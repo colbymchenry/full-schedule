@@ -1,58 +1,50 @@
 <script>
-  import Header from '$lib/header/Header.svelte';
-  import { webVitals } from '$lib/vitals';
-  import { browser } from '$app/env';
-  import { page } from '$app/stores';
-  import '../app.css';
+    import Nav from '$lib/__layout/nav.svelte';
+    import RightBar from '$lib/__layout/right-bar.svelte';
+    import TopBar from '$lib/__layout/top-bar.svelte';
+    import {webVitals} from '$lib/vitals';
+    import {browser} from '$app/env';
+    import {page} from '$app/stores';
+    import '../app.css';
+    import {setContext} from "svelte";
 
-  let analyticsId = import.meta.env.VERCEL_ANALYTICS_ID;
+    let analyticsId = import.meta.env.VERCEL_ANALYTICS_ID;
 
-  $: if (browser && analyticsId) {
-    webVitals({
-      path: $page.url.pathname,
-      params: $page.params,
-      analyticsId
-    })
-  }
+    $: if (browser && analyticsId) {
+        webVitals({
+            path: $page.url.pathname,
+            params: $page.params,
+            analyticsId
+        })
+    }
+
+    // check if user is authenticated by looking for user data in local storage
+    $: if (browser) {
+        if (localStorage.getItem("user")) {
+            // store user data in context to be used across the app
+            setContext("user", JSON.parse(localStorage.getItem("user")));
+        }
+    }
 </script>
 
-<Header />
 
-<main>
-  <slot />
-</main>
+{#if $page.url.pathname !== '/admin' }
+    <div class="root">
+        <Nav/>
+        <div class="main-container">
+            <TopBar/>
+            <slot/>
+            <RightBar/>
+        </div>
+    </div>
+{:else}
+    <div class="root">
+        <div class="main-container">
+            <slot/>
+        </div>
+    </div>
+{/if}
+
 
 <footer>
-  <p>visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to learn SvelteKit</p>
 </footer>
-
-<style>
-  main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    padding: 1rem;
-    width: 100%;
-    max-width: 1024px;
-    margin: 0 auto;
-    box-sizing: border-box;
-  }
-
-  footer {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 40px;
-  }
-
-  footer a {
-    font-weight: bold;
-  }
-
-  @media (min-width: 480px) {
-    footer {
-      padding: 40px 0;
-    }
-  }
-</style>
