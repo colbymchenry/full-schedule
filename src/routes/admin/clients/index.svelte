@@ -1,8 +1,10 @@
-<script context="module">
-    export const prerender = true;
-</script>
+<!--<script context="module">-->
+<!--    export const prerender = true;-->
+<!--</script>-->
 
 <script>
+    import Drawer from '$lib/drawer.svelte';
+    let drawer__open = false;
 </script>
 
 <svelte:head>
@@ -45,8 +47,8 @@
                 <div class="list__tab">
                     <div class="text-block-3">A</div>
                 </div>
-                <div data-w-id="3100d94d-7376-0edb-9f07-8512857792df" class="list__client"><img
-                        src="/images/brian-hughes.jpg" loading="lazy" alt="" class="client__avatar">
+                <div data-w-id="3100d94d-7376-0edb-9f07-8512857792df" class="list__client">
+                    <img src="/images/brian-hughes.jpg" loading="lazy" alt="" class="client__avatar">
                     <div class="client__details">
                         <div class="details__name">Alice Harding</div>
                         <div class="details__name details__email">alice@aol.com</div>
@@ -54,7 +56,7 @@
                 </div>
             </div>
         </div>
-<!--        DRAWER -->
+        <Drawer open={drawer__open} />
     </div>
 </div>
 

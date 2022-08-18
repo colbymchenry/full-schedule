@@ -1128,6 +1128,13 @@ label {
   -ms-flex-pack: end;
   justify-content: flex-end;
   border-left: 1px solid #e2e8ef;
+  -webkit-transition: all 1000ms linear;
+  transition: all 1000ms linear;
+}
+
+.drawer.is--visible {
+  display: block;
+  width: 100%;
 }
 
 .drawer__container {
@@ -1213,13 +1220,14 @@ label {
   align-self: flex-end;
 }
 
-.html-embed {
+.edit-btn {
   position: absolute;
+  right: 14px;
   margin-top: 21px;
   margin-right: 20px;
-  -webkit-transform: scale(0.2);
-  -ms-transform: scale(0.2);
-  transform: scale(0.2);
+  -webkit-transform: scale(0.3);
+  -ms-transform: scale(0.3);
+  transform: scale(0.3);
 }
 
 .client__name {
@@ -1365,7 +1373,7 @@ label {
   width: 64px;
   height: 26px;
   border-radius: 20px;
-  background-image: url('../images/waze-logo-compressed.jpg');
+  background-image: url('/images/waze-logo-compressed.jpg');
   background-position: 50% 50%;
   background-size: contain;
   background-repeat: repeat-x;
@@ -1377,7 +1385,7 @@ label {
   height: 26px;
   border-radius: 20px;
   background-color: #ebebeb;
-  background-image: url('../images/5ee732bebd983985fbff27fa_Google_Maps-Logo.wine.png');
+  background-image: url('/images/5ee732bebd983985fbff27fa_Google_Maps-Logo.wine.png');
   background-position: 50% 50%;
   background-size: cover;
   background-repeat: repeat-x;
@@ -1385,7 +1393,7 @@ label {
 }
 
 .location__button.is--google.is--apple {
-  background-image: url('../images/Apple_Maps_logo.svg.png');
+  background-image: url('/images/Apple_Maps_logo.svg.png');
   background-position: 50% 50%;
   background-size: 48px 15px;
   background-repeat: no-repeat;
@@ -1862,6 +1870,10 @@ label {
   margin-top: -13px;
   margin-left: 13px;
   font-family: Inter, sans-serif;
+  color: #f1493d;
+}
+
+.is-error {
   color: #f1493d;
 }
 
