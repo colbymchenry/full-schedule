@@ -33,7 +33,7 @@
         </div>
         <div id="w-node-_60ed2060-03e1-dcaa-0509-3c3a0011fb19-630e5788" class="drawer__body">
             <div class="body__edit-btn">
-                <a data-w-id="7241f703-d5af-9275-3142-df69bde86c9e" href="#"
+                <a data-w-id="7241f703-d5af-9275-3142-df69bde86c9e" href="/admin"
                    class="primary-button drawer__edit-btn is--clear w-button">Edit</a>
                 <div class="edit-btn">
                     <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20 20" fill="currentColor" fit=""
@@ -53,7 +53,7 @@
                         <path d="M7.1 40.3q-1.35 0-2.375-1.025T3.7 36.9V11.1q0-1.4 1.025-2.4t2.375-1h33.8q1.4 0 2.4 1t1 2.4v25.8q0 1.35-1 2.375T40.9 40.3Zm16.9-15L7.1 14.15V36.9h33.8V14.15Zm0-3.3 16.7-10.9H7.35ZM7.1 14.15V11.1v25.8Z"></path>
                     </svg>
                 </div>
-                <a href="#" class="detail__text">barberjohnson@mail.org</a>
+                <a href="/admin" class="detail__text">barberjohnson@mail.org</a>
             </div>
             <div class="client__detail">
                 <div class="detail__icon w-embed">
@@ -61,7 +61,7 @@
                         <path d="M19.9 41.6h8.2v-2h-8.2Zm-6.75 4.7q-1.4 0-2.425-1.025T9.7 42.85V5.15q0-1.4 1.025-2.425T13.15 1.7h21.7q1.4 0 2.425 1.025T38.3 5.15v37.7q0 1.4-1.025 2.425T34.85 46.3Zm0-7.95v4.5h21.7v-4.5Zm0-3h21.7V9.65h-21.7Zm0-28.7h21.7v-1.5h-21.7Zm0 31.7v4.5Zm0-31.7v-1.5 1.5Z"></path>
                     </svg>
                 </div>
-                <a href="#" class="detail__text is--ibm-font">470 495 5859</a>
+                <a href="/admin" class="detail__text is--ibm-font">470 495 5859</a>
             </div>
             <div class="client__detail-location">
                 <div class="client__detail">
@@ -70,12 +70,12 @@
                             <path d="M24 32.6q5.1-4.1 7.7-7.925 2.6-3.825 2.6-7.075 0-2.9-1.05-4.9-1.05-2-2.6-3.275t-3.35-1.85Q25.5 7 24 7q-1.5 0-3.3.575-1.8.575-3.35 1.85-1.55 1.275-2.6 3.275t-1.05 4.9q0 3.25 2.6 7.075T24 32.6Zm0 4.35q-6.95-5.25-10.325-10Q10.3 22.2 10.3 17.6q0-3.45 1.25-6.075t3.225-4.4q1.975-1.775 4.4-2.65Q21.6 3.6 24 3.6q2.4 0 4.825.875 2.425.875 4.4 2.65 1.975 1.775 3.225 4.4Q37.7 14.15 37.7 17.6q0 4.6-3.375 9.35T24 36.95ZM24 21q1.55 0 2.625-1.1t1.075-2.6q0-1.55-1.075-2.625T24 13.6q-1.5 0-2.6 1.075T20.3 17.3q0 1.5 1.1 2.6T24 21ZM10.3 44.4V41h27.4v3.4ZM24 17.6Z"></path>
                         </svg>
                     </div>
-                    <a href="#" class="detail__text">6400 Blue Stone Rd, Atlanta, GA 30326</a>
+                    <a href="/admin" class="detail__text">6400 Blue Stone Rd, Atlanta, GA 30326</a>
                 </div>
                 <div class="location__buttons">
-                    <a href="#" class="location__button is--waze w-inline-block"></a>
-                    <a href="#" class="location__button is--google w-inline-block"></a>
-                    <a href="#" class="location__button is--google is--apple w-inline-block"></a>
+                    <a href="/admin" class="location__button is--waze w-inline-block"></a>
+                    <a href="/admin" class="location__button is--google w-inline-block"></a>
+                    <a href="/admin" class="location__button is--google is--apple w-inline-block"></a>
                 </div>
             </div>
             <div class="client__detail">
@@ -447,7 +447,7 @@
                 <div class="text-btn delete-btn">Delete</div>
                 <div class="drawer__footer-right-controls">
                     <div data-w-id="69973e80-a082-9098-664f-38efd61afbc7" class="text-btn">Cancel</div>
-                    <a href="#" class="primary-button w-button">Save</a>
+                    <a href="/admin" class="primary-button w-button">Save</a>
                 </div>
             </div>
         </div>

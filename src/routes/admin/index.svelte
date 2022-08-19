@@ -47,7 +47,7 @@
             {@html iconLogo}
         </div>
         <h1>Sign in</h1>
-        <div class="signup-container">Don&#x27;t have an account? <a href="#">Sign up</a></div>
+        <div class="signup-container">Don&#x27;t have an account? <a href="/admin/create-account">Sign up</a></div>
         <div class="form-container">
             <Form class="login-form" onSubmit={onSubmit}>
                 <InputField form_errors={form_errors} name="email" type="email" label="Email address *" required/>
@@ -55,7 +55,7 @@
                             required/>
                 <div>
                     <Checkbox name="remember" label="Remember me"/>
-                    <a href="#" style="justify-self: flex-end;">Forgot password?</a>
+                    <a href="/admin/forgot-password" style="justify-self: flex-end;">Forgot password?</a>
                 </div>
                 <Button>Sign in</Button>
             </Form>
