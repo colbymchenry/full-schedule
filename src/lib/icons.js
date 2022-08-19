@@ -12,6 +12,8 @@ export const iconFullscreen = `<svg xmlns="http://www.w3.org/2000/svg" height="4
     <path d="M10 38v-9.65h3V35h6.65v3Zm0-18.35V10h9.65v3H13v6.65ZM28.35 38v-3H35v-6.65h3V38ZM35 19.65V13h-6.65v-3H38v9.65Z"></path>
 </svg>`;
 
+export const iconExitFullscreen = `<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" fill="currentColor"><path d="M16.65 38v-6.65H10v-3h9.65V38Zm11.7 0v-9.65H38v3h-6.65V38ZM10 19.65v-3h6.65V10h3v9.65Zm18.35 0V10h3v6.65H38v3Z"/></svg>`
+
 export const iconInbox = `<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" fill="currentColor">
     <path d="M9 42q-1.2 0-2.1-.9Q6 40.2 6 39V9q0-1.2.9-2.1Q7.8 6 9 6h30q1.2 0 2.1.9.9.9.9 2.1v30q0 1.2-.9 2.1-.9.9-2.1.9Zm0-3h30v-6.8h-7.3q-1.3 2-3.375 3.075Q26.25 36.35 24 36.35t-4.325-1.075Q17.6 34.2 16.3 32.2H9V39Zm15-5.65q2.05 0 3.7-1.175Q29.35 31 30.5 29.2H39V9H9v20.2h8.5q1.15 1.8 2.8 2.975T24 33.35ZM9 39h30Z"></path>
 </svg>`;
@@ -34,11 +36,11 @@ export const iconLogo = `<svg width="32" height="32" viewbox="0 0 32 32" fill="n
 </svg>`;
 
 export const iconMenu = `<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" fill="currentColor">
-    <path d="M6 36v-3h26v3Zm33.9-2.6-9.45-9.45 9.4-9.4L42 16.7l-7.25 7.25 7.3 7.3ZM6 25.4v-3h20v3ZM6 15v-3h26v3Z"></path>
+    <path d="M6 36v-3h36v3Zm0-10.5v-3h36v3ZM6 15v-3h36v3Z"></path>
 </svg>`;
 
 export const iconMenuOpen = `<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" fill="currentColor">
-    <path d="M6 36v-3h36v3Zm0-10.5v-3h36v3ZM6 15v-3h36v3Z"></path>
+    <path d="M6 36v-3h26v3Zm33.9-2.6-9.45-9.45 9.4-9.4L42 16.7l-7.25 7.25 7.3 7.3ZM6 25.4v-3h20v3ZM6 15v-3h26v3Z"></path>
 </svg>`;
 
 export const iconSearch = `<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" fill="currentColor">

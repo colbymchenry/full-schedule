@@ -1,48 +1,125 @@
 <script>
-    import {iconChat, iconFullscreen, iconInbox, iconMenu, iconMenuOpen, iconSearch} from "../icons.js";
+    import {
+        iconChat,
+        iconExitFullscreen,
+        iconFullscreen,
+        iconInbox,
+        iconMenu,
+        iconMenuOpen,
+        iconSearch
+    } from "../icons.js";
+    import {navOpen} from "../stores.js";
+    import {onDestroy} from "svelte";
+
+    let isFullscreen = false;
 
     function toggleFullScreen() {
         if (!document.fullscreenElement) {
             document.documentElement.requestFullscreen();
+            isFullscreen = true;
         } else if (document.exitFullscreen) {
             document.exitFullscreen();
+            isFullscreen = false;
         }
     }
 
+    let isNavOpen;
 
+    const unsubscribe = navOpen.subscribe(value => {
+        isNavOpen = value;
+    });
+
+    onDestroy(unsubscribe);
+
+    function toggleNav() {
+        navOpen.update((value) => !value);
+    }
 </script>
 
-<div class="main-container__top-bar">
-    <div class="top-bar__hamburger">
-        <div data-w-id="7d1fbe9c-4fd3-e6a2-ef89-c29a883f5149" class="top-bar__icon top-bar__menu-icon w-embed">
-            {@html iconMenu}
-        </div>
-        <div data-w-id="7d1fbe9c-4fd3-e6a2-ef89-c29a883f514a" class="top-bar__icon is--hidden top-bar__icon-menu-open w-embed">
-            {@html iconMenuOpen}
+<div class="top-bar">
+    <div class="hamburger">
+        <div class="icon" on:click={toggleNav}>
+            {#if isNavOpen}
+                {@html iconMenuOpen}
+            {:else}
+                {@html iconMenu}
+            {/if}
         </div>
     </div>
-    <div class="top-bar__buttons">
-        <div class="top-bar__icon w-embed" on:click={toggleFullScreen}>
-            {@html iconFullscreen}
+    <div class="buttons">
+        <div class="icon" on:click={toggleFullScreen}>
+            {#if isFullscreen}
+                {@html iconExitFullscreen}
+            {:else}
+                {@html iconFullscreen}
+            {/if}
         </div>
-        <div class="top-bar__icon w-embed">
+        <div class="icon">
             {@html iconSearch}
         </div>
-        <div class="badge">
-            <div class="top-bar__icon badge__icon w-embed">
+        <div class="badge-container">
+            <div class="icon">
                 {@html iconInbox}
             </div>
-            <div class="text-block">5</div>
+            <div class="badge">5</div>
         </div>
     </div>
 </div>
-<div id="w-node-e43b6e59-753f-b532-1182-06e8a754ad1d-a754ad1d" class="main-container__top-right">
-    <div data-w-id="e43b6e59-753f-b532-1182-06e8a754ad1e" class="top-bar__icon top-right__icon w-embed">
-        {@html iconChat}
-    </div>
-</div>
 
+<style lang="scss">
+  .top-bar {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    height: 64px;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: rgb(0 0 0 / 14%) -1px 1px 3px 0px;
+    flex-grow: 1;
+    background-color: #fff;
 
-<style>
+    .icon {
+      display: flex;
+      width: 64px;
+      height: 64px;
+      justify-content: center;
+      align-items: center;
+      border-radius: 100%;
+      transform: scale(0.7);
+      transition-property: all;
+      transition-duration: 300ms;
+      transition-timing-function: ease;
+      color: rgb(100, 116, 137);
+      cursor: pointer;
+      transition: all 0.3s ease;
 
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+      }
+    }
+
+    .buttons {
+      display: flex;
+    }
+
+    .badge-container {
+      position: relative;
+
+      .badge {
+        position: absolute;
+        inset: 0 0 auto auto;
+        margin-top: 8px;
+        margin-right: 10%;
+        padding-right: 8px;
+        padding-left: 8px;
+        border-radius: 40px;
+        background-color: rgb(79, 70, 222);
+        color: rgb(255, 255, 255);
+        font-size: 12px;
+        line-height: 20px;
+        text-align: center;
+      }
+    }
+  }
 </style>

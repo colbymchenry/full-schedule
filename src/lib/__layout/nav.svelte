@@ -9,10 +9,20 @@
         iconUser,
         iconUsers
     } from "../icons.js";
+    import {navOpen} from "../stores.js";
+    import {onDestroy} from "svelte";
+
+    let isNavOpen;
+
+    const unsubscribe = navOpen.subscribe(value => {
+        isNavOpen = value;
+    });
+
+    onDestroy(unsubscribe);
 </script>
 
 
-<div class="nav full-vh">
+<div class="nav full-vh" class:is--open={isNavOpen}>
     <div class="container">
         <div class="header">
             <div class="icon">
@@ -86,6 +96,13 @@
 <style lang="scss">
   .nav {
     background-color: #0F172A;
+    max-width: 0;
+    transition: max-width 1s ease;
+
+    &.is--open {
+      max-width: 280px;
+      transition: max-width 1s ease;
+    }
 
     .container {
       width: 280px;

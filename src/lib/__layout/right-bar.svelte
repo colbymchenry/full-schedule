@@ -1,6 +1,14 @@
 <script>
   import { page } from '$app/stores';
+  import {iconChat} from "../icons.js";
 </script>
+
+
+<div class="main-container__top-right">
+  <div data-w-id="e43b6e59-753f-b532-1182-06e8a754ad1e" class="top-bar__icon top-right__icon w-embed">
+    {@html iconChat}
+  </div>
+</div>
 
 <div id="w-node-_070efb8f-2e90-13e2-994f-2d4bccef6080-ccef6080" class="main-container__right-bar">
   <div id="w-node-_070efb8f-2e90-13e2-994f-2d4bccef6081-ccef6080" class="chat-bubble"><img

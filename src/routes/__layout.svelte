@@ -31,11 +31,12 @@
 {#if $page.url.pathname !== '/admin' }
     <div class="root">
         <Nav/>
-<!--        <div class="main-container">-->
-<!--            <TopBar/>-->
-<!--            <slot/>-->
-<!--            <RightBar/>-->
-<!--        </div>-->
+        <TopBar/>
+        <!--        <div class="main-container">-->
+        <!--            <TopBar/>-->
+        <!--            <slot/>-->
+        <!--            <RightBar/>-->
+        <!--        </div>-->
     </div>
 {:else}
     <slot/>
