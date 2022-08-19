@@ -1,0 +1,2 @@
+export const FIREBASE_CONFIG = import.meta.env.VITE_PUBLIC_FIREBASE_CONFIG;
+export const ADMIN_FIREBASE_CONFIG = import.meta.env.VITE_ADMIN_FIREBASE_CONFIG;

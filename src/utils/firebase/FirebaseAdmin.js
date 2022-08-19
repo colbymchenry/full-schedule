@@ -1,8 +1,9 @@
 import admin from 'firebase-admin';
+import {ADMIN_FIREBASE_CONFIG} from "../../lib/env.js";
 
 try {
     admin.initializeApp({
-        credential: admin.credential.cert(JSON.parse(import.meta.env.VITE_ADMIN_FIREBASE_CONFIG)),
+        credential: admin.credential.cert(JSON.parse(ADMIN_FIREBASE_CONFIG)),
     })
 
     admin.firestore().settings({
