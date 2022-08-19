@@ -38,11 +38,7 @@
         </div>
     </div>
 {:else}
-    <div class="root">
-        <div class="main-container">
-            <slot/>
-        </div>
-    </div>
+    <slot/>
 {/if}
 
 

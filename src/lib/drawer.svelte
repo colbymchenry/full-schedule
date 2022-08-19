@@ -1,5 +1,5 @@
 <script>
-    import IconClose from '$lib/svgs/icon-close.svelte';
+    import {iconClose} from "./icons.js";
 
     const banners = [
         '/images/14-640x480.jpg',
@@ -16,16 +16,18 @@
 
     export let open;
 
+    const banner = banners[Math.floor(Math.random()*banners.length)];
+
 </script>
 
 <div class="drawer" class:is--visible={open}>
     <div class="drawer__container">
         <div id="drawer-header" class="drawer__header w-node-_16246c70-24c8-286d-ac1f-98e34affc3de-630e5788">
-            <img src={banners[0]} loading="lazy"
-                 srcset={`${banners[0]} 500w, ${banners[0]} 640w`} sizes="100vw" alt=""
+            <img src={banner} loading="lazy"
+                 srcset={`${banner} 500w, ${banner} 640w`} sizes="100vw" alt=""
                  class="header__img is--visible">
-            <div data-w-id="3bac95bc-19b5-2ec4-1b52-c814e66cc721" class="top-bar__icon header__close w-embed">
-                <IconClose />
+            <div data-w-id="3bac95bc-19b5-2ec4-1b52-c814e66cc721" class="top-bar__icon header__close w-embed" on:click={() => open = false}>
+                {@html iconClose}
             </div>
             <img src="/images/brian-hughes.jpg" loading="lazy" alt="" class="header__avatar">
         </div>
@@ -451,3 +453,35 @@
         </div>
     </div>
 </div>
+
+<style>
+
+    .drawer.is--visible {
+        animation: open 2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        display: flex;
+    }
+
+    .drawer {
+        animation: close 2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    @keyframes open {
+        from {
+            width: 0;
+        }
+        to {
+            width: 100%;
+        }
+    }
+
+    @keyframes close {
+        from {
+            width: 100%;
+        }
+        to {
+           width: 0;
+        }
+    }
+
+
+</style>

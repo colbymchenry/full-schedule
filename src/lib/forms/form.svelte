@@ -1,6 +1,8 @@
 <script>
 
-    export let className;
+      let clazz;
+      export { clazz as class };
+      export let id;
     export let onSubmit;
 
     function prepare(e) {
@@ -18,6 +20,6 @@
 
 </script>
 
-<form class={className} on:submit|preventDefault={prepare}>
+<form {id} class={clazz || ''} on:submit|preventDefault={prepare}>
    <slot></slot>
 </form>

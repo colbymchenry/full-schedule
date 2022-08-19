@@ -4,6 +4,7 @@
 
 <script>
     import Drawer from '$lib/drawer.svelte';
+    import {tick} from "svelte";
     let drawer__open = false;
 </script>
 
@@ -47,7 +48,11 @@
                 <div class="list__tab">
                     <div class="text-block-3">A</div>
                 </div>
-                <div data-w-id="3100d94d-7376-0edb-9f07-8512857792df" class="list__client">
+                <div data-w-id="3100d94d-7376-0edb-9f07-8512857792df" class="list__client" on:click={() => {
+                    console.log("CLICKED")
+                    drawer__open = true;
+                    {tick()}
+                }}>
                     <img src="/images/brian-hughes.jpg" loading="lazy" alt="" class="client__avatar">
                     <div class="client__details">
                         <div class="details__name">Alice Harding</div>
@@ -56,7 +61,7 @@
                 </div>
             </div>
         </div>
-        <Drawer open={drawer__open} />
+        <Drawer bind:open={drawer__open} />
     </div>
 </div>
 
