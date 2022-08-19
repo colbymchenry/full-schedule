@@ -73,7 +73,7 @@
   }
 
   .error-message {
-    margin-top: -13px;
+    margin-top: 8px;
     margin-left: 13px;
     color: var(--error-color);
   }

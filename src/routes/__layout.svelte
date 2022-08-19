@@ -31,11 +31,11 @@
 {#if $page.url.pathname !== '/admin' }
     <div class="root">
         <Nav/>
-        <div class="main-container">
-            <TopBar/>
-            <slot/>
-            <RightBar/>
-        </div>
+<!--        <div class="main-container">-->
+<!--            <TopBar/>-->
+<!--            <slot/>-->
+<!--            <RightBar/>-->
+<!--        </div>-->
     </div>
 {:else}
     <slot/>
@@ -44,3 +44,14 @@
 
 <footer>
 </footer>
+
+<style lang="scss">
+  .root {
+    max-width: 100%;
+    min-width: 100%;
+    max-height: 100%;
+    min-height: 100%;
+    display: flex;
+    flex: 1 1 auto;
+  }
+</style>

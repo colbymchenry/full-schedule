@@ -15,9 +15,7 @@
     async function onSubmit(data) {
         try {
             response = await FirebaseClient.signIn(data["email"], data["password"]);
-            // set global user context
-            setContext("user", response);
-            // if in the browser store to local storage so can be used across the app in __layout it's picked back
+            // set in local storage so can be used across the app in __layout it's picked back
             // up on page reloads
             if (browser) {
                 localStorage.setItem("user", JSON.stringify(response));
