@@ -11,6 +11,8 @@
     } from "../icons.js";
     import {authStore, navStore} from "../stores.js";
     import Avatar from '$lib/avatar.svelte';
+    import axios from "axios";
+    import Swal from "sweetalert2";
 
     let routes = [
         {
@@ -59,6 +61,25 @@
             name: 'Settings'
         }
     ];
+
+    let nameDiv;
+    async function updateDisplayName() {
+        try {
+            // update Google User in the backend
+            axios.defaults.headers.common['authorization'] = await $authStore.getIdToken();
+            await axios.patch('/api/user', {
+                uid: $authStore.uid,
+                displayName: nameDiv.innerHTML
+            });
+        } catch (error) {
+            Swal.fire({
+               title: "Server error. Please try again later.",
+                timer: 3000,
+                timerProgressBar: true,
+                toast: true
+            });
+        }
+    }
 </script>
 
 
@@ -71,7 +92,7 @@
         </div>
         <div class="user">
             <Avatar user={$authStore} size="medium" />
-            <div class="name">{$authStore?.displayName || 'User'}</div>
+            <div class="name" contenteditable="true" bind:this={nameDiv} on:blur={updateDisplayName}>{$authStore?.displayName || 'User'}</div>
             <div class="email">{$authStore?.email}</div>
         </div>
 

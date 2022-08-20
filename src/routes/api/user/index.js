@@ -16,9 +16,7 @@ export async function patch({request}) {
 
         const res = await request.json();
 
-        await FirebaseAdmin.auth().updateUser(res.uid, {
-            photoURL: res.photoURL
-        });
+        await FirebaseAdmin.auth().updateUser(res.uid, res);
 
         return { status: 200 }
     } catch (error) {
