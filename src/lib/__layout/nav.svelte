@@ -113,11 +113,10 @@
   .nav {
     background-color: #0F172A;
     max-width: 0;
-    transition: max-width 1s ease;
+    transition: max-width 0.4s var(--transition-drawer);
 
     &.is--open {
       max-width: 280px;
-      transition: max-width 1s ease;
     }
 
     .container {

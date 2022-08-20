@@ -68,6 +68,7 @@
                 preConfirm: async () => {
                     try {
                         // upload image to cloudinary
+                        delete axios.defaults.headers.common['authorization'];
                         const imgUpload = await axios.post('https://api.cloudinary.com/v1_1/dfpldejtd/image/upload', {
                             file: newSrc,
                             upload_preset: 'my-uploads'

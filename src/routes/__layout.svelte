@@ -1,6 +1,7 @@
 <script>
     import Nav from '$lib/__layout/nav.svelte';
     import TopBar from '$lib/__layout/top-bar.svelte';
+    import RightBar from '$lib/__layout/right-bar.svelte';
     import {webVitals} from '$lib/vitals';
     import {browser} from '$app/env';
     import {page} from '$app/stores';
@@ -38,6 +39,7 @@
     <div class="root">
         <Nav/>
         <TopBar/>
+        <RightBar />
     </div>
 {:else}
     <slot/>
