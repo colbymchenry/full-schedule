@@ -9,15 +9,14 @@
         iconUser,
         iconUsers
     } from "../icons.js";
-    import {navOpen} from "../stores.js";
-    import {getContext, onDestroy} from "svelte";
+    import {writableNav} from "../stores.js";
+    import {onDestroy} from "svelte";
     import Avatar from '$lib/avatar.svelte';
-
-    let user = getContext("user");
+    import {FirebaseClient} from "../../utils/firebase/FirebaseClient.js";
 
     let isNavOpen;
 
-    const unsubscribe = navOpen.subscribe(value => {
+    const unsubscribe = writableNav.subscribe(value => {
         isNavOpen = value;
     });
 
@@ -81,9 +80,9 @@
             </div>
         </div>
         <div class="user">
-            <Avatar {user} size="medium" />
-            <div class="name">{user?.displayName || 'User'}</div>
-            <div class="email">{user?.email}</div>
+            <Avatar user={FirebaseClient.auth().currentUser} size="medium" />
+            <div class="name">{FirebaseClient.auth().currentUser?.displayName || 'User'}</div>
+            <div class="email">{FirebaseClient.auth().currentUser?.email}</div>
         </div>
 
         <div class="links">
