@@ -1,3 +1,4 @@
 import {writable} from "svelte/store";
 
-export const writableNav = writable(true);
+export const navStore = writable(true);
+export const authStore = writable(null);

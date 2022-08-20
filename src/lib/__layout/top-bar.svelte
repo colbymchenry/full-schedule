@@ -8,7 +8,7 @@
         iconMenuOpen,
         iconSearch
     } from "../icons.js";
-    import {writableNav} from "../stores.js";
+    import {navStore} from "../stores.js";
     import {onDestroy} from "svelte";
 
     let isFullscreen = false;
@@ -25,14 +25,14 @@
 
     let isNavOpen;
 
-    const unsubscribe = writableNav.subscribe(value => {
+    const unsubscribe = navStore.subscribe(value => {
         isNavOpen = value;
     });
 
     onDestroy(unsubscribe);
 
     function toggleNav() {
-        writableNav.update((value) => !value);
+        navStore.update((value) => !value);
     }
 </script>
 

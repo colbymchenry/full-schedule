@@ -9,18 +9,8 @@
         iconUser,
         iconUsers
     } from "../icons.js";
-    import {writableNav} from "../stores.js";
-    import {onDestroy} from "svelte";
+    import {authStore, navStore} from "../stores.js";
     import Avatar from '$lib/avatar.svelte';
-    import {FirebaseClient} from "../../utils/firebase/FirebaseClient.js";
-
-    let isNavOpen;
-
-    const unsubscribe = writableNav.subscribe(value => {
-        isNavOpen = value;
-    });
-
-    onDestroy(unsubscribe);
 
     let routes = [
         {
@@ -72,7 +62,7 @@
 </script>
 
 
-<div class="nav full-vh" class:is--open={isNavOpen}>
+<div class="nav full-vh" class:is--open={$navStore}>
     <div class="container">
         <div class="header">
             <div class="icon">
@@ -80,9 +70,9 @@
             </div>
         </div>
         <div class="user">
-            <Avatar user={FirebaseClient.auth().currentUser} size="medium" />
-            <div class="name">{FirebaseClient.auth().currentUser?.displayName || 'User'}</div>
-            <div class="email">{FirebaseClient.auth().currentUser?.email}</div>
+            <Avatar user={$authStore} size="medium" />
+            <div class="name">{$authStore?.displayName || 'User'}</div>
+            <div class="email">{$authStore?.email}</div>
         </div>
 
         <div class="links">

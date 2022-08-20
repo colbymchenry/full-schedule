@@ -6,10 +6,12 @@
     export let user;
     export let size;
 
-    let src = user?.providerData[0].photoURL;
+    $: src = user?.providerData[0].photoURL;
+
+    let newSrc;
 
     let clazz;
-    export { clazz as class };
+    export {clazz as class};
 
     let input;
     let files;
@@ -20,8 +22,9 @@
     }
 
     async function uploadImage() {
+        // check if there are any files selected
         if (files.length) {
-
+            // if no user is provided to the Avatar component the file uploading is disabled
             if (!user) {
                 await Swal.fire({
                     title: 'User not found.',
@@ -43,80 +46,76 @@
                 return;
             }
 
+            // read the uploaded file and set the source to the new file
             const reader = new FileReader();
             reader.addEventListener("load", () => {
-                src = reader.result;
+                newSrc = reader.result;
             });
             reader.readAsDataURL(files[0]);
 
+            // set uploading to true so z-index of avatar is above SweetAlert
             uploading = true;
-
             const keep = await Swal.fire({
                 title: 'Keep it?',
-                text: 'Click no to retry.',
                 icon: 'question',
-                showDenyButton: true,
                 confirmButtonText: 'Yes',
-                denyButtonText: 'No'
+                denyButtonText: 'No',
+                showLoaderOnConfirm: true,
+                backdrop: true,
+                showDenyButton: () => !Swal.isLoading(),
+                allowOutsideClick: () => !Swal.isLoading(),
+                preConfirm: async () => {
+                    try {
+                        // upload image to cloudinary
+                        const imgUpload = await axios.post('https://api.cloudinary.com/v1_1/dfpldejtd/image/upload', {
+                            file: src,
+                            upload_preset: 'my-uploads'
+                        });
+                        // update Google User in the backend
+                        axios.defaults.headers.common['authorization'] = user.stsTokenManager.accessToken;
+                        await axios.patch('/api/user', {
+                            uid: user.uid,
+                            photoURL: imgUpload.data["secure_url"]
+                        });
+                    } catch (error) {
+                        await Swal.fire({
+                            title: 'Error Reported',
+                            text: 'A Full Schedule helper has been contacted.',
+                            icon: 'error',
+                            confirmButtonText: 'Ok'
+                        });
+
+                        newSrc = undefined;
+                    }
+                }
             });
 
             uploading = false;
 
             if (keep.isDenied) {
-                src = user?.providerData[0].photoURL;
-                return;
-            }
-
-            await Swal.fire({
-                title: 'Uploading file...'
-            });
-            Swal.showLoading();
-
-            try {
-                const imgUpload = await axios.post('https://api.cloudinary.com/v1_1/dfpldejtd/image/upload', {
-                    file: src,
-                    upload_preset: 'my-uploads'
-                });
-
-                axios.defaults.headers.common['authorization'] = user.stsTokenManager.accessToken;
-
-                await axios.patch('/api/user', {
-                    uid: user.uid,
-                    photoURL: imgUpload.data["secure_url"]
-                });
-
-                // TODO: It's not updating the context of the user
-
-                Swal.close();
-            } catch (error) {
-                await Swal.fire({
-                    title: 'Error Reported',
-                    text: 'A Full Schedule helper has been contacted.',
-                    icon: 'error',
-                    confirmButtonText: 'Ok'
-                });
-
-                src = user?.providerData[0].photoURL;
+                newSrc = undefined;
             }
         }
     }
 </script>
 
 <div class={`avatar ${clazz || ''} ${size || 'small'} ${uploading ? 'uploading' : ''}`}>
-    {#if src}
-        <img src={src} loading="lazy" alt="">
-    {:else}
-        <div on:click={openFileDrawer}>
-            <input bind:this={input} bind:files={files} on:change={uploadImage} type="file" accept="image/*" name="image" alt=""  />
+    <div on:click={openFileDrawer}>
+        {#if src || newSrc}
+            <img src={newSrc || src} loading="lazy" alt="">
+        {:else}
             {@html iconPhotoLibrary}
-        </div>
-    {/if}
+        {/if}
+
+        <input bind:this={input} bind:files={files} on:change={uploadImage} type="file" accept="image/*"
+               name="image" alt=""/>
+    </div>
 </div>
 
 <style lang="scss">
 
   .avatar {
-    img,div {
+    img, div {
       border-radius: 100%;
       object-fit: cover;
     }
@@ -126,17 +125,17 @@
       z-index: 1066;
     }
 
-    &.x-small img,div {
+    &.x-small img, div {
       width: 32px;
       height: 32px;
     }
 
-    &.small img,div {
+    &.small img, div {
       width: 48px;
       height: 48px;
     }
 
-    &.medium img,div {
+    &.medium img, div {
       width: 96px;
       height: 96px;
     }

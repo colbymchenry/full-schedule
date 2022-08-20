@@ -6,7 +6,9 @@
     import {page} from '$app/stores';
     import '../app.css';
     import {FirebaseClient} from "../utils/firebase/FirebaseClient.js";
+    import {authStore} from "../lib/stores.js";
     import {goto} from "$app/navigation";
+    import {prettyLog} from "../utils/logger.js";
 
     let analyticsId = import.meta.env.VERCEL_ANALYTICS_ID;
 
@@ -19,9 +21,15 @@
     }
 
     $: if (browser) {
-        if ($page.url.pathname !== '/admin' && !FirebaseClient.auth().currentUser) {
-            goto("/admin");
-        }
+        FirebaseClient.auth().onAuthStateChanged((user) => {
+            if (user) {
+                $authStore = user;
+                prettyLog("AUTHENTICATION UPDATED");
+            } else {
+                prettyLog("LOGGED OUT");
+                goto("/admin");
+            }
+        })
     }
 </script>
 

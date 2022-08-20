@@ -6,6 +6,7 @@
     import {FirebaseClient} from "../../utils/firebase/FirebaseClient.js";
     import {goto} from "$app/navigation";
     import {iconLogo} from "../../lib/icons.js";
+    import {authStore} from "../../lib/stores.js";
 
     let response;
     let form_errors = {};
@@ -13,6 +14,7 @@
     async function onSubmit(data) {
         try {
             response = await FirebaseClient.signIn(data["email"], data["password"]);
+            $authStore = response.user;
             await goto("/admin/clients");
         } catch (error) {
             console.error(error)
