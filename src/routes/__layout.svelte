@@ -1,12 +1,13 @@
 <script>
     import Nav from '$lib/__layout/nav.svelte';
-    import RightBar from '$lib/__layout/right-bar.svelte';
     import TopBar from '$lib/__layout/top-bar.svelte';
     import {webVitals} from '$lib/vitals';
     import {browser} from '$app/env';
     import {page} from '$app/stores';
     import '../app.css';
-    import {setContext} from "svelte";
+    import {getContext, setContext} from "svelte";
+    import {goto} from "$app/navigation";
+    import {FirebaseClient} from "../utils/firebase/FirebaseClient.js";
 
     let analyticsId = import.meta.env.VERCEL_ANALYTICS_ID;
 
@@ -18,13 +19,40 @@
         })
     }
 
+    let user = getContext("user");
+
+    // THIS RUNS EVERY PAGE UPDATE with :$ if
     // check if user is authenticated by looking for user data in local storage
     $: if (browser) {
-        if (localStorage.getItem("user")) {
-            // store user data in context to be used across the app
-            setContext("user", JSON.parse(localStorage.getItem("user")));
+
+        FirebaseClient.auth().onIdTokenChanged(user => {
+            if (user) localStorage.setItem("user", JSON.stringify(user));
+        });
+
+        FirebaseClient.auth().onAuthStateChanged(user => {
+            if (user) localStorage.setItem("user", JSON.stringify(user));
+        });
+
+        if (!user && localStorage.getItem("user")) {
+            setContext("user", JSON.parse(localStorage.getItem("user")))
+            user = JSON.parse(localStorage.getItem("user"));
+        }
+
+        if (user?.providerData[0].photoURL) {
+            console.log(user?.providerData[0].photoURL)
+        }
+
+        // logout if on admin route but there is no user logged in
+        if ($page.url.pathname !== '/admin') {
+            if (!user) {
+                goto("/admin");
+            }
         }
     }
+
+
+
+
 </script>
 
 

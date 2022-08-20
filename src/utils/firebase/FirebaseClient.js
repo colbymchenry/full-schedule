@@ -33,9 +33,9 @@ import {FIREBASE_CONFIG} from "../../lib/env.js";
 let firebaseApp;
 let firebaseAnalytics;
 
-
 if (browser) {
     try {
+
         firebaseApp = initializeApp(JSON.parse(FIREBASE_CONFIG))
         firebaseAnalytics = getAnalytics(firebaseApp);
     } catch (error) {

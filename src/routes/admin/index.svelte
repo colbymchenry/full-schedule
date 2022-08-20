@@ -5,8 +5,6 @@
     import Button from '$lib/forms/button.svelte'
     import {FirebaseClient} from "../../utils/firebase/FirebaseClient.js";
     import {goto} from "$app/navigation";
-    import {browser} from "$app/env";
-    import {setContext} from "svelte";
     import {iconLogo} from "../../lib/icons.js";
 
     let response;
@@ -15,12 +13,6 @@
     async function onSubmit(data) {
         try {
             response = await FirebaseClient.signIn(data["email"], data["password"]);
-            // set in local storage so can be used across the app in __layout it's picked back
-            // up on page reloads
-            if (browser) {
-                localStorage.setItem("user", JSON.stringify(response));
-            }
-            // send user to dashboard
             await goto("/admin/clients");
         } catch (error) {
             console.error(error)

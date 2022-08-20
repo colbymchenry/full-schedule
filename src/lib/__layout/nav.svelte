@@ -10,7 +10,10 @@
         iconUsers
     } from "../icons.js";
     import {navOpen} from "../stores.js";
-    import {onDestroy} from "svelte";
+    import {getContext, onDestroy} from "svelte";
+    import Avatar from '$lib/avatar.svelte';
+
+    let user = getContext("user");
 
     let isNavOpen;
 
@@ -19,6 +22,54 @@
     });
 
     onDestroy(unsubscribe);
+
+    let routes = [
+        {
+            url: '/',
+            icon: iconCalendar,
+            name: 'Appointments'
+        },
+        {
+            url: '/clients',
+            icon: iconUsers,
+            name: 'Clients'
+        },
+        {
+            url: '/staff',
+            icon: iconShieldUser,
+            name: 'Staff'
+        },
+        {
+            url: '/admin/reports',
+            icon: iconCharts,
+            name: 'Reports'
+        },
+        {
+            url: '/admin/analytics',
+            icon: iconAnalytics,
+            name: 'Analytics'
+        },
+        {
+            url: '/admin/promotions',
+            icon: iconGiftCard,
+            name: 'Promotions'
+        },
+        {
+            url: '/admin/memberships',
+            icon: iconMemberships,
+            name: 'Members'
+        },
+        {
+            url: '/admin/clover-devices',
+            icon: iconSmartDevices,
+            name: 'Clover Devices'
+        },
+        {
+            url: '/admin/settings',
+            icon: iconCog,
+            name: 'Settings'
+        }
+    ];
 </script>
 
 
@@ -30,65 +81,20 @@
             </div>
         </div>
         <div class="user">
-            <img src="/images/brian-hughes.jpg" loading="lazy" alt="">
-            <div class="name">Brian Hughes</div>
-            <div class="email">hughes.brian@company.com</div>
+            <Avatar {user} size="medium" />
+            <div class="name">{user?.displayName || 'User'}</div>
+            <div class="email">{user?.email}</div>
         </div>
+
         <div class="links">
-            <a href="/admin" class:is--active={$page.url.pathname === "/admin"}>
-                <div>
-                    {@html iconCalendar}
-                </div>
-                <div>Appointments</div>
-            </a>
-            <a href="/admin" class:is--active={$page.url.pathname.startsWith("/admin/clients")}>
-                <div>
-                    {@html iconUsers}
-                </div>
-                <div>Clients</div>
-            </a>
-            <a href="/admin" class:is--active={$page.url.pathname.startsWith("/admin/staff")}>
-                <div>
-                    {@html iconShieldUser}
-                </div>
-                <div>Staff</div>
-            </a>
-            <a href="/admin" class:is--active={$page.url.pathname.startsWith("/admin/reports")}>
-                <div>
-                    {@html iconCharts}
-                </div>
-                <div>Reports</div>
-            </a>
-            <a href="/admin" class:is--active={$page.url.pathname.startsWith("/admin/analytics")}>
-                <div>
-                    {@html iconAnalytics}
-                </div>
-                <div>Analytics</div>
-            </a>
-            <a href="/admin" class:is--active={$page.url.pathname.startsWith("/admin/promotions")}>
-                <div>
-                    {@html iconGiftCard}
-                </div>
-                <div>Promotions</div>
-            </a>
-            <a href="/admin" class:is--active={$page.url.pathname.startsWith("/admin/memberships")}>
-                <div>
-                    {@html iconMemberships}
-                </div>
-                <div>Memberships</div>
-            </a>
-            <a href="/admin" class:is--active={$page.url.pathname.startsWith("/admin/clover-devices")}>
-                <div>
-                    {@html iconSmartDevices}
-                </div>
-                <div>Clover Devices</div>
-            </a>
-            <a href="/admin" class:is--active={$page.url.pathname.startsWith("/admin/settings")}>
-                <div>
-                    {@html iconCog}
-                </div>
-                <div>Settings</div>
-            </a>
+            {#each routes as route}
+                <a href={'/admin' + route.url} class:is--active={$page.url.pathname === ('/admin' + route.url)}>
+                    <div>
+                        {@html route.icon}
+                    </div>
+                    <div>{route.name}</div>
+                </a>
+            {/each}
         </div>
     </div>
 </div>
@@ -125,12 +131,6 @@
         flex-direction: column;
         justify-content: flex-start;
         align-items: center;
-
-        img {
-          width: 96px;
-          height: 96px;
-          border-radius: 100%;
-        }
 
         .name {
           margin-top: 16px;
