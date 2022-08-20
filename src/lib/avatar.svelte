@@ -57,10 +57,9 @@
             // set uploading to true so z-index of avatar is above SweetAlert
             uploading = true;
             const keep = await Swal.fire({
-                title: 'Keep it?',
                 icon: 'question',
-                confirmButtonText: 'Yes',
-                denyButtonText: 'No',
+                confirmButtonText: 'Keep it',
+                denyButtonText: 'Cancel',
                 showLoaderOnConfirm: true,
                 backdrop: true,
                 showDenyButton: () => !Swal.isLoading(),

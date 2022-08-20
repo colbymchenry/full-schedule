@@ -37,20 +37,29 @@
     }
 </script>
 
-<div class="top-bar">
-    <div class="hamburger">
-        <Button callback={toggleNav} icon={isNavOpen ? iconMenuOpen : iconMenu} />
+<div class="container">
+    <div class="top-bar">
+        <div class="hamburger">
+            <Button callback={toggleNav} icon={isNavOpen ? iconMenuOpen : iconMenu} />
+        </div>
+        <div class="buttons">
+            <Button callback={toggleFullScreen} icon={isFullscreen ? iconExitFullscreen : iconFullscreen} />
+            <Button icon={iconSearch} />
+            <Badge count={5}>
+                <Button icon={iconInbox} />
+            </Badge>
+        </div>
     </div>
-    <div class="buttons">
-        <Button callback={toggleFullScreen} icon={isFullscreen ? iconExitFullscreen : iconFullscreen} />
-        <Button icon={iconSearch} />
-        <Badge count={5}>
-            <Button icon={iconInbox} />
-        </Badge>
-    </div>
+    <slot></slot>
 </div>
 
 <style lang="scss">
+  .container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
   .top-bar {
     position: relative;
     z-index: 2;
@@ -59,7 +68,6 @@
     justify-content: space-between;
     align-items: center;
     box-shadow: rgb(0 0 0 / 14%) -1px 1px 3px 0px;
-    flex-grow: 1;
     background-color: #fff;
 
     .buttons {

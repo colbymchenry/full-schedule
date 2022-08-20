@@ -1,6 +1,6 @@
 <script>
     export let form_errors = {};
-    export let label, name, type = "text", placeholder;
+    export let label, name, type = "text", placeholder, icon;
     export let required = false;
 
     let focused = false;
@@ -14,7 +14,12 @@
 <div class="input-field__container">
     {#if label}<label for={name}>{label}</label>{/if}
     <div class="input-field" class:is--error={form_errors[name]} class:is--focused={focused}>
-        <input {type} {required} on:input={clear_error} maxlength="256" {name} placeholder={placeholder} id={name}
+        {#if icon}
+            <div class="icon">
+                {@html icon}
+            </div>
+        {/if}
+        <input {type} {required} on:input={clear_error} class:has--icon={icon} maxlength="256" {name} placeholder={placeholder} id={name}
                on:focusin={() => focused = true} on:focusout={() => focused = false}>
     </div>
 
@@ -29,9 +34,10 @@
     grid-template-columns: auto;
     grid-template-rows: auto;
     font: 400 .875rem/1.2857142857 Inter var,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,"Apple Color Emoji","Segoe UI Emoji",Segoe UI Symbol,"Noto Color Emoji";
-
     label {
-      margin-bottom: 0.25rem;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: var(--heading-color);
     }
   }
 
@@ -40,9 +46,11 @@
     align-items: center;
     border-style: solid;
     border-width: 1px;
-    border-color: var(--primary-border-color);
-    padding: 6px 16px;
+    border-color: rgb(203 213 225 / 1);
+    padding: 2px 16px;
     border-radius: 6px;
+    background: #fff;
+    box-shadow: var(--input-box-shadow);
 
     &.is--error {
       outline-offset: 0;
@@ -56,9 +64,8 @@
 
     input {
       margin-bottom: 0;
-      border: 1px none #000;
-      outline-offset: 0;
-      outline: #333 none 3px;
+      border: none;
+      outline: none;
       color: #333;
       display: block;
       width: 100%;
@@ -69,6 +76,17 @@
       font-size: 14px;
       font-weight: 500;
       font-family: inherit;
+
+      &.has--icon {
+        padding-left: 2rem;
+      }
+    }
+
+    .icon {
+      transform: scale(0.5);
+      position: absolute;
+      margin-left: -1rem;
+      color: var(--icon-gray);
     }
   }
 

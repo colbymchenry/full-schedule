@@ -31,32 +31,32 @@
             name: 'Staff'
         },
         {
-            url: '/admin/reports',
+            url: '/reports',
             icon: iconCharts,
             name: 'Reports'
         },
         {
-            url: '/admin/analytics',
+            url: '/analytics',
             icon: iconAnalytics,
             name: 'Analytics'
         },
         {
-            url: '/admin/promotions',
+            url: '/promotions',
             icon: iconGiftCard,
             name: 'Promotions'
         },
         {
-            url: '/admin/memberships',
+            url: '/memberships',
             icon: iconMemberships,
             name: 'Members'
         },
         {
-            url: '/admin/clover-devices',
+            url: '/clover-devices',
             icon: iconSmartDevices,
             name: 'Clover Devices'
         },
         {
-            url: '/admin/settings',
+            url: '/settings',
             icon: iconCog,
             name: 'Settings'
         }

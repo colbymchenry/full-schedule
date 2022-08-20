@@ -38,7 +38,9 @@
 {#if $page.url.pathname !== '/admin' }
     <div class="root">
         <Nav/>
-        <TopBar/>
+        <TopBar>
+            <slot></slot>
+        </TopBar>
         <RightBar />
     </div>
 {:else}
