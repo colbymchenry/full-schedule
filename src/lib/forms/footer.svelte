@@ -1,9 +1,11 @@
 <script>
     import Button from './button.svelte';
+
+    export let onCancel;
 </script>
 
 <div>
-    <Button type="button" color="secondary">Cancel</Button>
+    <Button type="button" color="secondary" callback={onCancel}>Cancel</Button>
     <Button color="primary">Save</Button>
 </div>
 

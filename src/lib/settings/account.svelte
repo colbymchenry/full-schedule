@@ -10,6 +10,7 @@
     import axios from "axios";
     import {ApiProgressBar} from "../ApiProgressBar.js";
     import {showToastError} from "../../utils/logger.js";
+    import {tick} from "svelte";
 
     let response;
     let form_errors = {};
@@ -51,5 +52,9 @@
         </Row>
     </Section>
     <Separator/>
-    <Footer bind:submitted={response} />
+    <Footer onCancel={async () => {
+        auth = {};
+        await tick();
+        auth = $authStore;
+    }} />
 </Form>

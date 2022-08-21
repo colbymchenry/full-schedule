@@ -7,7 +7,7 @@
     export let user;
     export let size;
 
-    $: src = user?.providerData[0].photoURL;
+    $: src = user?.photoURL;
 
     let newSrc;
 

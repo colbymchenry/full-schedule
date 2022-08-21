@@ -3,7 +3,7 @@
     import {iconHelp} from "../icons.js";
 
     export let form_errors = {};
-    export let value, label, name, type = "text", placeholder, icon, disablePrefill, readOnly, hint;
+    export let value, label, name, type = "text", placeholder, icon, disablePrefill, readOnly, hint, info;
     export let required = false;
 
     let focused = false;
@@ -36,9 +36,6 @@
         mouseX = event.clientX;
         mouseY = event.clientY;
     }
-
-        console.log(mouseX + "," + mouseY);
-
 </script>
 
 <svelte:window on:mousemove={handleMouseMove} />
@@ -76,6 +73,10 @@
         {/if}
     </div>
 
+    {#if info}
+    <small>{info}</small>
+    {/if}
+
     {#if form_errors[name]}
         <div class="error-message">{form_errors[name]}</div>
     {/if}
@@ -93,6 +94,12 @@
     grid-template-columns: auto;
     grid-template-rows: auto;
     font: 400 .875rem/1.2857142857 Inter var, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", Segoe UI Symbol, "Noto Color Emoji";
+
+    small {
+      margin-top: 0.25rem;
+      color: rgba(var(--fuse-text-hint-rgb), );
+      font-size: 13px;
+    }
 
     label {
       font-weight: 500;
@@ -180,7 +187,6 @@
 
   .error-message {
     margin-top: 8px;
-    margin-left: 13px;
     color: var(--error-color);
   }
 

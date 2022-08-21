@@ -91,7 +91,7 @@
             </div>
         </div>
         <div class="user">
-            <Avatar user={$authStore} size="medium" />
+            <Avatar bind:user={$authStore} size="medium" />
             <div class="name" contenteditable="true" bind:this={nameDiv} on:blur={updateDisplayName}>{$authStore?.displayName || 'User'}</div>
             <div class="email">{$authStore?.email}</div>
         </div>
