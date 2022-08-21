@@ -169,6 +169,7 @@
       flex-direction: column;
       grid-column-gap: 20px;
       grid-row-gap: 20px;
+      padding: 2rem 0;
     }
 
     .form-container {
