@@ -6,6 +6,7 @@
     export {clazz as class};
     export let id;
     export let onSubmit;
+    export let hideFooter;
     let reset = false;
 
     function prepare(e) {
@@ -28,6 +29,8 @@
     {#key reset}
         <slot></slot>
     {/key}
-    <Separator/>
-    <Footer onCancel={() => { reset = !reset }}/>
+    {#if !hideFooter}
+        <Separator/>
+        <Footer onCancel={() => { reset = !reset }}/>
+    {/if}
 </form>

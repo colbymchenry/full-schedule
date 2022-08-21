@@ -22,6 +22,8 @@ try {
 
 export class FirebaseAdmin {
 
+    static passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+
     static firestore() {
         return admin.firestore();
     }

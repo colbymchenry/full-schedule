@@ -7,9 +7,8 @@
     import {authStore} from "../stores.js";
     import axios from "axios";
     import {ApiProgressBar} from "../ApiProgressBar.js";
-    import {showToastError} from "../../utils/logger.js";
+    import {showToast} from "../../utils/logger.js";
 
-    let response;
     let form_errors = {};
     let auth = $authStore || {};
 
@@ -18,14 +17,13 @@
         try {
             // update Google User in the backend
             axios.defaults.headers.common['authorization'] = await $authStore.getIdToken();
-            response = await axios.patch('/api/user', {
+            await axios.patch('/api/user', {
                 uid: $authStore.uid,
                 displayName: data.name,
                 phoneNumber: data.phone
             });
         } catch (error) {
-            response = null;
-            showToastError();
+            showToast(error?.message);
         }
 
         ApiProgressBar.stop();

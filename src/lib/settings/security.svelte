@@ -6,14 +6,32 @@
     import {authStore} from "../stores.js";
     import axios from "axios";
     import {ApiProgressBar} from "../ApiProgressBar.js";
-    import {showToastError} from "../../utils/logger.js";
+    import {showToast} from "../../utils/logger.js";
+    import {FirebaseClient} from "../../utils/firebase/FirebaseClient.js";
 
-    let response;
     let form_errors = {};
     let auth = $authStore || {};
 
     async function onSubmit(data) {
-        if (data["old_password"] !== data["password"]) {
+        if (data["password"].length < 8) {
+            form_errors["password"] = "Your new password must be at least 8 characters long.";
+            form_errors = form_errors;
+            return;
+        }
+
+        if (data["password"].length > 15) {
+            form_errors["password"] = "Your new password must be less than 16 characters long.";
+            form_errors = form_errors;
+            return;
+        }
+
+        if (!data["password"].match(FirebaseClient.passwordRegex)) {
+            form_errors["password"] = "Your new password must include numbers, letters and special characters.";
+            form_errors = form_errors;
+            return;
+        }
+
+        if (data["password"] !== data["old_password"]) {
             form_errors["password"] = "Passwords do not match.";
             form_errors = form_errors;
             return;
@@ -21,18 +39,14 @@
 
         ApiProgressBar.start();
         try {
-            // update Google User in the backend
             axios.defaults.headers.common['authorization'] = await $authStore.getIdToken();
-            response = await axios.patch('/api/user', {
+            await axios.patch('/api/user', {
                 uid: $authStore.uid,
-                displayName: data.name,
-                phoneNumber: data.phone
+                password: data.password
             });
         } catch (error) {
-            response = null;
-            showToastError();
+            showToast(error?.message);
         }
-
         ApiProgressBar.stop();
     }
 

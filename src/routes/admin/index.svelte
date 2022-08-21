@@ -41,7 +41,7 @@
         <h1>Sign in</h1>
         <div class="signup-container">Don&#x27;t have an account? <a href="/admin/create-account">Sign up</a></div>
         <div class="form-container">
-            <Form class="login-form" onSubmit={onSubmit}>
+            <Form class="login-form" onSubmit={onSubmit} hideFooter>
                 <InputField form_errors={form_errors} name="email" type="email" label="Email address *" required/>
                 <InputField form_errors={form_errors} name="password" type="password" label="Password *"
                             required/>

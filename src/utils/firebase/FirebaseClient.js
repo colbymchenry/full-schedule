@@ -56,6 +56,8 @@ if (browser) {
 
 export class FirebaseClient { 
 
+    static passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/;
+
     static db() {
         return firebaseDb;
     }
