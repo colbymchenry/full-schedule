@@ -42,7 +42,11 @@
 </script>
 
 
-{#if $page.url.pathname !== '/admin' }
+{#if
+    $page.url.pathname !== '/admin' &&
+    $page.url.pathname !== '/admin/set-password' &&
+    $page.url.pathname !== '/admin/forgot-password'
+}
     {#if $progressBarStore}
         <ApiProgressBar/>
     {/if}
