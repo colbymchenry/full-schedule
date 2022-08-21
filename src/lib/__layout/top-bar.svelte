@@ -10,7 +10,7 @@
     import Button from "$lib/forms/button.svelte";
     import Badge from "$lib/badge.svelte";
     import {navStore} from "../stores.js";
-    import {onDestroy} from "svelte";
+    import {browser} from "$app/env";
 
     let isFullscreen = false;
 
@@ -24,14 +24,6 @@
         }
     }
 
-    let isNavOpen;
-
-    const unsubscribe = navStore.subscribe(value => {
-        isNavOpen = value;
-    });
-
-    onDestroy(unsubscribe);
-
     function toggleNav() {
         navStore.update((value) => !value);
     }
@@ -40,7 +32,7 @@
 <div class="container">
     <div class="top-bar">
         <div class="hamburger">
-            <Button callback={toggleNav} icon={isNavOpen ? iconMenuOpen : iconMenu} />
+            <Button callback={toggleNav} icon={$navStore ? iconMenuOpen : iconMenu} />
         </div>
         <div class="buttons">
             <Button callback={toggleFullScreen} icon={isFullscreen ? iconExitFullscreen : iconFullscreen} />
@@ -50,7 +42,9 @@
             </Badge>
         </div>
     </div>
-    <slot></slot>
+    <div class="content">
+        <slot></slot>
+    </div>
 </div>
 
 <style lang="scss">
@@ -58,6 +52,12 @@
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+    max-height: -webkit-fill-available;
+  }
+
+  .content {
+    position: relative;
+    max-height: calc(100vh - var(--top-bar-height));
   }
 
   .top-bar {
@@ -69,9 +69,17 @@
     align-items: center;
     box-shadow: rgb(0 0 0 / 14%) -1px 1px 3px 0px;
     background-color: #fff;
+    padding: 0 1.5rem;
 
     .buttons {
       display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .hamburger {
+      display: flex;
+      align-items: center;
     }
   }
 </style>

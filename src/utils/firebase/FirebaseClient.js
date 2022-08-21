@@ -34,7 +34,7 @@ let firebaseAnalytics;
 if (browser) {
     try {
         firebaseApp = initializeApp(JSON.parse(FIREBASE_CONFIG))
-        firebaseAnalytics = getAnalytics(firebaseApp);
+        // firebaseAnalytics = getAnalytics(firebaseApp);
     } catch (error) {
         /*
          * We skip the "already exists" message which is

@@ -15,9 +15,9 @@
         try {
             response = await FirebaseClient.signIn(data["email"], data["password"]);
             $authStore = response.user;
+            localStorage.setItem("user", JSON.stringify(response.user));
             await goto("/admin/clients");
         } catch (error) {
-            console.error(error)
             if (error?.code === 'auth/user-not-found') {
                 form_errors['email'] = "User not found.";
             } else if (error?.code === 'auth/wrong-password') {

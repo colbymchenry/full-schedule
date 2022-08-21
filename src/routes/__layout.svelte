@@ -22,9 +22,15 @@
     }
 
     $: if (browser) {
+
+        if (localStorage.getItem("user")) {
+            $authStore = JSON.parse(localStorage.getItem("user"));
+        }
+
         FirebaseClient.auth().onAuthStateChanged((user) => {
             if (user) {
                 $authStore = user;
+                localStorage.setItem("user", JSON.stringify(user));
                 prettyLog("AUTHENTICATION UPDATED");
             } else {
                 prettyLog("LOGGED OUT");

@@ -48,6 +48,10 @@
     let activeRoute = routes[0];
 </script>
 
+<svelte:head>
+    <title>FS • Settings</title>
+</svelte:head>
+
 <div class="container">
     <div class="navigation">
         <div class="heading">
@@ -74,6 +78,8 @@
 <style lang="scss">
   .content {
     padding: 3rem;
+    height: calc(100vh - var(--top-bar-height) - 6rem);
+    overflow-y: auto;
 
     h2 {
       color: var(--heading-color);
