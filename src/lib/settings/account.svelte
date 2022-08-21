@@ -3,14 +3,11 @@
     import InputField from '$lib/forms/input-field.svelte';
     import Row from '$lib/forms/row.svelte';
     import Form from '$lib/forms/form.svelte';
-    import Separator from '$lib/forms/separator.svelte';
-    import Footer from '$lib/forms/footer.svelte';
     import {iconMail, iconPerson, iconPhone} from "../icons.js";
     import {authStore} from "../stores.js";
     import axios from "axios";
     import {ApiProgressBar} from "../ApiProgressBar.js";
     import {showToastError} from "../../utils/logger.js";
-    import {tick} from "svelte";
 
     let response;
     let form_errors = {};
@@ -36,9 +33,10 @@
 
 </script>
 
+
 <Form onSubmit={onSubmit}>
     <Section title="Profile" info="Following information is publicly displayed, be careful!">
-        <InputField label="Name" name="name" icon={iconPerson} bind:value={auth["displayName"]} />
+        <InputField label="Name" name="name" icon={iconPerson} bind:value={auth["displayName"]}/>
         <Row>
             <InputField label="Email" type="email" name="email" icon={iconMail} bind:value={auth["email"]} readOnly
                         hint="Server administrator access only."/>
@@ -51,10 +49,4 @@
             />
         </Row>
     </Section>
-    <Separator/>
-    <Footer onCancel={async () => {
-        auth = {};
-        await tick();
-        auth = $authStore;
-    }} />
 </Form>
