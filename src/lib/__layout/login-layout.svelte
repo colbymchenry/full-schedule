@@ -56,7 +56,6 @@
     display: grid;
     overflow: hidden;
     width: 70%;
-    height: 75%;
     max-height: 700px;
     max-width: 80rem;
     min-height: 500px;
@@ -161,7 +160,8 @@
     }
 
     .signup-container {
-      margin-top: -6%;
+      margin-top: -4%;
+      font-size: 14px;
     }
 
     * :global(.login-form) {

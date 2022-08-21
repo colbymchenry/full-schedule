@@ -1,6 +1,5 @@
 <script>
     import InputField from '$lib/forms/input-field.svelte';
-    import Checkbox from '$lib/forms/checkbox.svelte';
     import Form from '$lib/forms/form.svelte';
     import Button from '$lib/forms/button.svelte'
     import {FirebaseClient} from "../../utils/firebase/FirebaseClient.js";
@@ -30,36 +29,33 @@
 </script>
 
 <svelte:head>
-    <title>FS • Admin Login</title>
+    <title>FS • Reset Password</title>
 </svelte:head>
 
-<LoginLayout title="Sign in">
+<LoginLayout title="Reset your password">
     <div slot="hint">
-        Don&#x27;t have an account? <a href="/admin/create-account">Sign up</a>
+        Create a new password for your account
     </div>
     <div slot="form">
         <Form class="login-form" onSubmit={onSubmit} hideFooter>
-            <InputField form_errors={form_errors} name="email" type="email" label="Email address *" required/>
-            <InputField form_errors={form_errors} name="password" type="password" label="Password *"
-                        required/>
-            <div class="remember-container">
-                <Checkbox name="remember" label="Remember me"/>
-                <a href="/admin/forgot-password" style="justify-self: flex-end;">Forgot password?</a>
-            </div>
-            <Button style="min-height: 48px;">Sign in</Button>
+            <InputField form_errors={form_errors} name="password" type="password" label="Password *" required/>
+            <InputField form_errors={form_errors} name="password_confirm" type="password" label="Password (Confirm) *" required/>
+            <Button style="min-height: 48px;">Reset your password</Button>
         </Form>
+
+        <span>Return to <a href="/admin">sign in</a></span>
     </div>
 </LoginLayout>
 
 
 <style lang="scss">
-    .remember-container {
-      display: grid;
-      margin-top: 11px;
-      grid-auto-columns: 1fr;
-      grid-column-gap: 16px;
-      grid-row-gap: 16px;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: auto;
+  span {
+    color: var(--fuse-text-secondary);
+    font-size: 13px;
+    font-weight: 500;
+
+    a {
+      font-weight: 500;
     }
+  }
 </style>

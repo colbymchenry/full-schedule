@@ -35,7 +35,12 @@
                 prettyLog("AUTHENTICATION UPDATED");
             } else {
                 prettyLog("LOGGED OUT");
-                goto("/admin");
+
+                if ($page.url.pathname !== '/admin' &&
+                    $page.url.pathname !== '/admin/reset-password' &&
+                    $page.url.pathname !== '/admin/forgot-password') {
+                    goto("/admin");
+                }
             }
         })
     }
@@ -44,7 +49,7 @@
 
 {#if
     $page.url.pathname !== '/admin' &&
-    $page.url.pathname !== '/admin/set-password' &&
+    $page.url.pathname !== '/admin/reset-password' &&
     $page.url.pathname !== '/admin/forgot-password'
 }
     {#if $progressBarStore}

@@ -3,12 +3,13 @@
     export let type = "submit";
     export let icon;
     export let callback;
+    export let style;
 </script>
 
 {#if icon}
-    <button {type} class={'icon'} on:click={callback}><span>{@html icon}</span></button>
+    <button {type} {style} class={'icon'} on:click={callback}><span>{@html icon}</span></button>
 {:else}
-    <button {type} class={'btn ' + color} on:click={callback}><span><slot></slot></span></button>
+    <button {type} {style} class={'btn ' + color} on:click={callback}><span><slot></slot></span></button>
 {/if}
 
 <style lang="scss">
