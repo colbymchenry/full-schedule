@@ -8,41 +8,40 @@
     import {iconMail, iconPerson, iconPhone} from "../icons.js";
     import {authStore} from "../stores.js";
     import axios from "axios";
-    import Swal from "sweetalert2";
+    import {ApiProgressBar} from "../ApiProgressBar.js";
+    import {showToastError} from "../../utils/logger.js";
 
     let response;
     let form_errors = {};
     let auth = $authStore || {};
 
     async function onSubmit(data) {
+        ApiProgressBar.start();
         try {
             // update Google User in the backend
             axios.defaults.headers.common['authorization'] = await $authStore.getIdToken();
-            await axios.patch('/api/user', {
+            response = await axios.patch('/api/user', {
                 uid: $authStore.uid,
-                displayName: data.displayName,
+                displayName: data.name,
                 phoneNumber: data.phone
             });
         } catch (error) {
-            Swal.fire({
-                title: "Server error. Please try again later.",
-                timer: 3000,
-                timerProgressBar: true,
-                toast: true
-            });
+            response = null;
+            showToastError();
         }
+
+        ApiProgressBar.stop();
     }
 
 </script>
 
-
 <Form onSubmit={onSubmit}>
     <Section title="Profile" info="Following information is publicly displayed, be careful!">
-        <InputField label="Name" name="name" icon={iconPerson} bind:value={auth["displayName"]}  hint="Server administrator access only." />
+        <InputField label="Name" name="name" icon={iconPerson} bind:value={auth["displayName"]} />
         <Row>
             <InputField label="Email" type="email" name="email" icon={iconMail} bind:value={auth["email"]} readOnly
                         hint="Server administrator access only."/>
-            <InputField label="Phone" type="tel" name="phone" icon={iconPhone} bind:value={auth["phoneNumber"]} hint="Server administrator access only."
+            <InputField label="Phone" type="tel" name="phone" icon={iconPhone} bind:value={auth["phoneNumber"]}
                         alwaysShowMask
                         mask='+1 (000) 000 - 0000'
                         size={20}
@@ -52,5 +51,5 @@
         </Row>
     </Section>
     <Separator/>
-    <Footer/>
+    <Footer bind:submitted={response} />
 </Form>

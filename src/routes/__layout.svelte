@@ -7,9 +7,11 @@
     import {page} from '$app/stores';
     import '../app.css';
     import {FirebaseClient} from "../utils/firebase/FirebaseClient.js";
-    import {authStore} from "../lib/stores.js";
+    import {authStore, progressBarStore} from "../lib/stores.js";
     import {goto} from "$app/navigation";
     import {prettyLog} from "../utils/logger.js";
+    import ApiProgressBar from '$lib/__layout/api-progress-bar.svelte';
+
 
     let analyticsId = import.meta.env.VERCEL_ANALYTICS_ID;
 
@@ -22,7 +24,6 @@
     }
 
     $: if (browser) {
-
         if (localStorage.getItem("user")) {
             $authStore = JSON.parse(localStorage.getItem("user"));
         }
@@ -42,12 +43,15 @@
 
 
 {#if $page.url.pathname !== '/admin' }
+    {#if $progressBarStore}
+        <ApiProgressBar/>
+    {/if}
     <div class="root">
         <Nav/>
         <TopBar>
             <slot></slot>
         </TopBar>
-        <RightBar />
+        <RightBar/>
     </div>
 {:else}
     <slot/>
