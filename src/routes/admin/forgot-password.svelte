@@ -3,19 +3,19 @@
     import Form from '$lib/forms/form.svelte';
     import Button from '$lib/forms/button.svelte'
     import {FirebaseClient} from "../../utils/firebase/FirebaseClient.js";
-    import {goto} from "$app/navigation";
-    import {authStore} from "../../lib/stores.js";
     import LoginLayout from "$lib/__layout/login-layout.svelte";
+    import Swal from "sweetalert2";
+    import AnimateCheckmark from "$lib/AnimateCheckmark.svelte";
 
     let response;
     let form_errors = {};
 
     async function onSubmit(data) {
+        Swal.fire({
+            icon: "success"
+        })
         try {
-            response = await FirebaseClient.signIn(data["email"], data["password"]);
-            $authStore = response.user;
-            localStorage.setItem("user", JSON.stringify(response.user));
-            await goto("/admin/clients");
+            response = await FirebaseClient.sendPasswordResetEmail(data["email"]);
         } catch (error) {
             if (error?.code === 'auth/user-not-found') {
                 form_errors['email'] = "User not found.";
@@ -37,6 +37,10 @@
         Fill the form to reset your password
     </div>
     <div slot="form">
+
+        <AnimateCheckmark />
+
+
         <Form class="login-form" onSubmit={onSubmit} hideFooter>
             <InputField form_errors={form_errors} name="email" type="email" label="Email address *" required/>
             <Button style="min-height: 48px;">Send reset link</Button>
