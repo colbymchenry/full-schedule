@@ -3,7 +3,6 @@
     import TopBar from '$lib/__layout/top-bar.svelte';
     import RightBar from '$lib/__layout/right-bar.svelte';
     import {webVitals} from '$lib/vitals';
-    import {browser} from '$app/env';
     import {page} from '$app/stores';
     import '../app.css';
     import {FirebaseClient} from "../utils/firebase/FirebaseClient.js";
@@ -11,6 +10,7 @@
     import {goto} from "$app/navigation";
     import {prettyLog} from "../utils/logger.js";
     import ApiProgressBar from '$lib/__layout/api-progress-bar.svelte';
+    import {browser} from "$app/env";
 
 
     let analyticsId = import.meta.env.VERCEL_ANALYTICS_ID;

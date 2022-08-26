@@ -26,32 +26,32 @@
             name: 'Clients'
         },
         {
-            url: '/staff',
+            url: '/',
             icon: iconShieldUser,
             name: 'Staff'
         },
         {
-            url: '/reports',
+            url: '/',
             icon: iconCharts,
             name: 'Reports'
         },
         {
-            url: '/analytics',
+            url: '/',
             icon: iconAnalytics,
             name: 'Analytics'
         },
         {
-            url: '/promotions',
+            url: '/',
             icon: iconGiftCard,
             name: 'Promotions'
         },
         {
-            url: '/memberships',
+            url: '/',
             icon: iconMemberships,
             name: 'Members'
         },
         {
-            url: '/clover-devices',
+            url: '/',
             icon: iconSmartDevices,
             name: 'Clover Devices'
         },

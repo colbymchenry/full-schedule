@@ -1,5 +1,4 @@
 import {initializeApp} from 'firebase/app';
-import {getAnalytics} from 'firebase/analytics';
 import {getFirestore} from 'firebase/firestore';
 import {
     getAuth,
@@ -29,7 +28,6 @@ import {browser} from "$app/env";
 import {FIREBASE_CONFIG} from "../../lib/env.js";
 
 let firebaseApp;
-let firebaseAnalytics;
 
 if (browser) {
     try {

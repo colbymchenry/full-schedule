@@ -10,7 +10,6 @@
     import Button from "$lib/forms/button.svelte";
     import Badge from "$lib/badge.svelte";
     import {navStore} from "../stores.js";
-    import {browser} from "$app/env";
 
     let isFullscreen = false;
 
