@@ -4,18 +4,17 @@
     import Button from '$lib/forms/button.svelte'
     import {FirebaseClient} from "../../utils/firebase/FirebaseClient.js";
     import LoginLayout from "$lib/__layout/login-layout.svelte";
-    import Swal from "sweetalert2";
     import AnimateCheckmark from "$lib/AnimateCheckmark.svelte";
 
     let response;
     let form_errors = {};
+    let loading;
 
     async function onSubmit(data) {
-        Swal.fire({
-            icon: "success"
-        })
+        loading = true;
         try {
             response = await FirebaseClient.sendPasswordResetEmail(data["email"]);
+            response = true;
         } catch (error) {
             if (error?.code === 'auth/user-not-found') {
                 form_errors['email'] = "User not found.";
@@ -24,6 +23,8 @@
             }
 
             form_errors = form_errors;
+            response = undefined;
+            loading = undefined;
         }
     }
 </script>
@@ -38,13 +39,16 @@
     </div>
     <div slot="form">
 
-        <AnimateCheckmark />
+        {#if response === true}
+            <AnimateCheckmark/>
+            <h2>Password reset email sent!</h2>
+        {:else}
+            <Form class="login-form" onSubmit={onSubmit} hideFooter>
+                <InputField form_errors={form_errors} name="email" type="email" label="Email address *" required/>
+                <Button style="min-height: 48px;" bind:loading={loading}>Send reset link</Button>
+            </Form>
+        {/if}
 
-
-        <Form class="login-form" onSubmit={onSubmit} hideFooter>
-            <InputField form_errors={form_errors} name="email" type="email" label="Email address *" required/>
-            <Button style="min-height: 48px;">Send reset link</Button>
-        </Form>
 
         <span>Return to <a href="/admin">sign in</a></span>
     </div>
@@ -52,13 +56,17 @@
 
 
 <style lang="scss">
-    span {
-      color: var(--fuse-text-secondary);
-      font-size: 13px;
-      font-weight: 500;
+  span {
+    color: var(--fuse-text-secondary);
+    font-size: 13px;
+    font-weight: 500;
 
-      a {
-        font-weight: 500;
-      }
+    a {
+      font-weight: 500;
     }
+  }
+
+  h2 {
+    margin: 4rem 0;
+  }
 </style>

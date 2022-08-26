@@ -1,15 +1,19 @@
 <script>
+    import Spinner from "./spinner.svelte";
     export let color = "primary";
     export let type = "submit";
     export let icon;
     export let callback;
     export let style;
+    export let loading = false;
+    export let disabled = loading;
 </script>
 
 {#if icon}
-    <button {type} {style} class={'icon'} on:click={callback}><span>{@html icon}</span></button>
+    <button {type} {style} {disabled} class={'icon'} class:loading={loading} on:click={callback}><span>{@html icon}</span></button>
 {:else}
-    <button {type} {style} class={'btn ' + color} on:click={callback}><span><slot></slot></span></button>
+    <button {type} {style} {disabled} class={'btn ' + color} class:loading={loading} on:click={callback}><span>{#if loading}<Spinner color="#fff" size="1.5rem" />{:else} <slot></slot> {/if}</span>
+    </button>
 {/if}
 
 <style lang="scss">
@@ -66,19 +70,19 @@
     tab-size: 4;
     font-size: .875rem;
     font-weight: 500;
-    display: inline-flex!important;
+    display: inline-flex !important;
     align-items: center;
     justify-content: center;
     min-height: 40px;
     max-height: 40px;
-    line-height: 1!important;
+    line-height: 1 !important;
     box-sizing: border-box;
     position: relative;
     user-select: none;
     cursor: pointer;
     outline: none;
     border: none;
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     white-space: nowrap;
     text-decoration: none;
     vertical-align: baseline;
@@ -101,12 +105,20 @@
 
     span {
       position: relative;
-      display: inline-flex!important;
+      display: inline-flex !important;
       align-items: center;
       justify-content: center;
       height: 100%;
       z-index: 2;
       transform: scale(0.6);
     }
+  }
+
+  .loading span {
+    color: white;
+  }
+
+  .loading {
+    background-color: #473fc6;
   }
 </style>

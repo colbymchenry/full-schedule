@@ -4,6 +4,8 @@
     import Security from '$lib/settings/security.svelte';
     import Billing from '$lib/settings/billing.svelte';
     import Team from '$lib/settings/team.svelte';
+    import Store from '$lib/settings/store.svelte';
+    import Api from '$lib/settings/api.svelte';
     import {iconApi, iconCreditCard, iconStore, iconUser, iconUserLock, iconUsers} from "../../lib/icons.js";
 
     const routes = [
@@ -35,13 +37,13 @@
             icon: iconStore,
             name: 'Store',
             info: 'Manage your stores address, phone number, socials, and features',
-            component: Team
+            component: Store
         },
         {
             icon: iconApi,
             name: 'API',
             info: 'Manage your API keys for your store.',
-            component: Team
+            component: Api
         }
     ]
 
@@ -52,7 +54,7 @@
     <title>FS • Settings</title>
 </svelte:head>
 
-<div class="container">
+<div class="container full-vh">
     <div class="navigation">
         <div class="heading">
             <h1 class="tracking-tight">Settings</h1>
@@ -78,7 +80,7 @@
 <style lang="scss">
   .content {
     padding: 3rem;
-    height: calc(100vh - var(--top-bar-height) - 6rem);
+    height: calc(100vh - var(--top-bar-height));
     overflow-y: auto;
 
     h2 {

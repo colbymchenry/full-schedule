@@ -31,19 +31,24 @@
             return;
         }
 
-        if (data["password"] !== data["old_password"]) {
-            form_errors["password"] = "Passwords do not match.";
-            form_errors = form_errors;
-            return;
-        }
-
         ApiProgressBar.start();
         try {
             axios.defaults.headers.common['authorization'] = await $authStore.getIdToken();
-            await axios.patch('/api/user', {
-                uid: $authStore.uid,
-                password: data.password
-            });
+
+            try {
+                await FirebaseClient.signIn($authStore.email, data["old_password"]);
+
+                await axios.patch('/api/user', {
+                    uid: $authStore.uid,
+                    password: data.password
+                });
+            } catch (error) {
+               if (error?.code === 'auth/wrong-password') {
+                    form_errors['old_password'] = "Wrong password."
+                }
+
+                form_errors = form_errors;
+            }
         } catch (error) {
             showToast(error?.message);
         }
