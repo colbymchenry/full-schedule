@@ -6,6 +6,9 @@
     export let value, label, name, type = "text", placeholder, icon, disablePrefill, readOnly, hint, info;
     export let required = false;
 
+    let clazz;
+    export {clazz as class};
+
     let focused = false;
 
     function clear_error() {
@@ -51,7 +54,7 @@
             {/if}
         </label>
     {/if}
-    <div class="input-field" class:is--readonly={readOnly} class:is--error={form_errors[name]} class:is--focused={focused}>
+    <div class={"input-field " + clazz} class:is--readonly={readOnly} class:is--error={form_errors[name]} class:is--focused={focused} >
         {#if icon}
             <div class="icon">
                 {@html icon}

@@ -20,6 +20,7 @@
     flex-direction: column;
     width: 64px;
     background-color: white;
+    z-index: 2;
 
     > div:first-of-type {
       height: 64px;
@@ -36,7 +37,7 @@
 
     > div:last-of-type {
       flex-grow: 1;
-      box-shadow: rgb(0 0 0 / 14%) -1px 1px 3px 0px;
+      box-shadow: rgb(0 0 0 / 5%) -1px 1px 3px 0px;
       display: grid;
       grid-template-columns: 1fr;
       grid-template-rows: 1fr;

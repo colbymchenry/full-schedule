@@ -26,7 +26,7 @@
             name: 'Clients'
         },
         {
-            url: '/',
+            url: '/staff',
             icon: iconShieldUser,
             name: 'Staff'
         },

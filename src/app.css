@@ -282,3 +282,39 @@ input.has--icon {
     background: rgba(155,155,155,0.5);
     /*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);*/
 }
+
+.br-20 {
+    border-radius: 20px !important;
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #93a2b7;
+    font-weight: 400;
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: #93a2b7;
+    font-weight: 400;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+    color: #93a2b7;
+    font-weight: 400;
+}
+
+.search-form {
+    display: flex;
+    gap: 1rem;
+    align-items: stretch;
+}
+
+.search-form .input-field__container {
+    flex-grow: 1;
+}
+
+.search-form button[type="submit"] {
+    height: unset !important;
+    min-height: unset !important;
+    max-height: unset !important;
+}
+
