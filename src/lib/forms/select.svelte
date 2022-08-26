@@ -52,9 +52,9 @@
                 {@html icon}
             </div>
         {/if}
-            <select {...inputProps} on:select={clear_error}
+            <select {...inputProps} bind:value={value} on:select={clear_error}
                    on:focusin={() => focused = true} on:focusout={() => focused = false}>
-                <option value="" disabled selected>Make a selection</option>
+                <option value="" disabled selected={!value}>Make a selection</option>
                 <slot></slot>
             </select>
     </div>

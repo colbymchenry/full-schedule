@@ -9,14 +9,24 @@
     export let hideFooter;
     let reset = false;
 
+    function setValue(object, path, value) {
+        path = path.replace(/[\[]/gm, '__').replace(/[\]]/gm, ''); //to accept [index]
+        let keys = path.split('__'),
+            last = keys.pop();
+
+        keys.reduce(function (o, k) { return o[k] = o[k] || {}; }, object)[last] = value;
+    }
+
+    var data = {};
+
     function prepare(e) {
         const formData = new FormData(e.target);
 
-        const data = {};
+        let data = {};
 
         for (let field of formData) {
             const [key, value] = field;
-            data[key] = value;
+            setValue(data, key, value);
         }
 
         onSubmit(data);

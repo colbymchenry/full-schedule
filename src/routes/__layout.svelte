@@ -6,7 +6,7 @@
     import {page} from '$app/stores';
     import '../app.css';
     import {FirebaseClient} from "../utils/firebase/FirebaseClient.js";
-    import {authStore, progressBarStore} from "../lib/stores.js";
+    import {authStore, progressBarStore, settingsStore} from '$lib/stores.js';
     import {goto} from "$app/navigation";
     import {prettyLog} from "../utils/logger.js";
     import ApiProgressBar from '$lib/__layout/api-progress-bar.svelte';
@@ -42,7 +42,13 @@
                     goto("/admin");
                 }
             }
-        })
+        });
+        if (!Object.keys($settingsStore).length) {
+            (async () => {
+                const settings = await FirebaseClient.doc("settings", "main");
+                $settingsStore = settings;
+            })();
+        }
     }
 </script>
 
