@@ -17,7 +17,7 @@
         iconStore, iconTiktok,
         iconTwitter, iconYoutube
     } from "../icons.js";
-    import {authStore, settingsStore} from "../stores.js";
+    import {authStore, settings} from "../stores.js";
     import {ApiProgressBar} from "../ApiProgressBar.js";
     import {showToast} from "../../utils/logger.js";
     import {FirebaseClient} from "../../utils/firebase/FirebaseClient.js";
@@ -42,10 +42,10 @@
 <Form onSubmit={onSubmit}>
     <Section title="Name & Phone Number" info="Following information is publicly displayed, be careful!">
         <Row>
-            <InputField label="Name" name="store__name" icon={iconStore} bind:value={$settingsStore["store"]["name"]}
+            <InputField label="Name" name="store.name" icon={iconStore} value={$settings.get("store.name")}
             />
-            <InputField label="Phone" type="tel" name="store__phone" icon={iconPhone}
-                        bind:value={$settingsStore["store"]["phone"]}
+            <InputField label="Phone" type="tel" name="store.phone" icon={iconPhone}
+                        value={$settings.get("store.phone")}
                         alwaysShowMask
                         mask='+1 (000) 000 - 0000'
                         size={20}
@@ -59,28 +59,27 @@
 
     <Section title="Address & Timezone" info="This will be used in emails, SMS messages, and booking process.">
         <Row>
-            <InputField label="Street Address (Line 1)" name="address__street1" icon={iconRoadSign}
-                        bind:value={$settingsStore["address"]["street1"]}
+            <InputField label="Street Address (Line 1)" name="address.street1" icon={iconRoadSign}
+                        value={$settings.get("address.street1")}
                         disablePrefill/>
-            <InputField label="Street Address (Line 2)" name="address__street2" icon={iconRoadSign}
-                        bind:value={$settingsStore["address"]["street2"]}
+            <InputField label="Street Address (Line 2)" name="address.street2" icon={iconRoadSign}
+                        value={$settings.get("address.street2")}
                         disablePrefill/>
-            <Select label="State" name="address__state" icon={iconState}
-                    bind:value={$settingsStore["address"]["state"]}>
+            <Select label="State" name="address.state" icon={iconState} value={$settings.get("address.state")}>
                 {#each states as state}
                     <option value={state.value}
-                            selected={state.value === $settingsStore["address"]["state"]}>{state.label}</option>
+                            selected={state.value === $settings.get("address.state")}>{state.label}</option>
                 {/each}
             </Select>
-            <InputField label="City" name="address__city" icon={iconCity} bind:value={$settingsStore["address"]["city"]}
+            <InputField label="City" name="address.city" icon={iconCity} value={$settings.get("address.city")}
                         disablePrefill/>
-            <InputField label="Zip" name="address__zip" icon={iconMap} bind:value={$settingsStore["address"]["zip"]}
+            <InputField label="Zip" name="address.zip" icon={iconMap} value={$settings.get("address.zip")}
                         disablePrefill/>
-            <Select label="Timezone" name="address__timezone" icon={iconClock}
-                    bind:value={$settingsStore["address"]["timezone"]}>
+            <Select label="Timezone" name="address.timezone" icon={iconClock}
+                    value={$settings.get("address.timezone")}>
                 {#each timezones as timezone}
                     <option value={timezone.value}
-                            selected={timezone.value === $settingsStore["address"]["timezone"]}>{timezone.label}</option>
+                            selected={timezone.value === $settings.get("address.timezone")}>{timezone.label}</option>
                 {/each}
             </Select>
         </Row>
@@ -90,20 +89,20 @@
 
     <Section title="Socials" info="This will be used in emails, SMS messages, and booking process.">
         <Row>
-            <InputField label="TikTok" name="socials__tiktok" icon={iconTiktok}
-                        bind:value={$settingsStore["socials"]["tiktok"]}
+            <InputField label="TikTok" name="socials.tiktok" icon={iconTiktok}
+                        value={$settings.get("socials.tiktok")}
                         placeholder="Enter account name" disablePrefill/>
-            <InputField label="Instagram" name="socials__instagram" icon={iconInstagram}
-                        bind:value={$settingsStore["socials"]["instagram"]}
+            <InputField label="Instagram" name="socials.instagram" icon={iconInstagram}
+                        value={$settings.get("socials.instagram")}
                         placeholder="Enter account name" disablePrefill/>
-            <InputField label="Facebook" name="socials__facebook" icon={iconFacebook}
-                        bind:value={$settingsStore["socials"]["facebook"]}
+            <InputField label="Facebook" name="socials.facebook" icon={iconFacebook}
+                        value={$settings.get("socials.facebook")}
                         placeholder="Enter account name" disablePrefill/>
-            <InputField label="YouTube" name="socials__youtube" icon={iconYoutube}
-                        bind:value={$settingsStore["socials"]["youtube"]}
+            <InputField label="YouTube" name="socials.youtube" icon={iconYoutube}
+                        value={$settings.get("socials.youtube")}
                         placeholder="Enter account name" disablePrefill/>
-            <InputField label="Twitter" name="socials__twitter" icon={iconTwitter}
-                        bind:value={$settingsStore["socials"]["twitter"]}
+            <InputField label="Twitter" name="socials.twitter" icon={iconTwitter}
+                        value={$settings.get("socials.twitter")}
                         placeholder="Enter account name" disablePrefill/>
         </Row>
     </Section>

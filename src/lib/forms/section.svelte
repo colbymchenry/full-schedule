@@ -4,10 +4,10 @@
 
 <section>
     {#if title}
-        <h3 class="title">{title}</h3>
+        <h3 class="title">{@html title}</h3>
     {/if}
     {#if info}
-        <span class="info">{info}</span>
+        <span class="info">{@html info}</span>
     {/if}
 
     <div class="content">

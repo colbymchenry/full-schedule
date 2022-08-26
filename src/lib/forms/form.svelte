@@ -10,14 +10,14 @@
     let reset = false;
 
     function setValue(object, path, value) {
-        path = path.replace(/[\[]/gm, '__').replace(/[\]]/gm, ''); //to accept [index]
-        let keys = path.split('__'),
+        path = path.replace(/[\[]/gm, '.').replace(/[\]]/gm, ''); //to accept [index]
+        let keys = path.split('.'),
             last = keys.pop();
 
         keys.reduce(function (o, k) { return o[k] = o[k] || {}; }, object)[last] = value;
     }
 
-    var data = {};
+    let data = {};
 
     function prepare(e) {
         const formData = new FormData(e.target);
