@@ -7,20 +7,24 @@
     import Button from '$lib/forms/button.svelte';
     import Separator from '$lib/forms/separator.svelte';
     import GoogleOAuthHandler from './google-oauth-handler.svelte';
-    import axios from "axios";
     import {ApiProgressBar} from "../../../lib/ApiProgressBar.js";
     import {FirebaseClient} from "../../../utils/firebase/FirebaseClient.js";
     import {showToast} from "../../../utils/logger.js";
     import {
-        iconApi, iconCalendar, iconEvent,
-        iconFingerprint, iconFreeAvailable,
-        iconGoogle, iconKey, iconLan,
+        iconApi,
+        iconEvent,
+        iconFingerprint,
+        iconFreeAvailable,
+        iconGoogle,
+        iconKey,
+        iconLan,
         iconPhone,
         iconToken,
         iconTravelExplore,
         iconUser
     } from "../../../lib/icons.js";
-    import {auth, settings} from "../../../lib/stores.js";
+    import {settings} from "../../../lib/stores.js";
+    import {Api} from "../../../utils/Api.js";
 
     let form_errors = {};
 
@@ -40,10 +44,7 @@
         let getUrl = window.location;
         let baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
         try {
-            axios.defaults.headers.common['authorization'] = await $auth.getIdToken();
-            const {data} = await axios.post("/api/google-oauth-url", {
-                baseUrl
-            });
+            const { data } = await Api.post('/api/google-oauth-url', { baseUrl });
             window.location.href = data;
         } catch (e) {
             showToast()

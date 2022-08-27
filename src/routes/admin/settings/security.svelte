@@ -2,12 +2,12 @@
     import InputField from '$lib/forms/input-field.svelte';
     import Form from '$lib/forms/form.svelte';
     import Section from '$lib/forms/section.svelte';
-    import axios from "axios";
     import {FirebaseClient} from "../../../utils/firebase/FirebaseClient.js";
     import {ApiProgressBar} from "../../../lib/ApiProgressBar.js";
     import {auth} from "../../../lib/stores.js";
     import {showToast} from "../../../utils/logger.js";
     import {iconKey} from "../../../lib/icons.js";
+    import {Api} from "../../../utils/Api.js";
 
     let form_errors = {};
 
@@ -32,15 +32,13 @@
 
         ApiProgressBar.start();
         try {
-            axios.defaults.headers.common['authorization'] = await $auth.getIdToken();
-
             try {
                 await FirebaseClient.signIn($auth.email, data["old_password"]);
 
-                await axios.patch('/api/user', {
+                await Api.patch('/api/user', {
                     uid: $auth.uid,
                     password: data.password
-                });
+                })
             } catch (error) {
                if (error?.code === 'auth/wrong-password') {
                     form_errors['old_password'] = "Wrong password."

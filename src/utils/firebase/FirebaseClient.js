@@ -68,6 +68,10 @@ export class FirebaseClient {
         return firebaseApp;
     }
 
+    static async getIdToken() {
+        return await firebaseAuth.currentUser.getIdToken();
+    }
+
     static async createUser(email, password) {
         return await createUserWithEmailAndPassword(firebaseAuth, email, password);
     }

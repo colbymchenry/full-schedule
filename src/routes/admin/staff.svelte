@@ -1,10 +1,12 @@
 <script>
-    import Drawer from '$lib/drawer.svelte';
+    import StaffDrawer from '$lib/drawers/staff.svelte';
     import Form from '$lib/forms/form.svelte';
     import InputField from '$lib/forms/input-field.svelte';
     import Button from '$lib/forms/button.svelte';
     import AlphabetizedList from '$lib/alphabetized-list.svelte';
     import {iconSearch} from "../../lib/icons.js";
+
+    let selectedStaff = null;
 
     async function onSubmit(formData) {
 
@@ -29,18 +31,17 @@
 
             <Form onSubmit={onSubmit} class="search-form" hideFooter >
                 <InputField placeholder="Search staff" name="name" icon={iconSearch} class="br-20" />
-                <Button>Add</Button>
+                <Button type="button" callback={() => selectedStaff = {}}>Add Staff</Button>
             </Form>
         </div>
 
         <AlphabetizedList />
     </div>
 
-    <Drawer open={false}/>
+    <StaffDrawer bind:staff={selectedStaff} />
 </div>
 
 <style lang="scss">
-
   .container {
     display: flex;
     background-color: white;

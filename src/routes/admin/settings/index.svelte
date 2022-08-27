@@ -3,11 +3,11 @@
     import Row from '$lib/forms/row.svelte';
     import Form from '$lib/forms/form.svelte';
     import Section from '$lib/forms/section.svelte';
-    import axios from "axios";
     import {ApiProgressBar} from "../../../lib/ApiProgressBar.js";
     import {showToast} from "../../../utils/logger.js";
     import {iconMail, iconPerson, iconPhone} from "../../../lib/icons.js";
     import {auth} from "../../../lib/stores.js";
+    import {Api} from "../../../utils/Api.js";
 
     let form_errors = {};
 
@@ -15,12 +15,11 @@
         ApiProgressBar.start();
         try {
             // update Google User in the backend
-            axios.defaults.headers.common['authorization'] = await $auth.getIdToken();
-            await axios.patch('/api/user', {
+            await Api.patch('/api/user', {
                 uid: $auth.uid,
                 displayName: data.name,
                 phoneNumber: data.phone
-            });
+            })
         } catch (error) {
             showToast(error?.message);
         }

@@ -13,6 +13,7 @@
     import Avatar from '$lib/avatar.svelte';
     import axios from "axios";
     import Swal from "sweetalert2";
+    import {Api} from "../../utils/Api.js";
 
     let routes = [
         {
@@ -65,12 +66,10 @@
     let nameDiv;
     async function updateDisplayName() {
         try {
-            // update Google User in the backend
-            axios.defaults.headers.common['authorization'] = await $auth.getIdToken();
-            await axios.patch('/api/user', {
+            await Api.patch('/api/user', {
                 uid: $auth.uid,
                 displayName: nameDiv.innerHTML
-            });
+            })
         } catch (error) {
             Swal.fire({
                title: "Server error. Please try again later.",

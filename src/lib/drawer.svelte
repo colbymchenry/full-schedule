@@ -11,6 +11,7 @@
 <style lang="scss">
    .content {
      min-width: 640px;
+     position: relative;
    }
 
     section {

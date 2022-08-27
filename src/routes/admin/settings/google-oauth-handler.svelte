@@ -1,9 +1,9 @@
 <script>
     import {browser} from "$app/env";
-    import axios from "axios";
     import {showToast} from "../../../utils/logger.js";
     import {auth} from "../../../lib/stores.js";
     import {FirebaseClient} from "../../../utils/firebase/FirebaseClient.js";
+    import {Api} from "../../../utils/Api.js";
 
     let searching = false;
 
@@ -16,11 +16,10 @@
         if (searchParams.has("code")) {
             (async () => {
                 try {
-                    axios.defaults.headers.common['authorization'] = await $auth.getIdToken();
-                    let { data } = await axios.post("/api/google-oauth-url", {
+                    let { data } = await Api.post('/api/google-oauth-url', {
                         code: searchParams.get("code"),
                         baseUrl
-                    });
+                    })
 
                     await FirebaseClient.update("settings", "main", {
                         "google": {

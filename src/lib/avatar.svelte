@@ -1,8 +1,7 @@
 <script>
     import {iconPhotoLibrary} from "./icons.js";
     import Swal from "sweetalert2";
-    import axios from "axios";
-    import {auth} from "./stores.js";
+    import {Api} from "../utils/Api.js";
 
     export let user;
     export let size;
@@ -67,17 +66,15 @@
                 preConfirm: async () => {
                     try {
                         // upload image to cloudinary
-                        delete axios.defaults.headers.common['authorization'];
-                        const imgUpload = await axios.post('https://api.cloudinary.com/v1_1/dfpldejtd/image/upload', {
+                        const imgUpload = await Api.post('https://api.cloudinary.com/v1_1/dfpldejtd/image/upload', {
                             file: newSrc,
                             upload_preset: 'my-uploads'
-                        });
+                        })
                         // update Google User in the backend
-                        axios.defaults.headers.common['authorization'] = await $auth.getIdToken();
-                        await axios.patch('/api/user', {
+                        await Api.patch('/api/user', {
                             uid: user.uid,
                             photoURL: imgUpload.data["secure_url"]
-                        });
+                        })
                     } catch (error) {
                         await Swal.fire({
                             title: 'Error Reported',
