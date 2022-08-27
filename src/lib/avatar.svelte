@@ -2,6 +2,7 @@
     import {iconPhotoLibrary} from "./icons.js";
     import Swal from "sweetalert2";
     import {Api} from "../utils/Api.js";
+    import {FirebaseClient} from "../utils/firebase/FirebaseClient.js";
 
     export let user;
     export let size;
@@ -66,14 +67,18 @@
                 preConfirm: async () => {
                     try {
                         // upload image to cloudinary
-                        const imgUpload = await Api.post('https://api.cloudinary.com/v1_1/dfpldejtd/image/upload', {
-                            file: newSrc,
-                            upload_preset: 'my-uploads'
+                        const formData = new FormData();
+                        formData.append('file', files[0])
+                        formData.append('upload_preset', 'my-uploads')
+                        const imgUpload = await fetch('https://api.cloudinary.com/v1_1/dfpldejtd/image/upload', {
+                            method: 'POST',
+                            body: formData
                         })
+                        const res = await imgUpload.json();
                         // update Google User in the backend
                         await Api.patch('/api/user', {
                             uid: user.uid,
-                            photoURL: imgUpload.data["secure_url"]
+                            photoURL: res["secure_url"]
                         })
                     } catch (error) {
                         await Swal.fire({
