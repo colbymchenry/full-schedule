@@ -1,9 +1,4 @@
 <script>
-
-    import Account from '$lib/settings/account.svelte';
-    import Security from '$lib/settings/security.svelte';
-    import Team from '$lib/settings/team.svelte';
-    import Store from '$lib/settings/store.svelte';
     import {iconApi, iconCreditCard, iconStore, iconUser, iconUserLock, iconUsers} from "../../../lib/icons.js";
     import {page} from "$app/stores";
     import {goto} from "$app/navigation";
@@ -13,7 +8,7 @@
             icon: iconUser,
             name: 'Account',
             info: 'Manage your public profile and private information',
-            url: '/'
+            url: ''
         },
         {
             icon: iconUserLock,
