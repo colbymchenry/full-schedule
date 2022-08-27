@@ -142,7 +142,7 @@
         align-items: center;
 
         .name {
-          margin-top: 16px;
+          margin-top: 1.5rem;
           color: #fff;
           font-family: Inter var, sans-serif;
         }

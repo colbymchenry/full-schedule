@@ -177,27 +177,5 @@
     color: var(--error-color);
   }
 
-  .hint {
-    position: fixed;
-    opacity: 0;
-    visibility: hidden;
-    min-width: 50px;
-    min-height: 8px;
-    color: white;
-    font-weight: 500;
-    background-color: #0f1729;
-    padding: 8px;
-    pointer-events: none;
-    margin-top: -8px;
-    margin-left: -8px;
-    transition: opacity 0.3s ease;
-    border-radius: 6px;
-    box-shadow: var(--input-box-shadow);
-    font-size: 12px;
 
-    &.is--visible {
-      visibility: visible;
-      opacity: 1;
-    }
-  }
 </style>

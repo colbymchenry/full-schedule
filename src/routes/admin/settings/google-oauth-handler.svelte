@@ -22,7 +22,11 @@
                         baseUrl
                     });
 
-                    await FirebaseClient.update("settings", "main", { "google": data });
+                    await FirebaseClient.update("settings", "main", {
+                        "google": {
+                            "token": data
+                        }
+                    });
                     history.pushState({}, null, "/admin/settings/api");
                 } catch (e) {
                     showToast()

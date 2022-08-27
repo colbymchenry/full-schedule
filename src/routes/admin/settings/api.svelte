@@ -3,6 +3,7 @@
     import Form from '$lib/forms/form.svelte';
     import Section from '$lib/forms/section.svelte';
     import Row from '$lib/forms/row.svelte';
+    import Select from '$lib/forms/select.svelte';
     import Button from '$lib/forms/button.svelte';
     import Separator from '$lib/forms/separator.svelte';
     import GoogleOAuthHandler from './google-oauth-handler.svelte';
@@ -11,8 +12,8 @@
     import {FirebaseClient} from "../../../utils/firebase/FirebaseClient.js";
     import {showToast} from "../../../utils/logger.js";
     import {
-        iconApi,
-        iconFingerprint,
+        iconApi, iconCalendar, iconEvent,
+        iconFingerprint, iconFreeAvailable,
         iconGoogle, iconKey, iconLan,
         iconPhone,
         iconToken,
@@ -40,7 +41,7 @@
         let baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
         try {
             axios.defaults.headers.common['authorization'] = await $auth.getIdToken();
-            const { data } = await axios.post("/api/google-oauth-url", {
+            const {data} = await axios.post("/api/google-oauth-url", {
                 baseUrl
             });
             window.location.href = data;
@@ -51,20 +52,36 @@
 
 </script>
 
-<GoogleOAuthHandler />
+<GoogleOAuthHandler/>
 
 <Form onSubmit={onSubmit}>
     <Section title="Google"
              info={'API keys used for various Google APIs. <a href="https://console.cloud.google.com/welcome" target="_blank">Go to Google console.</a>'}>
         <Row>
-            {#if !$settings.get("google.tokens")}
-            <!-- Needs to OAuth with Google Business Account -->
-                <Button icon={iconGoogle} color="input" type="button" callback={loginWithGoogle}>Login with Google</Button>
-            {:else if !$settings.get("google.calendarid")}
-            <!-- Needs to select their Google Calendar -->
-
+            {#if !$settings.get("google.token")}
+                <!-- Needs to OAuth with Google Business Account -->
+                <Button icon={iconGoogle} color="input" type="button" callback={loginWithGoogle}>Login with Google
+                </Button>
+            {:else if !$settings.get("google.calendars.appointments")}
+                <!-- Needs to select their Google Calendar -->
+                <Select label="Appointment Calendar" hint="Calendar used to keep track of appointments."
+                        name="google.calendars.appointments" icon={iconEvent}
+                        value={$settings.get("google.calendars.appointments")}>
+                    <!--{#each states as state}-->
+                    <!--    <option value={state.value}-->
+                    <!--            selected={state.value === $settings.get("address.state")}>{state.label}</option>-->
+                    <!--{/each}-->
+                </Select>
+                <Select label="Scheduling Calendar" hint="Calendar used to keep track of employee schedules."
+                        name="google.calendars.schedules" icon={iconFreeAvailable}
+                        value={$settings.get("google.calendars.schedules")}>
+                    <!--{#each states as state}-->
+                    <!--    <option value={state.value}-->
+                    <!--            selected={state.value === $settings.get("address.state")}>{state.label}</option>-->
+                    <!--{/each}-->
+                </Select>
             {:else}
-            <!-- Is all good -->
+                <!-- Is all good -->
 
             {/if}
         </Row>
