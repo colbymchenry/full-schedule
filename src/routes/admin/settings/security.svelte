@@ -1,13 +1,13 @@
 <script>
-    import Section from '../forms/section.svelte';
     import InputField from '$lib/forms/input-field.svelte';
     import Form from '$lib/forms/form.svelte';
-    import {iconKey} from "../icons.js";
-    import {auth} from "../stores.js";
+    import Section from '$lib/forms/section.svelte';
     import axios from "axios";
-    import {ApiProgressBar} from "../ApiProgressBar.js";
-    import {showToast} from "../../utils/logger.js";
-    import {FirebaseClient} from "../../utils/firebase/FirebaseClient.js";
+    import {FirebaseClient} from "../../../utils/firebase/FirebaseClient.js";
+    import {ApiProgressBar} from "../../../lib/ApiProgressBar.js";
+    import {auth} from "../../../lib/stores.js";
+    import {showToast} from "../../../utils/logger.js";
+    import {iconKey} from "../../../lib/icons.js";
 
     let form_errors = {};
 

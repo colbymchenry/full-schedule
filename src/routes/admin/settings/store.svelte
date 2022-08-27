@@ -1,12 +1,15 @@
 <script>
-    import Section from '../forms/section.svelte';
     import InputField from '$lib/forms/input-field.svelte';
     import Select from '$lib/forms/select.svelte';
     import Form from '$lib/forms/form.svelte';
+    import Section from '$lib/forms/section.svelte';
     import Row from '$lib/forms/row.svelte';
     import Separator from '$lib/forms/separator.svelte';
-    import states from '../../assets/states.json';
-    import timezones from '../../assets/timezones.json';
+    import {ApiProgressBar} from "../../../lib/ApiProgressBar.js";
+    import {FirebaseClient} from "../../../utils/firebase/FirebaseClient.js";
+    import {showToast} from "../../../utils/logger.js";
+    import states from '../../../assets/states.json';
+    import timezones from '../../../assets/timezones.json';
     import {
         iconCity,
         iconClock, iconFacebook, iconInstagram,
@@ -14,13 +17,10 @@
         iconPhone,
         iconRoadSign,
         iconState,
-        iconStore, iconTiktok,
-        iconTwitter, iconYoutube
-    } from "../icons.js";
-    import {settings} from "../stores.js";
-    import {ApiProgressBar} from "../ApiProgressBar.js";
-    import {showToast} from "../../utils/logger.js";
-    import {FirebaseClient} from "../../utils/firebase/FirebaseClient.js";
+        iconStore,
+        iconTiktok, iconTwitter, iconYoutube
+    } from "../../../lib/icons.js";
+    import {settings} from "../../../lib/stores.js";
 
     let form_errors = {};
 

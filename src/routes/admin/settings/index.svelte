@@ -1,13 +1,13 @@
 <script>
-    import Section from '../forms/section.svelte';
     import InputField from '$lib/forms/input-field.svelte';
     import Row from '$lib/forms/row.svelte';
     import Form from '$lib/forms/form.svelte';
-    import {iconMail, iconPerson, iconPhone} from "../icons.js";
-    import {auth} from "../stores.js";
+    import Section from '$lib/forms/section.svelte';
     import axios from "axios";
-    import {ApiProgressBar} from "../ApiProgressBar.js";
-    import {showToast} from "../../utils/logger.js";
+    import {ApiProgressBar} from "../../../lib/ApiProgressBar.js";
+    import {showToast} from "../../../utils/logger.js";
+    import {iconMail, iconPerson, iconPhone} from "../../../lib/icons.js";
+    import {auth} from "../../../lib/stores.js";
 
     let form_errors = {};
 

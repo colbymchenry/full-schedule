@@ -1,11 +1,9 @@
 <script>
     import {browser} from "$app/env";
-    import {auth} from "../stores.js";
     import axios from "axios";
-    import {FirebaseClient} from "../../utils/firebase/FirebaseClient.js";
-    import {showToast} from "../../utils/logger.js";
-
-    export let activeRoute, routes;
+    import {showToast} from "../../../utils/logger.js";
+    import {auth} from "../../../lib/stores.js";
+    import {FirebaseClient} from "../../../utils/firebase/FirebaseClient.js";
 
     let searching = false;
 
@@ -25,8 +23,7 @@
                     });
 
                     await FirebaseClient.update("settings", "main", { "google": data });
-                    history.pushState({}, null, "/admin/settings");
-                    activeRoute = routes[routes.length - 1]
+                    history.pushState({}, null, "/admin/settings/api");
                 } catch (e) {
                     showToast()
                     console.error(e)

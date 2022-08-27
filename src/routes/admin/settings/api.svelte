@@ -1,25 +1,25 @@
 <script>
-    import Section from '../forms/section.svelte';
     import InputField from '$lib/forms/input-field.svelte';
     import Form from '$lib/forms/form.svelte';
+    import Section from '$lib/forms/section.svelte';
     import Row from '$lib/forms/row.svelte';
     import Button from '$lib/forms/button.svelte';
     import Separator from '$lib/forms/separator.svelte';
+    import GoogleOAuthHandler from './google-oauth-handler.svelte';
+    import axios from "axios";
+    import {ApiProgressBar} from "../../../lib/ApiProgressBar.js";
+    import {FirebaseClient} from "../../../utils/firebase/FirebaseClient.js";
+    import {showToast} from "../../../utils/logger.js";
     import {
         iconApi,
-        iconFingerprint, iconGoogle,
-        iconKey,
-        iconLan,
+        iconFingerprint,
+        iconGoogle, iconKey, iconLan,
         iconPhone,
         iconToken,
         iconTravelExplore,
         iconUser
-    } from "../icons.js";
-    import {auth, settings} from "../stores.js";
-    import {ApiProgressBar} from "../ApiProgressBar.js";
-    import {showToast} from "../../utils/logger.js";
-    import {FirebaseClient} from "../../utils/firebase/FirebaseClient.js";
-    import axios from "axios";
+    } from "../../../lib/icons.js";
+    import {auth, settings} from "../../../lib/stores.js";
 
     let form_errors = {};
 
@@ -50,6 +50,8 @@
     }
 
 </script>
+
+<GoogleOAuthHandler />
 
 <Form onSubmit={onSubmit}>
     <Section title="Google"

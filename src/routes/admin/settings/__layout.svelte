@@ -2,60 +2,56 @@
 
     import Account from '$lib/settings/account.svelte';
     import Security from '$lib/settings/security.svelte';
-    import Billing from '$lib/settings/billing.svelte';
     import Team from '$lib/settings/team.svelte';
     import Store from '$lib/settings/store.svelte';
-    import Api from '$lib/settings/api.svelte';
-    import GoogleOAuthHandler from '$lib/settings/google-oauth-handler.svelte';
-    import {iconApi, iconCreditCard, iconStore, iconUser, iconUserLock, iconUsers} from "../../lib/icons.js";
+    import {iconApi, iconCreditCard, iconStore, iconUser, iconUserLock, iconUsers} from "../../../lib/icons.js";
+    import {page} from "$app/stores";
+    import {goto} from "$app/navigation";
 
     const routes = [
         {
             icon: iconUser,
             name: 'Account',
             info: 'Manage your public profile and private information',
-            component: Account
+            url: '/'
         },
         {
             icon: iconUserLock,
             name: 'Security',
             info: 'Manage your password',
-            component: Security
+            url: '/security'
         },
         {
             icon: iconCreditCard,
             name: 'Plan & Billing',
             info: 'Manage your subscription plan, payment method and billing information',
-            component: Billing
+            url: '/billing'
         },
         {
             icon: iconUsers,
             name: 'Team',
             info: 'Manage your existing team and change roles/permissions',
-            component: Team
+            url: '/team'
         },
         {
             icon: iconStore,
             name: 'Store',
             info: 'Manage your stores address, phone number, socials, and features',
-            component: Store
+            url: '/store'
         },
         {
             icon: iconApi,
             name: 'API',
             info: 'Manage your API keys for your store.',
-            component: Api
+            url: '/api'
         }
     ]
-
-    let activeRoute = routes[0];
 </script>
 
 <svelte:head>
     <title>FS • Settings</title>
 </svelte:head>
 
-<GoogleOAuthHandler {routes} bind:activeRoute={activeRoute} />
 
 <div class="container full-vh">
     <div class="navigation">
@@ -63,7 +59,7 @@
             <h1 class="tracking-tight">Settings</h1>
         </div>
         {#each routes as route}
-            <div class="route" on:click={() => activeRoute = route} class:is--active={activeRoute.name === route.name}>
+            <div class="route" on:click={() => goto('/admin/settings' + route.url)} class:is--active={$page.url.pathname === ('/admin/settings' + route.url)}>
                 <div class="icon">
                     {@html route.icon}
                 </div>
@@ -75,8 +71,8 @@
         {/each}
     </div>
     <div class="content">
-        <h2 class="tracking-tight">{activeRoute.name}</h2>
-        <svelte:component this={activeRoute.component}/>
+        <h2 class="tracking-tight">{"TEST"}</h2>
+        <slot></slot>
     </div>
 </div>
 
