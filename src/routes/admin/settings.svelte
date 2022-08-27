@@ -6,6 +6,7 @@
     import Team from '$lib/settings/team.svelte';
     import Store from '$lib/settings/store.svelte';
     import Api from '$lib/settings/api.svelte';
+    import GoogleOAuthHandler from '$lib/settings/google-oauth-handler.svelte';
     import {iconApi, iconCreditCard, iconStore, iconUser, iconUserLock, iconUsers} from "../../lib/icons.js";
 
     const routes = [
@@ -53,6 +54,8 @@
 <svelte:head>
     <title>FS • Settings</title>
 </svelte:head>
+
+<GoogleOAuthHandler {routes} bind:activeRoute={activeRoute} />
 
 <div class="container full-vh">
     <div class="navigation">

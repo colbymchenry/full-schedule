@@ -5,7 +5,7 @@
     import Button from '$lib/forms/button.svelte'
     import {FirebaseClient} from "../../utils/firebase/FirebaseClient.js";
     import {goto} from "$app/navigation";
-    import {authStore} from "../../lib/stores.js";
+    import {auth} from "../../lib/stores.js";
     import LoginLayout from "$lib/__layout/login-layout.svelte";
 
     let response;
@@ -14,7 +14,7 @@
     async function onSubmit(data) {
         try {
             response = await FirebaseClient.signIn(data["email"], data["password"]);
-            $authStore = response.user;
+            $auth = response.user;
             localStorage.setItem("user", JSON.stringify(response.user));
             await goto("/admin/clients");
         } catch (error) {

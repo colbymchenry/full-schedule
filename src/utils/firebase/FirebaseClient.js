@@ -173,9 +173,14 @@ export class FirebaseClient {
 
     static async update(collectionName, docId, data) {
         if (browser) {
-            removeUndefined(data);
-            await updateDoc(doc(firebaseDb, collectionName, docId), {...data, updated_at: serverTimestamp()});
-            return await this.doc(collectionName, docId);
+            try {
+                removeUndefined(data);
+                await updateDoc(doc(firebaseDb, collectionName, docId), {...data, updated_at: serverTimestamp()});
+                return await this.doc(collectionName, docId);
+            } catch (e) {
+                return await this.set(collectionName, docId, data);
+            }
+
         }
 
         return undefined;

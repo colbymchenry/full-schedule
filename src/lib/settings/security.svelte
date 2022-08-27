@@ -3,14 +3,13 @@
     import InputField from '$lib/forms/input-field.svelte';
     import Form from '$lib/forms/form.svelte';
     import {iconKey} from "../icons.js";
-    import {authStore} from "../stores.js";
+    import {auth} from "../stores.js";
     import axios from "axios";
     import {ApiProgressBar} from "../ApiProgressBar.js";
     import {showToast} from "../../utils/logger.js";
     import {FirebaseClient} from "../../utils/firebase/FirebaseClient.js";
 
     let form_errors = {};
-    let auth = $authStore || {};
 
     async function onSubmit(data) {
         if (data["password"].length < 8) {
@@ -33,13 +32,13 @@
 
         ApiProgressBar.start();
         try {
-            axios.defaults.headers.common['authorization'] = await $authStore.getIdToken();
+            axios.defaults.headers.common['authorization'] = await $auth.getIdToken();
 
             try {
-                await FirebaseClient.signIn($authStore.email, data["old_password"]);
+                await FirebaseClient.signIn($auth.email, data["old_password"]);
 
                 await axios.patch('/api/user', {
-                    uid: $authStore.uid,
+                    uid: $auth.uid,
                     password: data.password
                 });
             } catch (error) {

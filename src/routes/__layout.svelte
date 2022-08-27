@@ -6,12 +6,12 @@
     import {page} from '$app/stores';
     import '../app.css';
     import {FirebaseClient} from "../utils/firebase/FirebaseClient.js";
-    import {authStore, progressBarStore, settings} from '$lib/stores.js';
     import {goto} from "$app/navigation";
     import {prettyLog} from "../utils/logger.js";
     import ApiProgressBar from '$lib/__layout/api-progress-bar.svelte';
     import {browser} from "$app/env";
     import {JsonHelper} from "../utils/jsonhelper.js";
+    import {auth, progressBarStore, settings} from "../lib/stores.js";
 
 
     let analyticsId = import.meta.env.VERCEL_ANALYTICS_ID;
@@ -25,14 +25,9 @@
     }
 
     $: if (browser) {
-        if (localStorage.getItem("user")) {
-            authStore.set(JSON.parse(localStorage.getItem("user")))
-        }
-
         FirebaseClient.auth().onAuthStateChanged((user) => {
             if (user) {
-                authStore.set(user);
-                localStorage.setItem("user", JSON.stringify(user));
+                auth.set(user);
                 prettyLog("AUTHENTICATION UPDATED");
             } else {
                 prettyLog("LOGGED OUT");
@@ -46,7 +41,7 @@
         });
         if (!Object.keys($settings.object).length) {
             FirebaseClient.doc("settings", "main").then((data) => {
-                console.log(data)
+                if (!data) return;
                 const jsonObj = new JsonHelper(data);
                 settings.set(jsonObj)
             })

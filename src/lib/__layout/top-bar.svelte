@@ -31,13 +31,13 @@
 <div class="container">
     <div class="top-bar">
         <div class="hamburger">
-            <Button callback={toggleNav} icon={$navStore ? iconMenuOpen : iconMenu} />
+            <Button callback={toggleNav} icon={$navStore ? iconMenuOpen : iconMenu} color="icon" />
         </div>
         <div class="buttons">
-            <Button callback={toggleFullScreen} icon={isFullscreen ? iconExitFullscreen : iconFullscreen} />
-            <Button icon={iconSearch} />
+            <Button callback={toggleFullScreen} icon={isFullscreen ? iconExitFullscreen : iconFullscreen} color="icon" />
+            <Button icon={iconSearch} color="icon" />
             <Badge count={5}>
-                <Button icon={iconInbox} />
+                <Button icon={iconInbox} color="icon" />
             </Badge>
         </div>
     </div>

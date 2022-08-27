@@ -3,10 +3,11 @@
     import InputField from '$lib/forms/input-field.svelte';
     import Form from '$lib/forms/form.svelte';
     import Row from '$lib/forms/row.svelte';
+    import Button from '$lib/forms/button.svelte';
     import Separator from '$lib/forms/separator.svelte';
     import {
         iconApi,
-        iconFingerprint,
+        iconFingerprint, iconGoogle,
         iconKey,
         iconLan,
         iconPhone,
@@ -14,13 +15,13 @@
         iconTravelExplore,
         iconUser
     } from "../icons.js";
-    import {authStore, settings} from "../stores.js";
+    import {auth, settings} from "../stores.js";
     import {ApiProgressBar} from "../ApiProgressBar.js";
     import {showToast} from "../../utils/logger.js";
     import {FirebaseClient} from "../../utils/firebase/FirebaseClient.js";
+    import axios from "axios";
 
     let form_errors = {};
-    let auth = $authStore || {};
 
     async function onSubmit(formData) {
         ApiProgressBar.start()
@@ -34,10 +35,43 @@
         ApiProgressBar.stop();
     }
 
+    async function loginWithGoogle() {
+        let getUrl = window.location;
+        let baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+        try {
+            axios.defaults.headers.common['authorization'] = await $auth.getIdToken();
+            const { data } = await axios.post("/api/google-oauth-url", {
+                baseUrl
+            });
+            window.location.href = data;
+        } catch (e) {
+            showToast()
+        }
+    }
+
 </script>
 
 <Form onSubmit={onSubmit}>
-    <Section title="Twilio SMS" info={'This service is used for SMS texting. <a href="https://www.twilio.com/try-twilio" target="_blank">Go to sign up page.</a>'}>
+    <Section title="Google"
+             info={'API keys used for various Google APIs. <a href="https://console.cloud.google.com/welcome" target="_blank">Go to Google console.</a>'}>
+        <Row>
+            {#if !$settings.get("google.tokens")}
+            <!-- Needs to OAuth with Google Business Account -->
+                <Button icon={iconGoogle} color="input" type="button" callback={loginWithGoogle}>Login with Google</Button>
+            {:else if !$settings.get("google.calendarid")}
+            <!-- Needs to select their Google Calendar -->
+
+            {:else}
+            <!-- Is all good -->
+
+            {/if}
+        </Row>
+    </Section>
+
+    <Separator/>
+
+    <Section title="Twilio SMS"
+             info={'This service is used for SMS texting. <a href="https://www.twilio.com/try-twilio" target="_blank">Go to sign up page.</a>'}>
         <Row>
             <InputField label="SID" name="twilio.sid" icon={iconFingerprint} value={$settings.get("twilio.sid")}
             />
@@ -45,7 +79,8 @@
             />
             <InputField label="MSID" name="twilio.msid" icon={iconFingerprint} value={$settings.get("twilio.msid")}
             />
-            <InputField label="Phone Number" type="tel" name="twilio.number" icon={iconPhone} value={$settings.get("twilio.number")}
+            <InputField label="Phone Number" type="tel" name="twilio.number" icon={iconPhone}
+                        value={$settings.get("twilio.number")}
                         alwaysShowMask
                         mask='+1 (000) 000 - 0000'
                         size={20}
@@ -55,18 +90,20 @@
         </Row>
     </Section>
 
-    <Separator />
+    <Separator/>
 
-    <Section title="TextMagic" info={'This service is used for scheduled text reminders. <a href="https://my.textmagic.com/register/" target="_blank">Go to sign up page.</a>'}>
+    <Section title="TextMagic"
+             info={'This service is used for scheduled text reminders. <a href="https://my.textmagic.com/register/" target="_blank">Go to sign up page.</a>'}>
         <Row>
-            <InputField label="Username" name="textmagic.username" icon={iconUser} value={$settings.get("textmagic.username")}
+            <InputField label="Username" name="textmagic.username" icon={iconUser}
+                        value={$settings.get("textmagic.username")}
             />
             <InputField label="API Key" name="textmagic.apikey" icon={iconApi} value={$settings.get("textmagic.apikey")}
             />
         </Row>
     </Section>
 
-    <Separator />
+    <Separator/>
 
     <Section title="Email" info={'This service is used for all emails within Full Schedule.'}>
         <Row>
@@ -81,26 +118,31 @@
         </Row>
     </Section>
 
-    <Separator />
+    <Separator/>
 
-    <Section title="Clover" info={'This service is used for payment processing and inventory management. <a href="https://connect.clover.com/get-started" target="_blank">Go here to sign up.</a>'}>
+    <Section title="Clover"
+             info={'This service is used for payment processing and inventory management. <a href="https://connect.clover.com/get-started" target="_blank">Go here to sign up.</a>'}>
         <Row>
-            <InputField label="E-Commerce Token (Private)" name="clover.ecomtoken" icon={iconToken} value={$settings.get("clover.ecomtoken")}
+            <InputField label="E-Commerce Token (Private)" name="clover.ecomtoken" icon={iconToken}
+                        value={$settings.get("clover.ecomtoken")}
             />
-            <InputField label="API Tokens (Private)" name="clover.apitoken" icon={iconToken} value={$settings.get("clover.apitoken")}
+            <InputField label="API Tokens (Private)" name="clover.apitoken" icon={iconToken}
+                        value={$settings.get("clover.apitoken")}
             />
-            <InputField label="Merchant ID" name="clover.merchantid" icon={iconFingerprint} value={$settings.get("clover.merchantid")}
+            <InputField label="Merchant ID" name="clover.merchantid" icon={iconFingerprint}
+                        value={$settings.get("clover.merchantid")}
             />
             <InputField label="App ID" name="clover.appid" icon={iconFingerprint} value={$settings.get("clover.appid")}
             />
         </Row>
     </Section>
 
-    <Separator />
+    <Separator/>
 
     <Section title="Facebook Pixel" info={'This service is used for Facebook Pixel integration.'}>
         <Row>
-            <InputField label="Pixel ID" name="facebook.pixel_id" icon={iconFingerprint} value={$settings.get("facebook.pixel_id")}
+            <InputField label="Pixel ID" name="facebook.pixel_id" icon={iconFingerprint}
+                        value={$settings.get("facebook.pixel_id")}
             />
         </Row>
     </Section>

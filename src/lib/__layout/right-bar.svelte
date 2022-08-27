@@ -6,7 +6,7 @@
 
 <div class="right-bar">
     <div>
-        <Button icon={iconChat}/>
+        <Button icon={iconChat} color="icon"/>
     </div>
     <div>
 

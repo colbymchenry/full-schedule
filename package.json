@@ -27,6 +27,7 @@
     "cookie": "^0.4.1",
     "firebase": "^9.9.2",
     "firebase-admin": "^11.0.1",
+    "googleapis": "^107.0.0",
     "svelte-input-mask": "^1.1.0",
     "sweetalert2": "^11.4.28",
     "web-vitals": "^2.1.4"

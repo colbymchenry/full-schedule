@@ -2,7 +2,7 @@
     import {iconPhotoLibrary} from "./icons.js";
     import Swal from "sweetalert2";
     import axios from "axios";
-    import {authStore} from "./stores.js";
+    import {auth} from "./stores.js";
 
     export let user;
     export let size;
@@ -73,7 +73,7 @@
                             upload_preset: 'my-uploads'
                         });
                         // update Google User in the backend
-                        axios.defaults.headers.common['authorization'] = await $authStore.getIdToken();
+                        axios.defaults.headers.common['authorization'] = await $auth.getIdToken();
                         await axios.patch('/api/user', {
                             uid: user.uid,
                             photoURL: imgUpload.data["secure_url"]

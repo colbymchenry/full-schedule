@@ -9,10 +9,10 @@
     export let disabled = loading;
 </script>
 
-{#if icon}
+{#if icon && color === "icon" }
     <button {type} {style} {disabled} class={'icon'} class:loading={loading} on:click={callback}><span>{@html icon}</span></button>
 {:else}
-    <button {type} {style} {disabled} class={'btn ' + color} class:loading={loading} on:click={callback}><span>{#if loading}<Spinner color="#fff" size="1.5rem" />{:else} <slot></slot> {/if}</span>
+    <button {type} {style} {disabled} class={'btn ' + color} class:loading={loading} on:click={callback}><span>{#if loading}<Spinner color="#fff" size="1.5rem" />{:else}{#if icon}<div class="icon">{@html icon}</div>{/if}<slot></slot> {/if}</span>
     </button>
 {/if}
 
@@ -31,7 +31,7 @@
     line-height: 1 !important;
     padding: 0 20px !important;
     border-radius: 9999px !important;
-    box-sizing: border-box;
+    box-sizing: content-box;
     position: relative;
     user-select: none;
     cursor: pointer;
@@ -49,6 +49,14 @@
     background-color: var(--primary-color);
     box-shadow: 0 0 #0003, 0 0 #00000024, 0 0 #0000001f;
     transition: all 0.3s ease;
+    justify-self: flex-start;
+
+    span {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+    }
 
     &.secondary {
       background-color: rgba(0, 0, 0, 0);
@@ -62,6 +70,27 @@
 
     &:hover {
       background-color: #473fc6;
+    }
+
+    &.input {
+      display: flex;
+      align-items: center;
+      border-style: solid;
+      border-width: 1px;
+      border-color: rgb(203 213 225 / 1);
+      padding: 2px 16px 2px 40px !important;
+      border-radius: 6px !important;
+      background: #fff;
+      box-shadow: var(--input-box-shadow);
+      position: relative;
+      color: #333;
+
+      .icon {
+        transform: scale(0.5);
+        position: absolute;
+        color: var(--icon-gray);
+        left: 0;
+      }
     }
   }
 

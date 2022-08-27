@@ -17,13 +17,12 @@
         iconStore, iconTiktok,
         iconTwitter, iconYoutube
     } from "../icons.js";
-    import {authStore, settings} from "../stores.js";
+    import {settings} from "../stores.js";
     import {ApiProgressBar} from "../ApiProgressBar.js";
     import {showToast} from "../../utils/logger.js";
     import {FirebaseClient} from "../../utils/firebase/FirebaseClient.js";
 
     let form_errors = {};
-    let auth = $authStore || {};
 
     async function onSubmit(formData) {
         ApiProgressBar.start()

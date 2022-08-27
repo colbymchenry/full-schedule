@@ -1,2 +1,4 @@
 export const FIREBASE_CONFIG = import.meta.env.VITE_PUBLIC_FIREBASE_CONFIG;
 export const ADMIN_FIREBASE_CONFIG = import.meta.env.VITE_ADMIN_FIREBASE_CONFIG;
+export const GOOGLE_CLIENT_ID = import.meta.env.VITE_PUBLIC_GOOGLE_CLIENT_ID;
+export const GOOGLE_CLIENT_SECRET = import.meta.env.VITE_GOOGLE_CLIENT_SECRET;

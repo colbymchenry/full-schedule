@@ -5,11 +5,11 @@
         iconCalendar,
         iconCharts, iconCog,
         iconGiftCard, iconMemberships,
-        iconShieldUser, iconSmartDevices,
+        iconShieldUser, iconSmartDevices, iconTools,
         iconUser,
         iconUsers
     } from "../icons.js";
-    import {authStore, navStore} from "../stores.js";
+    import {auth, navStore} from "../stores.js";
     import Avatar from '$lib/avatar.svelte';
     import axios from "axios";
     import Swal from "sweetalert2";
@@ -57,7 +57,7 @@
         },
         {
             url: '/settings',
-            icon: iconCog,
+            icon: iconTools,
             name: 'Settings'
         }
     ];
@@ -66,9 +66,9 @@
     async function updateDisplayName() {
         try {
             // update Google User in the backend
-            axios.defaults.headers.common['authorization'] = await $authStore.getIdToken();
+            axios.defaults.headers.common['authorization'] = await $auth.getIdToken();
             await axios.patch('/api/user', {
-                uid: $authStore.uid,
+                uid: $auth.uid,
                 displayName: nameDiv.innerHTML
             });
         } catch (error) {
@@ -91,9 +91,9 @@
             </div>
         </div>
         <div class="user">
-            <Avatar bind:user={$authStore} size="medium" />
-            <div class="name" contenteditable="true" bind:this={nameDiv} on:blur={updateDisplayName}>{$authStore?.displayName || 'User'}</div>
-            <div class="email">{$authStore?.email}</div>
+            <Avatar bind:user={$auth} size="medium" />
+            <div class="name" contenteditable="true" bind:this={nameDiv} on:blur={updateDisplayName}>{$auth?.displayName || 'User'}</div>
+            <div class="email">{$auth?.email}</div>
         </div>
 
         <div class="links">
