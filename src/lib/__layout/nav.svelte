@@ -11,7 +11,6 @@
     } from "../icons.js";
     import {auth, navStore} from "../stores.js";
     import Avatar from '$lib/avatar.svelte';
-    import axios from "axios";
     import Swal from "sweetalert2";
     import {Api} from "../../utils/Api.js";
 
