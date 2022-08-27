@@ -1,5 +1,7 @@
 import { google } from 'googleapis';
 
+// TODO: Implement freebusy to determine if blocked time with new appointments when scheduling
+// https://stackoverflow.com/questions/44133947/google-calendar-api-check-for-conflicts
 export class GoogleCalendarAPI {
 
     constructor() {
