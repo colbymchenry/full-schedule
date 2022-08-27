@@ -41,6 +41,8 @@
             url: '/api'
         }
     ]
+
+    $: activeUrl = routes.find(({url}) => $page.url.pathname === ('/admin/settings' + url))
 </script>
 
 <svelte:head>
@@ -66,7 +68,7 @@
         {/each}
     </div>
     <div class="content">
-        <h2 class="tracking-tight">{"TEST"}</h2>
+        <h2 class="tracking-tight">{activeUrl?.name}</h2>
         <slot></slot>
     </div>
 </div>
