@@ -1,11 +1,11 @@
-// export async function get() {
-//     return {
-//         status: 200,
-//         body: {
-//             message: "Hello"
-//         }
-//     }
-// }
+export async function get({url}) {
+    const ids = url.searchParams.get("ids").includes(",") ? url.searchParams.get("ids").split(",").filter((id) => id) : [url.searchParams.get("ids")];
+    const users = await FirebaseAdmin.auth().getUsers(ids.map((uid) => { return { uid } }));
+    return {
+        status: 200,
+        body: users
+    }
+}
 
 
 import {FirebaseAdmin} from "../../../utils/firebase/FirebaseAdmin.js";
@@ -25,9 +25,9 @@ export async function patch({request}) {
 
         await FirebaseAdmin.auth().updateUser(res.uid, res);
 
-        return { status: 200 }
+        return {status: 200}
     } catch (error) {
-        if (error?.code ) {
+        if (error?.code) {
             return {
                 status: 400,
                 body: {

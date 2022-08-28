@@ -6,11 +6,22 @@
     import TextArea from '$lib/forms/textarea.svelte';
     import Footer from './footer.svelte';
     import Avatar from '$lib/avatar.svelte';
-    import {iconBirthday, iconClose, iconKey, iconMail, iconNotes, iconPhone, iconPin, iconUser} from "../icons.js";
+    import {
+        iconBirthday,
+        iconBriefcase,
+        iconClose,
+        iconKey,
+        iconMail,
+        iconNotes,
+        iconPhone,
+        iconPin,
+        iconUser
+    } from "../icons.js";
     import {ApiProgressBar} from "../ApiProgressBar.js";
     import {FirebaseClient} from "../../utils/firebase/FirebaseClient.js";
     import {Api} from "../../utils/Api.js";
     import {FormHelper} from "../../utils/FormHelper.js";
+    import {Cloudinary} from "../../utils/Cloudinary.js";
 
     export let staff;
     let formElem;
@@ -54,16 +65,19 @@
             if (res?.code === 'auth/email-already-exists') {
                 form_errors["email"] = res.message;
                 form_errors = form_errors;
+                ApiProgressBar.stop();
+                return;
             }
 
-            console.log(res)
+            if (avatarImg) {
+                const resCloudinary = await Cloudinary.upload(avatarImg)
+                // update Google User in the backend
+                await Api.patch('/api/user', {
+                    uid: res.user.uid,
+                    photoURL: resCloudinary["secure_url"]
+                })
+            }
 
-            // const res = await Cloudinary.upload(avatarImg)
-            // // update Google User in the backend
-            // await Api.patch('/api/user', {
-            //     uid: user.uid,
-            //     photoURL: res["secure_url"]
-            // })
         } catch (error) {
         }
         ApiProgressBar.stop();
@@ -84,9 +98,12 @@
         <div class="editor">
             <form bind:this={formElem}
                   style="display: grid;grid-template-rows: 1fr;grid-template-columns: 1fr;row-gap: 2rem;">
-                <InputField label="Name *" name="name" icon={iconUser} value={staff?.displayName}
+                <InputField label="Name *" name="displayName" icon={iconUser} value={staff?.displayName}
                             required disablePrefill
                             bind:form_errors={form_errors}/>
+
+                <InputField label="Title" name="title" icon={iconBriefcase} value={staff?.title}
+                            disablePrefill bind:form_errors={form_errors}/>
 
                 <InputField label="Email *" type="email" name="email" icon={iconMail} value={staff?.email} required
                             disablePrefill

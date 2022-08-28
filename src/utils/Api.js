@@ -1,5 +1,6 @@
 import {FirebaseClient} from "./firebase/FirebaseClient.js";
 
+// TODO: Errors not catching with try catch
 export class Api {
 
     static async get(url, headers) {
@@ -35,6 +36,11 @@ export class Api {
     }
 
     static async post(url, data, headers) {
+        // clean up masked phone number
+        if (data["phoneNumber"]) {
+            data["phoneNumber"] = data["phoneNumber"].replace('+1', '').replace(/[^a-zA-Z0-9 ]/g, '').trim();
+            if (!data["phoneNumber"].length) delete data["phoneNumber"]
+        }
         const response = await fetch(url, {
             method: 'POST', // *GET, POST, PUT, DELETE, etc.
             mode: 'cors', // no-cors, *cors, same-origin
@@ -54,6 +60,11 @@ export class Api {
 
 
     static async patch(url, data, headers) {
+        // clean up masked phone number
+        if (data["phoneNumber"]) {
+            data["phoneNumber"] = data["phoneNumber"].replace('+1', '').replace(/[^a-zA-Z0-9 ]/g, '').trim();
+            if (!data["phoneNumber"].length) delete data["phoneNumber"]
+        }
         const response = await fetch(url, {
             method: 'PATCH', // *GET, POST, PUT, DELETE, etc.
             mode: 'cors', // no-cors, *cors, same-origin

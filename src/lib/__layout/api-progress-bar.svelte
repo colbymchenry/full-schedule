@@ -36,6 +36,7 @@
     left: 0;
     width: 100vw;
     z-index: 4;
+    transition: all 0.3s ease;
 
     &::after {
       z-index: 3;
@@ -47,6 +48,9 @@
       height: 100vh;
       overflow: hidden;
       background-color: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      transition: all 0.3s ease;
     }
   }
 
@@ -89,8 +93,10 @@
     display: block;
     height: 5px;
     width: 0;
-    background-color: var(--primary-color);
+    background-color: #1cce1c;
+    box-shadow: 0 -3px 10px 5px rgba(28, 206, 28, 0.27);
     position: relative;
+    transition: all 0.4s var(--transition-drawer);
   }
 
 

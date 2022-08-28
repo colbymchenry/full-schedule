@@ -1,17 +1,26 @@
 <script>
+    export let data;
+    export let key;
 
     const alphabetStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    let alphabet = [];
-    for (let i = 0; i < alphabetStr.length; i++) {
-        alphabet.push(alphabetStr.charAt(i));
+    let alphabet = {};
+
+    $: if (data) {
+        for (let i = 0; i < alphabetStr.length; i++) {
+            let letter = alphabetStr.charAt(i);
+            alphabet[letter] = data.filter((x) => x[key].toUpperCase().startsWith(letter));
+        }
     }
 
 </script>
 
 <section>
-    {#each alphabet as letter}
-        <div class="letter-block">{letter}</div>
-    {/each}
+    {#if Object.keys(alphabet).length}
+        {#each Object.keys(alphabet) as letter}
+            <div class="letter-block">{letter}</div>
+            <slot letter={letter}></slot>
+        {/each}
+    {/if}
 </section>
 
 

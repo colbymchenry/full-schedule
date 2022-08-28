@@ -112,6 +112,9 @@
     background-color: #0F172A;
     max-width: 0;
     transition: max-width 0.4s var(--transition-drawer);
+    height: 100vh !important;
+    min-height: 100vh !important;
+    max-height: 100vh !important;
 
     &.is--open {
       max-width: 280px;

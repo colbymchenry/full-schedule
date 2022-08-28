@@ -220,9 +220,11 @@ h1, h2, h3, h4, h5, p, input, textarea, span, div {
 .full-vh {
     min-height: -moz-available;
     min-height: -webkit-fill-available;
+    min-height: calc(100vh - var(--top-bar-height));
+    overflow-x: hidden;
+    overflow-y: auto;
+    max-height: calc(100vh - var(--top-bar-height));
     min-height: fill-available;
-    min-height: 100vh;
-    overflow: hidden;
 }
 
 input:-webkit-autofill,

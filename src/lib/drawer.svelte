@@ -29,6 +29,8 @@
       right: 0;
       overflow-y: auto;
       transition: width 0.4s var(--transition-drawer);
+      position: fixed;
+      margin-right: var(--top-bar-height);
 
       &.open {
         width: 40rem !important;
