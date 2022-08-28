@@ -27,16 +27,16 @@ export async function patch({request}) {
 
         return { status: 200 }
     } catch (error) {
-        console.error(error);
         if (error?.code ) {
             return {
                 status: 400,
                 body: {
-                    cody: error.code,
+                    code: error.code,
                     message: error.message
                 }
             }
         } else {
+            console.error(error);
             return {
                 status: 500
             }

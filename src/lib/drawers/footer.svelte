@@ -23,10 +23,6 @@
         height: 4.5rem;
         background-color: var(--bg-color);
         border-top: 1px solid var(--border-color);
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        margin-bottom: 4rem;
         padding: 0 1.75rem;
 
         > div {

@@ -12,6 +12,9 @@
    .content {
      min-width: 640px;
      position: relative;
+     max-height: calc(100vh - var(--top-bar-height));
+     overflow-y: auto;
+     overflow-x: hidden;
    }
 
     section {

@@ -2,9 +2,11 @@
     import {iconPhotoLibrary} from "./icons.js";
     import Swal from "sweetalert2";
     import {Api} from "../utils/Api.js";
+    import {Cloudinary} from "../utils/Cloudinary.js";
 
     export let user;
     export let size;
+    export let onChange;
 
     $: src = user?.photoURL;
 
@@ -53,6 +55,12 @@
             });
             reader.readAsDataURL(files[0]);
 
+            if (onChange) {
+                onChange(files[0]);
+            }
+
+            if (!user || !Object.keys(user).length) return;
+
             // set uploading to true so z-index of avatar is above SweetAlert
             uploading = true;
             const keep = await Swal.fire({
@@ -66,14 +74,7 @@
                 preConfirm: async () => {
                     try {
                         // upload image to cloudinary
-                        const formData = new FormData();
-                        formData.append('file', files[0])
-                        formData.append('upload_preset', 'my-uploads')
-                        const imgUpload = await fetch('https://api.cloudinary.com/v1_1/dfpldejtd/image/upload', {
-                            method: 'POST',
-                            body: formData
-                        })
-                        const res = await imgUpload.json();
+                        const res = await Cloudinary.upload(files[0]);
                         // update Google User in the backend
                         await Api.patch('/api/user', {
                             uid: user.uid,

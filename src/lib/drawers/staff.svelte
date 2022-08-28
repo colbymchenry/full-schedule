@@ -4,17 +4,17 @@
     import Form from '$lib/forms/form.svelte';
     import InputField from '$lib/forms/input-field.svelte';
     import TextArea from '$lib/forms/textarea.svelte';
-    import Separator from '$lib/forms/separator.svelte';
     import Footer from './footer.svelte';
     import Avatar from '$lib/avatar.svelte';
-    import {iconBirthday, iconClose, iconMail, iconNotes, iconPhone, iconPin, iconUser} from "../icons.js";
+    import {iconBirthday, iconClose, iconKey, iconMail, iconNotes, iconPhone, iconPin, iconUser} from "../icons.js";
     import {ApiProgressBar} from "../ApiProgressBar.js";
     import {FirebaseClient} from "../../utils/firebase/FirebaseClient.js";
-    import {auth} from "../stores.js";
     import {Api} from "../../utils/Api.js";
-    import {showToast} from "../../utils/logger.js";
+    import {FormHelper} from "../../utils/FormHelper.js";
 
     export let staff;
+    let formElem;
+    let avatarImg;
     let form_errors = {};
     let headerImg = `/images/cover${getRandomInt(1, 10)}.jpg`;
 
@@ -29,24 +29,42 @@
     }
 
     async function onSubmit(data) {
+        if (data["password"].length < 8) {
+            form_errors["password"] = "Your new password must be at least 8 characters long.";
+            form_errors = form_errors;
+            return;
+        }
+
+        if (data["password"].length > 15) {
+            form_errors["password"] = "Your new password must be less than 16 characters long.";
+            form_errors = form_errors;
+            return;
+        }
+
+        if (!data["password"].match(FirebaseClient.passwordRegex)) {
+            form_errors["password"] = "Your new password must include numbers, letters and special characters.";
+            form_errors = form_errors;
+            return;
+        }
+
         ApiProgressBar.start();
         try {
-            try {
-                await FirebaseClient.signIn($auth.email, data["old_password"]);
+            const res = await Api.post('/api/staff', data);
 
-                await Api.patch('/api/user', {
-                    uid: $auth.uid,
-                    password: data.password
-                })
-            } catch (error) {
-                if (error?.code === 'auth/wrong-password') {
-                    form_errors['old_password'] = "Wrong password."
-                }
-
+            if (res?.code === 'auth/email-already-exists') {
+                form_errors["email"] = res.message;
                 form_errors = form_errors;
             }
+
+            console.log(res)
+
+            // const res = await Cloudinary.upload(avatarImg)
+            // // update Google User in the backend
+            // await Api.patch('/api/user', {
+            //     uid: user.uid,
+            //     photoURL: res["secure_url"]
+            // })
         } catch (error) {
-            showToast(error?.message);
         }
         ApiProgressBar.stop();
     }
@@ -61,10 +79,10 @@
     </div>
     <div class="body">
         <div class="avatar">
-            <Avatar user={staff} size="large"/>
+            <Avatar user={staff} size="large" onChange={(imgData) => avatarImg = imgData}/>
         </div>
         <div class="editor">
-            <Form onSubmit={onSubmit} hideFooter
+            <form bind:this={formElem}
                   style="display: grid;grid-template-rows: 1fr;grid-template-columns: 1fr;row-gap: 2rem;">
                 <InputField label="Name *" name="name" icon={iconUser} value={staff?.displayName}
                             required disablePrefill
@@ -72,6 +90,9 @@
 
                 <InputField label="Email *" type="email" name="email" icon={iconMail} value={staff?.email} required
                             disablePrefill
+                            bind:form_errors={form_errors}/>
+
+                <InputField label="Password *" type="password" name="password" icon={iconKey} required
                             bind:form_errors={form_errors}/>
 
                 <InputField label="Phone" type="tel" name="phoneNumber" icon={iconPhone} value={staff?.phoneNumber}
@@ -89,12 +110,12 @@
                             disablePrefill bind:form_errors={form_errors}/>
 
                 <TextArea label="Notes" name="notes" icon={iconNotes} value={staff?.notes}
-                            disablePrefill bind:form_errors={form_errors}/>
+                          disablePrefill bind:form_errors={form_errors}/>
 
-            </Form>
+            </form>
         </div>
     </div>
-    <Footer />
+    <Footer onSave={() => onSubmit(FormHelper.getFormData(formElem))}/>
 </Drawer>
 
 <style lang="scss">
@@ -113,17 +134,13 @@
   }
 
   .body {
-    padding: 3rem;
+    padding: 5rem 3rem 3rem;
     display: flex;
     flex-direction: column;
-
-    .editor {
-      margin-top: 3.5rem;
-    }
   }
 
   .avatar {
     position: absolute;
-    margin-top: -6.5rem;
+    margin-top: -9rem;
   }
 </style>
