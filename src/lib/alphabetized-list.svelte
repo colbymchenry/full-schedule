@@ -5,9 +5,11 @@
     const alphabetStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     let alphabet = {};
 
+    // wait for data to populate of async
     $: if (data) {
         for (let i = 0; i < alphabetStr.length; i++) {
             let letter = alphabetStr.charAt(i);
+            // find all the objects with the key starting with the letter
             alphabet[letter] = data.filter((x) => x[key].toUpperCase().startsWith(letter));
         }
     }
@@ -17,8 +19,10 @@
 <section>
     {#if Object.keys(alphabet).length}
         {#each Object.keys(alphabet) as letter}
-            <div class="letter-block">{letter}</div>
-            <slot letter={letter}></slot>
+            {#each alphabet[letter] as obj}
+                <div class="letter-block">{letter}</div>
+                <slot data={obj}></slot>
+            {/each}
         {/each}
     {/if}
 </section>

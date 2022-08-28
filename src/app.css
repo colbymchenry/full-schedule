@@ -345,3 +345,9 @@ input.has--icon {
     visibility: visible;
     opacity: 1;
 }
+
+.truncate {
+    overflow: hidden!important;
+    text-overflow: ellipsis!important;
+    white-space: nowrap!important;
+}

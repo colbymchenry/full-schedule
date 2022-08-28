@@ -20,6 +20,7 @@ export async function post({request}) {
             address: data.address,
             birthday: data.birthday,
             notes: data.notes,
+            title: data.title,
             uid: user.uid
         });
 
