@@ -32,11 +32,11 @@
 
 <Form onSubmit={onSubmit}>
     <Section title="Profile" info="Following information is publicly displayed, be careful!">
-        <InputField label="Name" name="name" icon={iconPerson} value={$auth?.displayName}/>
+        <InputField label="Name *" name="name" icon={iconPerson} value={$auth?.displayName} required />
         <Row>
             <InputField label="Email" type="email" name="email" icon={iconMail} value={$auth?.email} readOnly
                         hint="Server administrator access only."/>
-            <InputField label="Phone" type="tel" name="phone" icon={iconPhone} value={$auth?.phoneNumber}
+            <InputField label="Phone *" type="tel" name="phone" icon={iconPhone} value={$auth?.phoneNumber} required
                         alwaysShowMask
                         mask='+1 (000) 000 - 0000'
                         size={20}

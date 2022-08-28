@@ -2,7 +2,6 @@
     import {iconPhotoLibrary} from "./icons.js";
     import Swal from "sweetalert2";
     import {Api} from "../utils/Api.js";
-    import {FirebaseClient} from "../utils/firebase/FirebaseClient.js";
 
     export let user;
     export let size;
@@ -128,19 +127,24 @@
       z-index: 1066;
     }
 
-    &.x-small img, div {
+    &.x-small img, &.x-small div {
       width: 32px;
       height: 32px;
     }
 
-    &.small img, div {
+    &.small img, &.small div {
       width: 48px;
       height: 48px;
     }
 
-    &.medium img, div {
+    &.medium img,  &.medium div {
       width: 96px;
       height: 96px;
+    }
+
+    &.large img, &.large div {
+      width: 120px;
+      height: 120px;
     }
 
     div {

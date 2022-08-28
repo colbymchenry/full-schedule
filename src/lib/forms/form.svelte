@@ -7,6 +7,7 @@
     export let id;
     export let onSubmit;
     export let hideFooter;
+    export let style;
     let reset = false;
 
     function setValue(object, path, value) {
@@ -35,7 +36,7 @@
 </script>
 
 
-<form {id} class={clazz || ''} on:submit|preventDefault={prepare}>
+<form {id} {style} class={clazz || ''} on:submit|preventDefault={prepare}>
     {#key reset}
         <slot></slot>
     {/key}

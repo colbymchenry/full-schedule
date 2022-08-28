@@ -146,3 +146,15 @@ export const iconTools = `<svg xmlns="http://www.w3.org/2000/svg" width="48" hei
 export const iconEvent = `<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" fill="currentColor" viewBox="0 0 48 48"><path d="M29.85 37q-2.05 0-3.45-1.4-1.4-1.4-1.4-3.45 0-2.05 1.4-3.45 1.4-1.4 3.45-1.4 2.05 0 3.45 1.4 1.4 1.4 1.4 3.45 0 2.05-1.4 3.45-1.4 1.4-3.45 1.4ZM9 44q-1.2 0-2.1-.9Q6 42.2 6 41V10q0-1.2.9-2.1Q7.8 7 9 7h3.25V4h3.25v3h17V4h3.25v3H39q1.2 0 2.1.9.9.9.9 2.1v31q0 1.2-.9 2.1-.9.9-2.1.9Zm0-3h30V19.5H9V41Zm0-24.5h30V10H9Zm0 0V10v6.5Z"/></svg>`;
 
 export const iconFreeAvailable = `<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" fill="currentColor" viewBox="0 0 48 48"><path d="M33.1 45 26 37.9l2.1-2.1 4.95 4.95 9.2-9.2 2.1 2.15ZM14.45 33.65l-2.1-2.1L15.9 28l-3.55-3.55 2.1-2.1L18 25.9l3.55-3.55 2.1 2.1L20.1 28l3.55 3.55-2.1 2.1L18 30.1ZM9 44q-1.2 0-2.1-.9Q6 42.2 6 41V10q0-1.2.9-2.1Q7.8 7 9 7h3.25V4h3.25v3h17V4h3.25v3H39q1.2 0 2.1.9.9.9.9 2.1v17.6l-3 3V19.5H9V41h15.85l3 3Zm0-27.5h30V10H9Zm0 0V10v6.5Z"/></svg>`;
+
+export const iconPin = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" height="48" width="48" preserveAspectRatio="xMidYMid meet" focusable="false">
+            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+        </svg>`;
+
+export const iconBirthday = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" height="48" width="48" preserveAspectRatio="xMidYMid meet" focusable="false">
+            <path fill-rule="evenodd" d="M6 3a1 1 0 011-1h.01a1 1 0 010 2H7a1 1 0 01-1-1zm2 3a1 1 0 00-2 0v1a2 2 0 00-2 2v1a2 2 0 00-2 2v.683a3.7 3.7 0 011.055.485 1.704 1.704 0 001.89 0 3.704 3.704 0 014.11 0 1.704 1.704 0 001.89 0 3.704 3.704 0 014.11 0 1.704 1.704 0 001.89 0A3.7 3.7 0 0118 12.683V12a2 2 0 00-2-2V9a2 2 0 00-2-2V6a1 1 0 10-2 0v1h-1V6a1 1 0 10-2 0v1H8V6zm10 8.868a3.704 3.704 0 01-4.055-.036 1.704 1.704 0 00-1.89 0 3.704 3.704 0 01-4.11 0 1.704 1.704 0 00-1.89 0A3.704 3.704 0 012 14.868V17a1 1 0 001 1h14a1 1 0 001-1v-2.132zM9 3a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1zm3 0a1 1 0 011-1h.01a1 1 0 110 2H13a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+        </svg>`;
+
+export const iconNotes = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="48" height="48" preserveAspectRatio="xMidYMid meet" focusable="false">
+            <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+        </svg>`;

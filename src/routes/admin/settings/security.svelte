@@ -56,9 +56,9 @@
 
 <Form onSubmit={onSubmit}>
     <Section title="Change your password" info="Pro tip: Never share your password.">
-        <InputField label="Current password" type="password" name="old_password" icon={iconKey} required
+        <InputField label="Current password *" type="password" name="old_password" icon={iconKey} required
                     bind:form_errors={form_errors}/>
-        <InputField label="New password" type="password" name="password" icon={iconKey} required
+        <InputField label="New password *" type="password" name="password" icon={iconKey} required
                     bind:form_errors={form_errors}
                     info="Minimum 8 characters. Must include numbers, letters and special characters."/>
     </Section>

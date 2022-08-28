@@ -29,7 +29,7 @@
     min-height: 40px;
     max-height: 40px;
     line-height: 1 !important;
-    padding: 0 20px !important;
+    padding: 0 10px !important;
     border-radius: 9999px !important;
     box-sizing: content-box;
     position: relative;
@@ -65,6 +65,24 @@
 
       &:hover {
         background-color: #dde3e9;
+      }
+    }
+
+    &.delete {
+      background-color: transparent;
+      color: var(--error-color);
+
+      &:hover {
+        background-color: #f4e4e5;
+      }
+    }
+
+    &.cancel {
+      background-color: transparent;
+      color: var(--fuse-accent-rgb);
+
+      &:hover {
+        background-color: #e2e7ed;
       }
     }
 

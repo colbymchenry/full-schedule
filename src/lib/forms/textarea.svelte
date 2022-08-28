@@ -32,8 +32,6 @@
         "class": (icon ? "has--icon" : "")
     }
 
-    $: readonly = readOnly ? readOnly : disablePrefill ? !focused : false;
-
     let showHint = false;
     let mouseX, mouseY;
 
@@ -41,43 +39,36 @@
         mouseX = event.clientX;
         mouseY = event.clientY;
     }
+
+    $: readonly = readOnly ? readOnly : disablePrefill ? !focused : false;
 </script>
 
-<svelte:window on:mousemove={handleMouseMove} />
+<svelte:window on:mousemove={handleMouseMove}/>
 
 <div class="input-field__container">
     {#if label}
         <label for={name}>
             {label}
             {#if hint}
-            <div on:mouseenter={() => showHint = true} on:mouseleave={() => showHint = false}>
-                <span>{@html iconHelp}</span>
-            </div>
+                <div on:mouseenter={() => showHint = true} on:mouseleave={() => showHint = false}>
+                    <span>{@html iconHelp}</span>
+                </div>
             {/if}
         </label>
     {/if}
-    <div class={"input-field " + clazz} class:is--readonly={readOnly} class:is--error={form_errors[name]} class:is--focused={focused} >
+    <div class={"input-field " + clazz} class:is--readonly={readOnly} class:is--error={form_errors[name]}
+         class:is--focused={focused}>
         {#if icon}
             <div class="icon">
                 {@html icon}
             </div>
         {/if}
-        {#if alwaysShowMask || maskChar || mask}
-            <MaskInput {...inputProps} {alwaysShowMask} {maskChar} {mask} {size} {showMask} {readonly}
-                       on:focus={() => focused = true} on:blur={() => focused = false}
-                       on:change={clear_error} on:input={clear_error}
-                       value={value || ""}
-            />
-        {:else}
-            <input {...inputProps} {readonly} on:input={clear_error}
-                   on:focusin={() => focused = true} on:focusout={() => focused = false}
-                   value={value || ""}
-            />
-        {/if}
+        <textarea {...inputProps} {readonly} on:input={clear_error}
+                  on:focusin={() => focused = true} on:focusout={() => focused = false}>{value || ""}</textarea>
     </div>
 
     {#if info}
-    <small>{info}</small>
+        <small>{info}</small>
     {/if}
 
     {#if form_errors[name]}
@@ -100,7 +91,7 @@
 
     small {
       margin-top: 0.25rem;
-      color: rgba(var(--fuse-text-hint-rgb), );
+      color: rgba(var(--fuse-text-hint-rgb),);
       font-size: 13px;
     }
 
@@ -133,11 +124,11 @@
 
   .input-field {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     border-style: solid;
     border-width: 1px;
     border-color: rgb(203 213 225 / 1);
-    padding: 2px 16px;
+    padding: 2px 0 2px 16px;
     border-radius: 6px;
     background: #fff;
     box-shadow: var(--input-box-shadow);
@@ -157,27 +148,29 @@
       background-color: #DFE3E7FF;
       cursor: not-allowed;
 
-      input {
+      textarea {
         background-color: #DFE3E7FF;
         color: var(--fuse-text-secondary) !important;
         cursor: not-allowed;
+        resize: vertical;
       }
     }
 
-    input {
+    textarea {
       margin-bottom: 0;
       border: none;
       outline: none;
       color: #333;
       display: block;
       width: 100%;
-      height: 38px;
+      min-height: 38px;
       line-height: 1.42857143;
       vertical-align: middle;
       background-color: #fff;
       font-size: 14px;
       font-weight: 500;
       font-family: inherit;
+      resize: vertical;
     }
 
     .icon {
@@ -185,6 +178,7 @@
       position: absolute;
       margin-left: -1rem;
       color: var(--icon-gray);
+      margin-top: -0.4rem;
     }
   }
 
