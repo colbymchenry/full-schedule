@@ -5,19 +5,16 @@
     import Button from '$lib/forms/button.svelte';
     import AlphabetizedList from '$lib/alphabetized-list.svelte';
     import {iconSearch} from "../../lib/icons.js";
-    import {onMount} from "svelte";
     import {showToast} from "../../utils/logger.js";
     import {FirebaseClient} from "../../utils/firebase/FirebaseClient.js";
     import {Api} from "../../utils/Api.js";
     import {StringUtils} from "../../utils/StringUtils.js";
+    import Skeleton from 'svelte-skeleton/Skeleton.svelte'
+    import {MathHelper} from "../../utils/MathHelper.js";
 
     let selectedClient = null;
 
-    let clientAccounts;
-
-    onMount(async () => {
-        await fetchClients();
-    });
+    let clientAccounts = new Promise(fetchClients);
 
     async function fetchClients() {
         try {
@@ -40,6 +37,8 @@
                     return account;
                 }
             }).filter((account) => account !== undefined);
+
+            return clientAccounts;
         } catch (error) {
             showToast();
         }
@@ -62,7 +61,7 @@
                     Clients
                 </div>
                 <div>
-                    {clientAccounts ? clientAccounts.length + " clients": "Fetching..."}
+                    {clientAccounts?.length ? clientAccounts.length + " clients" : "Fetching..."}
                 </div>
             </div>
 
@@ -72,21 +71,35 @@
             </Form>
         </div>
 
-        <AlphabetizedList data={clientAccounts} key="displayName" let:data>
-            <div class="client-block" on:click={() => selectedClient = data}>
-                {#if data?.photoURL}
-                    <img class="avatar" src={data.photoURL} loading="lazy" alt="" />
-                {:else}
-                    <div class="avatar">
-                        {StringUtils.getInitials(data.displayName)}
-                    </div>
-                {/if}
-
-                <div>
-                    {data?.displayName}
-                </div>
+        {#await clientAccounts}
+            <!-- promise is pending -->
+            <div style="max-width: 500px;">
+                {#each [0, 1, 2, 3, 4, 5] as number (number)}
+                    <Skeleton width="100%" height="75px">
+                        <circle cx="50" cy="50" r="24" stroke="black"/>
+                        <rect width={MathHelper.getNumberFromRange(100, 280)} height="10" x="90" y="54" rx="5" ry="5"/>
+                        <rect width={MathHelper.getNumberFromRange(100, 280)} height="10" x="90" y="35" rx="5" ry="5"/>
+                    </Skeleton>
+                {/each}
             </div>
-        </AlphabetizedList>
+        {:then value}
+            <AlphabetizedList data={clientAccounts} key="displayName" let:data>
+                <div class="client-block" on:click={() => selectedClient = data}>
+                    {#if data?.photoURL}
+                        <img class="avatar" src={data.photoURL} loading="lazy" alt=""/>
+                    {:else}
+                        <div class="avatar">
+                            {StringUtils.getInitials(data.displayName)}
+                        </div>
+                    {/if}
+
+                    <div>
+                        {data?.displayName}
+                    </div>
+                </div>
+            </AlphabetizedList>
+        {:catch error}
+        {/await}
     </div>
 
     <StaffDrawer bind:staff={selectedClient} onComplete={async () => {
@@ -116,7 +129,7 @@
       align-items: center;
       background-color: #e0e6ee;
       color: #475569;
-      text-transform: uppercase!important;
+      text-transform: uppercase !important;
     }
 
     > div:last-of-type {
@@ -128,7 +141,7 @@
       font-weight: 500;
 
       > span {
-        color: rgba(var(--fuse-text-secondary-rgb),var(--tw-text-opacity))!important;
+        color: rgba(var(--fuse-text-secondary-rgb), var(--tw-text-opacity)) !important;
       }
     }
   }

@@ -78,7 +78,7 @@
 </script>
 
 
-<div class="nav full-vh" class:is--open={$navStore}>
+<div id="nav" class="nav full-vh" class:is--open={$navStore}>
     <div class="container">
         <div class="header">
             <div class="icon">

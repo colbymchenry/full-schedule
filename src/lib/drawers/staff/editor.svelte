@@ -1,7 +1,6 @@
 <script>
     import Button from '$lib/forms/button.svelte';
     import InputField from '$lib/forms/input-field.svelte';
-    import TextArea from '$lib/forms/textarea.svelte';
     import Footer from '../footer.svelte';
     import Avatar from '$lib/avatar.svelte';
     import {
@@ -10,7 +9,6 @@
         iconClose,
         iconKey,
         iconMail,
-        iconNotes,
         iconPhone,
         iconPin,
         iconUser
@@ -21,6 +19,7 @@
     import {FormHelper} from "../../../utils/FormHelper.js";
     import {CloudinaryApi} from "../../../utils/CloudinaryApi.js";
     import {showToast} from "../../../utils/logger.js";
+    import {MathHelper} from "../../../utils/MathHelper.js";
 
     export let staff;
     export let onComplete, onClose;
@@ -29,16 +28,10 @@
     let formElem;
     let avatarImg;
     let form_errors = {};
-    let headerImg = `/images/cover${getRandomInt(1, 10)}.jpg`;
-
-    function getRandomInt(min, max) {
-        min = Math.ceil(min);
-        max = Math.floor(max);
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
+    let headerImg = `/images/cover${MathHelper.getNumberFromRange(1, 10)}.jpg`;
 
     $: if (staff) {
-        headerImg = `/images/cover${getRandomInt(1, 10)}.jpg`;
+        headerImg = `/images/cover${MathHelper.getNumberFromRange(1, 10)}.jpg`;
     }
 
     async function onSubmit(data) {
