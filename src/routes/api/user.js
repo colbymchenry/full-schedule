@@ -1,5 +1,5 @@
-import {FirebaseAdmin} from "../../../utils/firebase/FirebaseAdmin.js";
-import {CloudinaryApi} from "../../../utils/CloudinaryApi.js";
+import {FirebaseAdmin} from "../../utils/firebase/FirebaseAdmin.js";
+import {CloudinaryApi} from "../../utils/CloudinaryApi.js";
 
 export async function get({url}) {
     const ids = url.searchParams.get("ids").includes(",") ? url.searchParams.get("ids").split(",").filter((id) => id) : [url.searchParams.get("ids")];

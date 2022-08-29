@@ -59,7 +59,12 @@
                     Staff
                 </div>
                 <div>
-                    {staffAccounts?.length ? staffAccounts.length + " staff" : "Fetching..."}
+                    {#await staffAccounts}
+                        Fetching...
+                    {:then data}
+                        {staffAccounts.length + " staff"}
+                    {:catch error}
+                    {/await}
                 </div>
             </div>
 

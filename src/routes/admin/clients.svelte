@@ -1,5 +1,5 @@
 <script>
-    import StaffDrawer from '$lib/drawers/staff/index.svelte';
+    import ClientDrawer from '$lib/drawers/client/index.svelte';
     import Form from '$lib/forms/form.svelte';
     import InputField from '$lib/forms/input-field.svelte';
     import Button from '$lib/forms/button.svelte';
@@ -18,7 +18,7 @@
 
     async function fetchClients() {
         try {
-            let accounts = await FirebaseClient.collection("staff");
+            let accounts = await FirebaseClient.collection("clients");
 
             if (!accounts.map(({uid}) => uid).join(",").length) {
                 clientAccounts = [];
@@ -61,13 +61,18 @@
                     Clients
                 </div>
                 <div>
-                    {clientAccounts?.length ? clientAccounts.length + " clients" : "Fetching..."}
+                    {#await clientAccounts}
+                        Fetching...
+                    {:then data}
+                        {clientAccounts.length + " clients"}
+                    {:catch error}
+                    {/await}
                 </div>
             </div>
 
             <Form onSubmit={performSearch} class="search-form" hideFooter>
                 <InputField placeholder="Search client" name="name" icon={iconSearch} class="br-20"/>
-                <Button type="button" callback={() => selectedClient = {}}>Add Client</Button>
+                <Button type="button" callback={() => selectedClient = {editing: true}}>Add Client</Button>
             </Form>
         </div>
 
@@ -102,7 +107,7 @@
         {/await}
     </div>
 
-    <StaffDrawer bind:staff={selectedClient} onComplete={async () => {
+    <ClientDrawer bind:client={selectedClient} onComplete={async () => {
         await fetchClients();
     }}/>
 </div>

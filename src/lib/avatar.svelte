@@ -31,7 +31,7 @@
         // check if there are any files selected
         if (files.length) {
             // if no user is provided to the Avatar component the file uploading is disabled
-            if (!user) {
+            if (!user && !dontUpload) {
                 await Swal.fire({
                     title: 'User not found.',
                     icon: 'warning',

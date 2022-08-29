@@ -5,23 +5,20 @@
     import Avatar from '$lib/avatar.svelte';
     import {
         iconBirthday,
-        iconBriefcase,
         iconClose,
-        iconKey,
         iconMail,
         iconPhone,
         iconPin,
         iconUser
     } from "../../icons.js";
     import {ApiProgressBar} from "../../ApiProgressBar.js";
-    import {FirebaseClient} from "../../../utils/firebase/FirebaseClient.js";
     import {Api} from "../../../utils/Api.js";
     import {FormHelper} from "../../../utils/FormHelper.js";
     import {CloudinaryApi} from "../../../utils/CloudinaryApi.js";
     import {showToast} from "../../../utils/logger.js";
     import {MathHelper} from "../../../utils/MathHelper.js";
 
-    export let staff;
+    export let client;
     export let onComplete, onClose;
     export let editing;
 
@@ -30,37 +27,16 @@
     let form_errors = {};
     let headerImg = `/images/cover${MathHelper.getNumberFromRange(1, 10)}.jpg`;
 
-    $: if (staff) {
+    $: if (client) {
         headerImg = `/images/cover${MathHelper.getNumberFromRange(1, 10)}.jpg`;
     }
 
     // TODO: Deleting
-
     async function onSubmit(data) {
-        if (data["password"]) {
-            if (data["password"].length < 8) {
-                form_errors["password"] = "Your new password must be at least 8 characters long.";
-                form_errors = form_errors;
-                return;
-            }
-
-            if (data["password"].length > 15) {
-                form_errors["password"] = "Your new password must be less than 16 characters long.";
-                form_errors = form_errors;
-                return;
-            }
-
-            if (!data["password"].match(FirebaseClient.passwordRegex)) {
-                form_errors["password"] = "Your new password must include numbers, letters and special characters.";
-                form_errors = form_errors;
-                return;
-            }
-        }
-
         ApiProgressBar.start();
         try {
             data.notes = document.querySelector('.ql-editor').innerHTML;
-            const res = !staff.uid ? await Api.post('/api/staff', data) : await Api.patch('/api/staff?uid=' + staff.uid, data)
+            const res = !client?.uid ? await Api.post('/api/client', data) : await Api.patch('/api/client?uid=' + client.uid, data)
 
             if (res?.code === 'auth/email-already-exists') {
                 form_errors["email"] = res.message;
@@ -80,17 +56,17 @@
                 const resCloudinary = await CloudinaryApi.upload(avatarImg)
                 // update Google User in the backend
                 await Api.patch('/api/user', {
-                    uid: staff?.uid || res.user.uid,
+                    uid: client?.uid || res.user.uid,
                     photoURL: resCloudinary["secure_url"]
                 })
                 data.photoURL = resCloudinary["secure_url"];
             } else {
-                data.photoURL = staff.photoURL;
+                data.photoURL = client.photoURL;
             }
 
             editing = false;
-            data.uid = staff?.uid || res.user.uid;
-            staff = data;
+            data.uid = client?.uid || res.user.uid;
+            client = data;
 
             if (onComplete) {
                 onComplete();
@@ -118,29 +94,21 @@
 </div>
 <div class="body">
     <div class="avatar">
-        <Avatar user={staff} size="large" style="outline: 4px solid white;" dontUpload
+        <Avatar user={client} size="large" style="outline: 4px solid white;" dontUpload
                 onChange={(imgData) => avatarImg = imgData} canEdit/>
     </div>
     <div>
         <form bind:this={formElem}
               style="display: grid;grid-template-rows: 1fr;grid-template-columns: 1fr;row-gap: 2rem;">
-            <InputField label="Name *" name="displayName" icon={iconUser} value={staff?.displayName}
+            <InputField label="Name *" name="displayName" icon={iconUser} value={client?.displayName}
                         required disablePrefill
                         bind:form_errors={form_errors}/>
 
-            <InputField label="Title" name="title" icon={iconBriefcase} value={staff?.title}
-                        disablePrefill bind:form_errors={form_errors}/>
-
-            <InputField label="Email *" type="email" name="email" icon={iconMail} value={staff?.email} required
+            <InputField label="Email *" type="email" name="email" icon={iconMail} value={client?.email} required
                         disablePrefill
                         bind:form_errors={form_errors}/>
 
-            {#if !staff || !Object.keys(staff).length}
-                <InputField label="Password *" type="password" name="password" icon={iconKey} required
-                            bind:form_errors={form_errors}/>
-            {/if}
-
-            <InputField label="Phone" type="tel" name="phoneNumber" icon={iconPhone} value={staff?.phoneNumber}
+            <InputField label="Phone" type="tel" name="phoneNumber" icon={iconPhone} value={client?.phoneNumber}
                         alwaysShowMask bind:form_errors={form_errors}
                         mask='+1 (000) 000 - 0000'
                         size={20}
@@ -148,18 +116,18 @@
                         maskChar="_"
             />
 
-            <InputField label="Address" name="address" icon={iconPin} value={staff?.address}
+            <InputField label="Address" name="address" icon={iconPin} value={client?.address}
                         disablePrefill bind:form_errors={form_errors}/>
 
-            <InputField label="Birthday" name="birthday" type="date" icon={iconBirthday} value={staff?.birthday}
+            <InputField label="Birthday" name="birthday" type="date" icon={iconBirthday} value={client?.birthday}
                         disablePrefill bind:form_errors={form_errors}
             />
 
             <div class="notes">
                 <span>Notes</span>
                 <div id="editor">
-                    {#if staff?.notes}
-                        {@html staff.notes}
+                    {#if client?.notes}
+                        {@html client.notes}
                     {/if}
                 </div>
             </div>
