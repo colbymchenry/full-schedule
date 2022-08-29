@@ -177,7 +177,13 @@
         </form>
     </div>
 </div>
-<Footer onSave={() => onSubmit(FormHelper.getFormData(formElem))} onCancel={() => editing = false}
+<Footer onSave={() => onSubmit(FormHelper.getFormData(formElem))} onCancel={() => {
+    if (!staff?.uid) {
+        onClose();
+    } else {
+        editing = false;
+    }
+}}
         onDelete={deleteStaff} hideDelete={!staff?.uid}/>
 
 <style lang="scss">
