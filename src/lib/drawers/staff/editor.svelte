@@ -20,6 +20,7 @@
     import {Api} from "../../../utils/Api.js";
     import {FormHelper} from "../../../utils/FormHelper.js";
     import {CloudinaryApi} from "../../../utils/CloudinaryApi.js";
+    import {showToast} from "../../../utils/logger.js";
 
     export let staff;
     export let onComplete, onClose;
@@ -63,10 +64,18 @@
 
         ApiProgressBar.start();
         try {
+            data.notes = document.querySelector('.ql-editor').innerHTML;
             const res = !staff || !Object.keys(staff).length ? await Api.post('/api/staff', data) : await Api.patch('/api/staff?uid=' + staff.uid, data)
 
             if (res?.code === 'auth/email-already-exists') {
                 form_errors["email"] = res.message;
+                form_errors = form_errors;
+                ApiProgressBar.stop();
+                return;
+            }
+
+            if (res?.code === 'auth/invalid-phone-number') {
+                form_errors["phoneNumber"] = 'Invalid phone number.';
                 form_errors = form_errors;
                 ApiProgressBar.stop();
                 return;
@@ -88,11 +97,22 @@
             data.uid = staff.uid;
             staff = data;
 
-            if (onComplete) onComplete();
+            if (onComplete) {
+                onComplete();
+            }
         } catch (error) {
+            console.error(error)
+            showToast()
         }
         ApiProgressBar.stop();
     }
+
+    setTimeout(() => {
+        new window.Quill('#editor', {
+            theme: 'snow'
+        });
+    }, 100);
+
 </script>
 
 <div class="header">
@@ -104,7 +124,7 @@
 <div class="body">
     <div class="avatar">
         <Avatar user={staff} size="large" style="outline: 4px solid white;" dontUpload
-                onChange={(imgData) => avatarImg = imgData} canEdit />
+                onChange={(imgData) => avatarImg = imgData} canEdit/>
     </div>
     <div>
         <form bind:this={formElem}
@@ -126,7 +146,7 @@
             {/if}
 
             <InputField label="Phone" type="tel" name="phoneNumber" icon={iconPhone} value={staff?.phoneNumber}
-                        alwaysShowMask
+                        alwaysShowMask bind:form_errors={form_errors}
                         mask='+1 (000) 000 - 0000'
                         size={20}
                         showMask
@@ -139,15 +159,25 @@
             <InputField label="Birthday" name="birthday" icon={iconBirthday} value={staff?.birthday}
                         disablePrefill bind:form_errors={form_errors}/>
 
-            <TextArea label="Notes" name="notes" icon={iconNotes} value={staff?.notes}
-                      disablePrefill bind:form_errors={form_errors}/>
-
+            <div class="notes">
+                <span>Notes</span>
+                <div id="editor">
+                    {@html staff.notes}
+                </div>
+            </div>
         </form>
     </div>
 </div>
 <Footer onSave={() => onSubmit(FormHelper.getFormData(formElem))} onCancel={() => editing = false}/>
 
 <style lang="scss">
+  .notes > span {
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: var(--heading-color);
+    font-size: 14px;
+  }
+
   .header {
     height: 12rem;
     width: 100%;

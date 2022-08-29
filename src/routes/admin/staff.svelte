@@ -36,6 +36,7 @@
                     account["displayName"] = user.displayName;
                     account["email"] = user.email;
                     account["photoURL"] = user.photoURL;
+                    account["phoneNumber"] = user.phoneNumber;
                     return account;
                 }
             }).filter((account) => account !== undefined);
@@ -44,7 +45,7 @@
         }
     }
 
-    async function onSubmit(formData) {
+    async function performSearch(formData) {
 
     }
 </script>
@@ -65,7 +66,7 @@
                 </div>
             </div>
 
-            <Form onSubmit={onSubmit} class="search-form" hideFooter>
+            <Form onSubmit={performSearch} class="search-form" hideFooter>
                 <InputField placeholder="Search staff" name="name" icon={iconSearch} class="br-20"/>
                 <Button type="button" callback={() => selectedStaff = {}}>Add Staff</Button>
             </Form>
@@ -163,6 +164,7 @@
         > div > div:last-of-type {
           font-weight: 500 !important;
           margin-left: 0.125rem !important;
+          font-size: 14px;
           color: rgba(var(--fuse-text-secondary-rgb), var(--tw-text-opacity)) !important;
         }
       }

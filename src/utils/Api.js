@@ -38,8 +38,8 @@ export class Api {
     static async post(url, data, headers) {
         // clean up masked phone number
         if (data["phoneNumber"]) {
-            data["phoneNumber"] = data["phoneNumber"].replace('+1', '').replace(/[^a-zA-Z0-9 ]/g, '').trim();
-            if (!data["phoneNumber"].length) delete data["phoneNumber"]
+            data["phoneNumber"] = "+1" + data["phoneNumber"].replace('+1', '').replace(/[^a-zA-Z0-9 ]/g, '').replace(/\s+/g, '');
+            if (data["phoneNumber"].length < 3) delete data["phoneNumber"]
         }
         const response = await fetch(url, {
             method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -62,8 +62,8 @@ export class Api {
     static async patch(url, data, headers) {
         // clean up masked phone number
         if (data["phoneNumber"]) {
-            data["phoneNumber"] = data["phoneNumber"].replace('+1', '').replace(/[^a-zA-Z0-9 ]/g, '').trim();
-            if (!data["phoneNumber"].length) delete data["phoneNumber"]
+            data["phoneNumber"] = "+1" + data["phoneNumber"].replace('+1', '').replace(/[^a-zA-Z0-9 ]/g, '').replace(/\s+/g, '');
+            if (data["phoneNumber"].length < 3) delete data["phoneNumber"]
         }
         const response = await fetch(url, {
             method: 'PATCH', // *GET, POST, PUT, DELETE, etc.

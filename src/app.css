@@ -352,3 +352,15 @@ input.has--icon {
     text-overflow: ellipsis!important;
     white-space: nowrap!important;
 }
+
+.font-mono {
+    font-family: IBM Plex Mono,ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace!important;
+}
+
+.ql-container {
+    height: auto !important;
+}
+
+.ql-toolbar.ql-snow {
+    margin-top: 6px;
+}

@@ -43,7 +43,6 @@
             editing = false;
         }, 200);
     }
-
 </script>
 
 <Drawer open={open}>
@@ -86,7 +85,7 @@
                             {@html iconPhone}
                         </div>
                         <div class="info">
-                            <a href={`tel:${staff?.phoneNumber}`}>{staff?.phoneNumber}</a>
+                            <a href={`tel:${staff?.phoneNumber}`} class="font-mono">{staff?.phoneNumber.replace(/^(?:\+?1[-.●]?)?\(?([0-9]{3})\)?[-.●]?([0-9]{3})[-.●]?([0-9]{4})$/, '+1 $1 $2 $3')}</a>
                         </div>
                     {/if}
                     {#if staff?.address}
@@ -110,7 +109,7 @@
                             {@html iconNotes}
                         </div>
                         <div class="info">
-                            {staff?.notes}
+                            {@html staff?.notes}
                         </div>
                     {/if}
                 </section>
@@ -150,7 +149,7 @@
       display: grid;
       grid-template-rows: auto;
       grid-template-columns: 48px auto;
-      align-items: center;
+      align-items: flex-start;
 
       .icon {
         color: #63738a;
@@ -161,6 +160,7 @@
       .info {
         line-height: 1.5rem;
         font-size: 14px;
+        margin-top: 0.8rem;
       }
     }
   }
@@ -168,5 +168,9 @@
   .avatar {
     position: absolute;
     margin-top: -9rem;
+  }
+
+  .phone {
+
   }
 </style>
