@@ -56,7 +56,7 @@
             {/if}
         </label>
     {/if}
-    <div class={"input-field " + clazz} class:is--readonly={readOnly} class:is--error={form_errors[name]} class:is--focused={focused} >
+    <div class={"input-field" + (clazz ? " " + clazz : "")} class:is--readonly={readOnly} class:is--error={form_errors[name]} class:is--focused={focused} >
         {#if icon}
             <div class="icon">
                 {@html icon}

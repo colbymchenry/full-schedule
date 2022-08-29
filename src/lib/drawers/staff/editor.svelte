@@ -156,8 +156,8 @@
             <InputField label="Address" name="address" icon={iconPin} value={staff?.address}
                         disablePrefill bind:form_errors={form_errors}/>
 
-            <InputField label="Birthday" name="birthday" icon={iconBirthday} value={staff?.birthday}
-                        disablePrefill bind:form_errors={form_errors}/>
+            <InputField label="Birthday" name="birthday" type="date" icon={iconBirthday} value={staff?.birthday} disablePrefill bind:form_errors={form_errors}
+            />
 
             <div class="notes">
                 <span>Notes</span>

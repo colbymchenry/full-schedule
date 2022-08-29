@@ -85,7 +85,7 @@
                             {@html iconPhone}
                         </div>
                         <div class="info">
-                            <a href={`tel:${staff?.phoneNumber}`} class="font-mono">{staff?.phoneNumber.replace(/^(?:\+?1[-.●]?)?\(?([0-9]{3})\)?[-.●]?([0-9]{3})[-.●]?([0-9]{4})$/, '+1 $1 $2 $3')}</a>
+                            <a href={`tel:${staff.phoneNumber}`} class="font-mono">{staff.phoneNumber.replace(/^(?:\+?1[-.●]?)?\(?([0-9]{3})\)?[-.●]?([0-9]{3})[-.●]?([0-9]{4})$/, '+1 $1 $2 $3')}</a>
                         </div>
                     {/if}
                     {#if staff?.address}
@@ -93,7 +93,7 @@
                             {@html iconPin}
                         </div>
                         <div class="info">
-                            {staff?.address}
+                            {staff.address}
                         </div>
                     {/if}
                     {#if staff?.birthday}
@@ -101,7 +101,11 @@
                             {@html iconBirthday}
                         </div>
                         <div class="info">
-                            {staff?.birthday}
+                            {new Date(staff.birthday).toLocaleDateString('en-US', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                            })}
                         </div>
                     {/if}
                     {#if staff?.notes}
@@ -109,7 +113,7 @@
                             {@html iconNotes}
                         </div>
                         <div class="info">
-                            {@html staff?.notes}
+                            {@html staff.notes}
                         </div>
                     {/if}
                 </section>

@@ -62,7 +62,7 @@
                     Staff
                 </div>
                 <div>
-                    80 staff
+                    {staffAccounts ? staffAccounts.length + " staff": "Fetching..."}
                 </div>
             </div>
 
