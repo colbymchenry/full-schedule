@@ -35,7 +35,7 @@ export class Api {
         return response.json(); // parses JSON response into native JavaScript objects
     }
 
-    static async post(url, data, headers) {
+    static async post(url, data = {}, headers) {
         // clean up masked phone number
         if (data["phoneNumber"]) {
             data["phoneNumber"] = "+1" + data["phoneNumber"].replace('+1', '').replace(/[^a-zA-Z0-9 ]/g, '').replace(/\s+/g, '');
@@ -59,7 +59,7 @@ export class Api {
     }
 
 
-    static async patch(url, data, headers) {
+    static async patch(url, data = {}, headers) {
         // clean up masked phone number
         if (data["phoneNumber"]) {
             data["phoneNumber"] = "+1" + data["phoneNumber"].replace('+1', '').replace(/[^a-zA-Z0-9 ]/g, '').replace(/\s+/g, '');

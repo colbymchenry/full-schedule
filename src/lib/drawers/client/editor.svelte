@@ -31,7 +31,19 @@
         headerImg = `/images/cover${MathHelper.getNumberFromRange(1, 10)}.jpg`;
     }
 
-    // TODO: Deleting
+    async function deleteClient() {
+        ApiProgressBar.start();
+        try {
+            const res = await Api.post('/api/client/delete?uid=' + client?.uid);
+            if (onClose) onClose();
+            if (onComplete) onComplete();
+        } catch (error) {
+            console.error(error)
+            showToast()
+        }
+        ApiProgressBar.stop();
+    }
+
     async function onSubmit(data) {
         ApiProgressBar.start();
         try {
@@ -134,7 +146,8 @@
         </form>
     </div>
 </div>
-<Footer onSave={() => onSubmit(FormHelper.getFormData(formElem))} onCancel={() => editing = false}/>
+<Footer onSave={() => onSubmit(FormHelper.getFormData(formElem))} onCancel={() => editing = false}
+        onDelete={deleteClient} hideDelete={!client?.uid}/>
 
 <style lang="scss">
   .notes > span {
@@ -146,6 +159,7 @@
 
   .header {
     height: 12rem;
+    min-height: 12rem;
     width: 100%;
     overflow: hidden;
     position: relative;

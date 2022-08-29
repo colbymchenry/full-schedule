@@ -34,7 +34,18 @@
         headerImg = `/images/cover${MathHelper.getNumberFromRange(1, 10)}.jpg`;
     }
 
-    // TODO: Deleting
+    async function deleteStaff() {
+        ApiProgressBar.start();
+        try {
+            const res = await Api.post('/api/staff/delete?uid=' + staff?.uid);
+            if (onClose) onClose();
+            if (onComplete) onComplete();
+        } catch (error) {
+            console.error(error)
+            showToast()
+        }
+        ApiProgressBar.stop();
+    }
 
     async function onSubmit(data) {
         if (data["password"]) {
@@ -166,7 +177,8 @@
         </form>
     </div>
 </div>
-<Footer onSave={() => onSubmit(FormHelper.getFormData(formElem))} onCancel={() => editing = false}/>
+<Footer onSave={() => onSubmit(FormHelper.getFormData(formElem))} onCancel={() => editing = false}
+        onDelete={deleteStaff} hideDelete={!staff?.uid}/>
 
 <style lang="scss">
   .notes > span {
@@ -178,6 +190,7 @@
 
   .header {
     height: 12rem;
+    min-height: 12rem;
     width: 100%;
     overflow: hidden;
     position: relative;

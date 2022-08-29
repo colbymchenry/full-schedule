@@ -1,5 +1,5 @@
-import {FirebaseAdmin} from "../../utils/firebase/FirebaseAdmin.js";
-import {CloudinaryApi} from "../../utils/CloudinaryApi.js";
+import {FirebaseAdmin} from "../../../utils/firebase/FirebaseAdmin.js";
+import {CloudinaryApi} from "../../../utils/CloudinaryApi.js";
 
 export async function patch({request, url}) {
     try {
