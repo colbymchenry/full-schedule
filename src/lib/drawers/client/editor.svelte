@@ -17,6 +17,7 @@
     import {CloudinaryApi} from "../../../utils/CloudinaryApi.js";
     import {showToast} from "../../../utils/logger.js";
     import {MathHelper} from "../../../utils/MathHelper.js";
+    import Swal from "sweetalert2";
 
     export let client;
     export let onComplete, onClose;
@@ -32,16 +33,30 @@
     }
 
     async function deleteClient() {
-        ApiProgressBar.start();
-        try {
-            const res = await Api.post('/api/client/delete?uid=' + client?.uid);
-            if (onClose) onClose();
-            if (onComplete) onComplete();
-        } catch (error) {
-            console.error(error)
-            showToast()
-        }
-        ApiProgressBar.stop();
+        Swal.fire({
+            icon: 'warning',
+            text: 'Are you sure? This is irreversible.',
+            confirmButtonText: 'Delete',
+            cancelButtonText: 'Never mind',
+            confirmButtonColor: 'var(--fuse-warn-600)',
+            cancelButtonColor: 'var(--nav-color)',
+            showCloseButton: true,
+            showCancelButton: true,
+            showConfirmButton: true
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                ApiProgressBar.start();
+                try {
+                    const res = await Api.post('/api/client/delete?uid=' + client?.uid);
+                    if (onClose) onClose();
+                    if (onComplete) onComplete();
+                } catch (error) {
+                    console.error(error)
+                    showToast()
+                }
+                ApiProgressBar.stop();
+            }
+        })
     }
 
     async function onSubmit(data) {

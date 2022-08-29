@@ -190,6 +190,8 @@
     --fuse-icon-rgb: 100, 116, 139;
     --fuse-mat-icon: #64748b;
     --fuse-mat-icon-rgb: 100, 116, 139;
+
+    --nav-color: #1e293b;
 }
 
 html, body {

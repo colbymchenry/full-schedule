@@ -20,6 +20,7 @@
     import {CloudinaryApi} from "../../../utils/CloudinaryApi.js";
     import {showToast} from "../../../utils/logger.js";
     import {MathHelper} from "../../../utils/MathHelper.js";
+    import Swal from "sweetalert2";
 
     export let staff;
     export let onComplete, onClose;
@@ -35,20 +36,40 @@
     }
 
     async function deleteStaff() {
-        ApiProgressBar.start();
-        try {
-            const res = await Api.post('/api/staff/delete?uid=' + staff?.uid);
-            if (onClose) onClose();
-            if (onComplete) onComplete();
-        } catch (error) {
-            console.error(error)
-            showToast()
-        }
-        ApiProgressBar.stop();
+        Swal.fire({
+            icon: 'warning',
+            text: 'Are you sure? This is irreversible.',
+            confirmButtonText: 'Delete',
+            cancelButtonText: 'Never mind',
+            confirmButtonColor: 'var(--fuse-warn-600)',
+            cancelButtonColor: 'var(--nav-color)',
+            showCloseButton: true,
+            showCancelButton: true,
+            showConfirmButton: true
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                ApiProgressBar.start();
+                try {
+                    const res = await Api.post('/api/staff/delete?uid=' + staff?.uid);
+                    if (onClose) onClose();
+                    if (onComplete) onComplete();
+                } catch (error) {
+                    console.error(error)
+                    showToast()
+                }
+                ApiProgressBar.stop();
+            }
+        })
     }
 
     async function onSubmit(data) {
-        if (data["password"]) {
+        if (!staff || !Object.keys(staff).length) {
+            if (!data["password"] || !data["password"].length) {
+                form_errors["password"] = "A password is required.";
+                form_errors = form_errors;
+                return;
+            }
+            
             if (data["password"].length < 8) {
                 form_errors["password"] = "Your new password must be at least 8 characters long.";
                 form_errors = form_errors;
