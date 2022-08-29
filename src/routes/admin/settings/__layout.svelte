@@ -1,5 +1,13 @@
 <script>
-    import {iconApi, iconCreditCard, iconStore, iconUser, iconUserLock, iconUsers} from "../../../lib/icons.js";
+    import {
+        iconApi, iconClover,
+        iconCreditCard, iconPayPal,
+        iconSmartDevices,
+        iconStore, iconStripe,
+        iconUser,
+        iconUserLock,
+        iconUsers
+    } from "../../../lib/icons.js";
     import {page} from "$app/stores";
     import {goto} from "$app/navigation";
 
@@ -37,8 +45,26 @@
         {
             icon: iconApi,
             name: 'API',
-            info: 'Manage your API keys for your store.',
+            info: 'Manage your API keys for your store',
             url: '/api'
+        },
+        {
+            icon: iconClover,
+            name: 'Clover',
+            info: 'Manage and connect to your Clover POS',
+            url: '/clover'
+        },
+        {
+            icon: iconPayPal,
+            name: 'PayPal',
+            info: 'Manage and connect to your PayPal account',
+            url: '/paypal'
+        },
+        {
+            icon: iconStripe,
+            name: 'Stripe',
+            info: 'Manage and connect to your Stripe account',
+            url: '/stripe'
         }
     ]
 

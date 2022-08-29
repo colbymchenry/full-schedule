@@ -1,27 +1,29 @@
+import {FirebaseAdmin} from "../../../utils/firebase/FirebaseAdmin.js";
+import {CloudinaryApi} from "../../../utils/CloudinaryApi.js";
+
 export async function get({url}) {
     const ids = url.searchParams.get("ids").includes(",") ? url.searchParams.get("ids").split(",").filter((id) => id) : [url.searchParams.get("ids")];
-    const users = await FirebaseAdmin.auth().getUsers(ids.map((uid) => { return { uid } }));
+    const users = await FirebaseAdmin.auth().getUsers(ids.map((uid) => {
+        return {uid}
+    }));
     return {
         status: 200,
         body: users
     }
 }
 
-
-import {FirebaseAdmin} from "../../../utils/firebase/FirebaseAdmin.js";
-
 export async function patch({request}) {
     try {
         await FirebaseAdmin.auth().verifyIdToken(request.headers.get("authorization"));
 
-        // TODO: Delete Cloudinary old image
-        /*
-        cloudinary.v2.api.delete_resources([photo.public_id], (result) => {
-      console.log(result)
-    });
-         */
 
         const res = await request.json();
+
+        const user = await FirebaseAdmin.auth().getUser(res.uid);
+
+        if (user?.photoURL) {
+            await CloudinaryApi.delete(CloudinaryApi.getFileNameFromURL(user.photoURL));
+        }
 
         await FirebaseAdmin.auth().updateUser(res.uid, res);
 

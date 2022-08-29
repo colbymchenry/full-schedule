@@ -16,9 +16,6 @@
         form_errors = form_errors;
     }
 
-    // masked input fields
-    export let alwaysShowMask, maskChar, mask, size, showMask;
-
     $: inputProps = {
         ...(disablePrefill && {autocorrect: "off"}),
         ...(disablePrefill && {spellcheck: "false"}),

@@ -3,9 +3,11 @@
     import {
         iconAnalytics,
         iconCalendar,
-        iconCharts, iconCog,
-        iconGiftCard, iconMemberships,
-        iconShieldUser, iconSmartDevices, iconTools,
+        iconCharts,
+        iconGiftCard,
+        iconMemberships,
+        iconShieldUser,
+        iconTools,
         iconUser,
         iconUsers
     } from "../icons.js";
@@ -51,11 +53,6 @@
             name: 'Members'
         },
         {
-            url: '/',
-            icon: iconSmartDevices,
-            name: 'Clover Devices'
-        },
-        {
             url: '/settings',
             icon: iconTools,
             name: 'Settings'
@@ -89,7 +86,7 @@
             </div>
         </div>
         <div class="user">
-            <Avatar bind:user={$auth} size="medium" />
+            <Avatar bind:user={$auth} size="medium" canEdit />
             <div class="name" contenteditable="true" bind:this={nameDiv} on:blur={updateDisplayName}>{$auth?.displayName || 'User'}</div>
             <div class="email">{$auth?.email}</div>
         </div>

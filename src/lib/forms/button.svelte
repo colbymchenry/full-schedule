@@ -66,6 +66,14 @@
       &:hover {
         background-color: #dde3e9;
       }
+
+      .icon {
+        transform: scale(0.5);
+      }
+
+      span {
+        gap: 0;
+      }
     }
 
     &.delete {

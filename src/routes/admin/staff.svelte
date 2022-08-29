@@ -1,5 +1,5 @@
 <script>
-    import StaffDrawer from '$lib/drawers/staff.svelte';
+    import StaffDrawer from '$lib/drawers/staff/index.svelte';
     import Form from '$lib/forms/form.svelte';
     import InputField from '$lib/forms/input-field.svelte';
     import Button from '$lib/forms/button.svelte';
@@ -16,8 +16,17 @@
     let staffAccounts;
 
     onMount(async () => {
+       await fetchStaff();
+    });
+
+    async function fetchStaff() {
         try {
             let accounts = await FirebaseClient.collection("staff");
+
+            if (!accounts.map(({uid}) => uid).join(",").length) {
+                staffAccounts = [];
+                return;
+            }
 
             const {users} = await Api.get(`/api/user?ids=${accounts.map(({uid}) => uid).join(",")}`);
 
@@ -30,12 +39,10 @@
                     return account;
                 }
             }).filter((account) => account !== undefined);
-
-            console.log(staffAccounts)
         } catch (error) {
             showToast();
         }
-    });
+    }
 
     async function onSubmit(formData) {
 
@@ -65,7 +72,7 @@
         </div>
 
         <AlphabetizedList data={staffAccounts} key="displayName" let:data>
-            <div class="staff-block">
+            <div class="staff-block" on:click={() => selectedStaff = data}>
                 {#if data?.photoURL}
                     <img class="avatar" src={data.photoURL} loading="lazy" alt="" />
                 {:else}
@@ -82,7 +89,9 @@
         </AlphabetizedList>
     </div>
 
-    <StaffDrawer bind:staff={selectedStaff}/>
+    <StaffDrawer bind:staff={selectedStaff} onComplete={async () => {
+        await fetchStaff();
+    }}/>
 </div>
 
 <style lang="scss">
@@ -91,6 +100,7 @@
     display: flex;
     align-items: center;
     cursor: pointer;
+    border-bottom: 1px solid var(--border-color);
 
     &:hover {
       background-color: #eff3f7;

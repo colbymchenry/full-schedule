@@ -140,25 +140,6 @@
 
     <Separator/>
 
-    <Section title="Clover"
-             info={'This service is used for payment processing and inventory management. <a href="https://connect.clover.com/get-started" target="_blank">Go here to sign up.</a>'}>
-        <Row>
-            <InputField label="E-Commerce Token (Private)" name="clover.ecomtoken" icon={iconToken}
-                        value={$settings.get("clover.ecomtoken")}
-            />
-            <InputField label="API Tokens (Private)" name="clover.apitoken" icon={iconToken}
-                        value={$settings.get("clover.apitoken")}
-            />
-            <InputField label="Merchant ID" name="clover.merchantid" icon={iconFingerprint}
-                        value={$settings.get("clover.merchantid")}
-            />
-            <InputField label="App ID" name="clover.appid" icon={iconFingerprint} value={$settings.get("clover.appid")}
-            />
-        </Row>
-    </Section>
-
-    <Separator/>
-
     <Section title="Facebook Pixel" info={'This service is used for Facebook Pixel integration.'}>
         <Row>
             <InputField label="Pixel ID" name="facebook.pixel_id" icon={iconFingerprint}

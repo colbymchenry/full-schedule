@@ -196,6 +196,7 @@ html, body {
     min-height: -moz-available;
     min-height: -webkit-fill-available;
     min-height: fill-available;
+    color: #1e293b;
 }
 
 body {

@@ -2,11 +2,14 @@
     import {iconPhotoLibrary} from "./icons.js";
     import Swal from "sweetalert2";
     import {Api} from "../utils/Api.js";
-    import {Cloudinary} from "../utils/Cloudinary.js";
+    import {CloudinaryApi} from "../utils/CloudinaryApi.js";
 
     export let user;
     export let size;
     export let onChange;
+    export let style;
+    export let dontUpload = false
+    export let canEdit = false;
 
     $: src = user?.photoURL;
 
@@ -20,7 +23,8 @@
     let uploading = false;
 
     function openFileDrawer() {
-        input.click();
+        if (canEdit)
+            input.click();
     }
 
     async function uploadImage() {
@@ -59,7 +63,7 @@
                 onChange(files[0]);
             }
 
-            if (!user || !Object.keys(user).length) return;
+            if (dontUpload) return;
 
             // set uploading to true so z-index of avatar is above SweetAlert
             uploading = true;
@@ -74,7 +78,7 @@
                 preConfirm: async () => {
                     try {
                         // upload image to cloudinary
-                        const res = await Cloudinary.upload(files[0]);
+                        const res = await CloudinaryApi.upload(files[0]);
                         // update Google User in the backend
                         await Api.patch('/api/user', {
                             uid: user.uid,
@@ -103,9 +107,9 @@
 </script>
 
 <div class={`avatar ${clazz || ''} ${size || 'small'} ${uploading ? 'uploading' : ''}`}>
-    <div on:click={openFileDrawer}>
+    <div on:click={openFileDrawer} class:canEdit={canEdit}>
         {#if src || newSrc}
-            <img src={newSrc || src} loading="lazy" alt="">
+            <img {style} src={newSrc || src} loading="lazy" alt="">
         {:else}
             {@html iconPhotoLibrary}
         {/if}
@@ -138,7 +142,7 @@
       height: 48px;
     }
 
-    &.medium img,  &.medium div {
+    &.medium img, &.medium div {
       width: 96px;
       height: 96px;
     }
@@ -154,10 +158,10 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
       transition: 0.5s ease;
 
-      &:hover {
+      &.canEdit:hover {
+        cursor: pointer;
         scale: 1.1;
         background-color: #9ea1a7;
         color: #29303b;

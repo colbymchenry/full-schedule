@@ -19,10 +19,12 @@
 <section>
     {#if Object.keys(alphabet).length}
         {#each Object.keys(alphabet) as letter}
-            {#each alphabet[letter] as obj}
+            {#if alphabet[letter].length}
                 <div class="letter-block">{letter}</div>
-                <slot data={obj}></slot>
-            {/each}
+                {#each alphabet[letter] as obj}
+                    <slot data={obj}></slot>
+                {/each}
+            {/if}
         {/each}
     {/if}
 </section>
