@@ -65,7 +65,7 @@
 
             <Form onSubmit={performSearch} class="search-form" hideFooter>
                 <InputField placeholder="Search staff" name="name" icon={iconSearch} class="br-20"/>
-                <Button type="button" callback={() => selectedStaff = {}}>Add Staff</Button>
+                <Button type="button" callback={() => selectedStaff = {editing: true}}>Add Staff</Button>
             </Form>
         </div>
 

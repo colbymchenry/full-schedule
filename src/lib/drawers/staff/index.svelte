@@ -20,6 +20,12 @@
 
     let open = false;
     let editing = false;
+
+    $: if (staff?.editing) {
+        editing = true;
+        delete staff["editing"];
+    }
+
     let form_errors = {};
     let headerImg = `/images/cover${MathHelper.getNumberFromRange(1, 10)}.jpg`;
 
