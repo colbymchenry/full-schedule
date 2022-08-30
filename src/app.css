@@ -215,6 +215,10 @@ h1, h2, h3, h4, h5, p, input, textarea, span, div {
     padding: 0;
 }
 
+table {
+    border-collapse: collapse;
+}
+
 *, :after, :before {
     box-sizing: border-box;
     margin: 0;

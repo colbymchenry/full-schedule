@@ -8,7 +8,6 @@
     let visible = true;
 
     onMount(() => {
-        now.setHours(5)
         interval = setInterval(() => {
             now = new Date();
         }, 1000);
@@ -32,7 +31,6 @@
             visible = false;
         } else {
             marginTop = totalMinutes * minuteHeight;
-            marginTop += (hoursPassed * 3.65);
         }
     }
 
@@ -53,7 +51,7 @@
     border-top: 1px solid var(--primary-color);
     transition: all 0.3s ease;
     display: none;
-    top: 58px;
+    top: 57px;
 
     &.visible {
       display: block;
