@@ -20,6 +20,7 @@
     --border-color: rgba(226, 232, 240, 1);
     --input-box-shadow: 0 0 #0000, 0 0 #0000, 0 0 2px 0 rgb(0 0 0 / 0.1);
     --top-bar-height: 64px;
+    --nav-width: 280px;
 
 
     --fuse-drawer-width: 320px;
@@ -271,6 +272,7 @@ input.has--icon {
 
 ::-webkit-scrollbar {
     width: 4px;
+    height: 4px;
 }
 
 /* Track */

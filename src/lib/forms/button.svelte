@@ -56,6 +56,10 @@
         transform: scale(0.6);
         color: white;
         margin-left: -1rem;
+
+        &:hover {
+          background-color: transparent;
+        }
       }
 
       padding-right: 1rem !important;

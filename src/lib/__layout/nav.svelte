@@ -124,11 +124,11 @@
     max-height: 100vh !important;
 
     &.is--open {
-      max-width: 280px;
+      max-width: var(--nav-width);
     }
 
     .container {
-      width: 280px;
+      width: var(--nav-width);
       overflow-y: auto;
 
       .header {

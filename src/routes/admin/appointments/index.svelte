@@ -121,7 +121,9 @@
     border-right: 1px solid var(--border-color);
     text-align: left;
     max-height: calc(100vh - var(--top-bar-height) - var(--top-bar-height));
-    overflow-y: auto;
+    max-width: calc(100vw - var(--top-bar-height) - var(--nav-width));
+    overflow: auto;
+
 
     table {
       min-width: 100%;
@@ -153,6 +155,15 @@
         td {
           border-right: 1px solid var(--border-color);
           border-top: 1px solid var(--border-color);
+          min-width: 300px;
+        }
+
+        td:first-of-type {
+          min-width: unset;
+          position: sticky;
+          left: 0;
+          background-color: var(--bg-color);
+          z-index: 3;
         }
       }
 
@@ -161,14 +172,14 @@
         position: sticky;
         top: 0;
         left: 0;
-
+        z-index: 2;
 
         tr {
 
           // time slot in sticky header
           th:first-of-type {
-            background-color: transparent;
             box-shadow: none;
+            background-color: transparent;
           }
 
           // staff sticky header

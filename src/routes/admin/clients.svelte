@@ -166,6 +166,7 @@
         flex-direction: column !important;
         display: flex;
         flex: 1 1 auto !important;
+        border-bottom: 1px solid var(--border-color);
 
         > div {
           margin-bottom: 1rem;

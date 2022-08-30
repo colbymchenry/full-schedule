@@ -42,12 +42,12 @@
     .content {
       flex-grow: 1;
 
-
       .header {
         padding: 2rem !important;
         display: flex;
         flex: 1 1 auto !important;
         justify-content: space-between;
+        border-bottom: 1px solid var(--border-color);
 
         > div {
           letter-spacing: -.025em !important;

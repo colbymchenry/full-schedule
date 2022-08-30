@@ -51,13 +51,17 @@
     align-items: center;
     justify-content: space-between;
     padding: 0 3rem;
-    z-index: 3;
+    z-index: 4;
 
     h1 {
       letter-spacing: -.025em;
       line-height: 1;
       font-weight: 800;
       font-size: 2rem;
+
+      @media screen and (max-width: 800px) {
+        font-size: 1.2rem;
+      }
     }
 
     > div:last-of-type {

@@ -64,10 +64,8 @@
       background-color: white;
       box-shadow: 0 0 #0000, 0 0 #0000, 0 0 15px 0 rgb(0 0 0 / 0.14);
       position: absolute;
-      top: 50%;
-      left: 50%;
-      margin-left: -5.8rem;
-      margin-top: -1.3rem;
+      top: 0;
+      left: 0;
       border-radius: 0.5rem;
       transition: max-height 0.4s ease;
       overflow: hidden;
