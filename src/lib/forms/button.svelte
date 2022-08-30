@@ -12,7 +12,7 @@
 {#if icon && color === "icon" }
     <button {type} {style} {disabled} class={'icon'} class:loading={loading} on:click={callback}><span>{@html icon}</span></button>
 {:else}
-    <button {type} {style} {disabled} class={'btn ' + color} class:loading={loading} on:click={callback}><span>{#if loading}<Spinner color="#fff" size="1.5rem" />{:else}{#if icon}<div class="icon">{@html icon}</div>{/if}<slot></slot> {/if}</span>
+    <button {type} {style} {disabled} class={`btn ${icon ? 'has--icon ' : ''}` + color} class:loading={loading} on:click={callback}><span>{#if loading}<Spinner color="#fff" size="1.5rem" />{:else}{#if icon}<div class="icon">{@html icon}</div>{/if}<slot></slot> {/if}</span>
     </button>
 {/if}
 
@@ -29,7 +29,7 @@
     min-height: 40px;
     max-height: 40px;
     line-height: 1 !important;
-    padding: 0 10px !important;
+    padding: 0 1rem !important;
     border-radius: 9999px !important;
     box-sizing: content-box;
     position: relative;
@@ -51,6 +51,19 @@
     transition: all 0.3s ease;
     justify-self: flex-start;
 
+    &.has--icon {
+      .icon {
+        transform: scale(0.5);
+        color: white;
+      }
+
+      padding-right: 1rem !important;
+
+      span {
+        gap: 0;
+      }
+    }
+
     span {
       display: flex;
       justify-content: center;
@@ -69,6 +82,7 @@
 
       .icon {
         transform: scale(0.5);
+        color: var(--icon-gray);
       }
 
       span {
@@ -164,7 +178,7 @@
       align-items: center;
       justify-content: center;
       height: 100%;
-      z-index: 2;
+      //z-index: 2;
       transform: scale(0.6);
     }
   }

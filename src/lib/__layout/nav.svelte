@@ -18,7 +18,7 @@
 
     let routes = [
         {
-            url: '/',
+            url: '/appointments',
             icon: iconCalendar,
             name: 'Appointments'
         },
@@ -33,22 +33,22 @@
             name: 'Staff'
         },
         {
-            url: '/',
+            url: '/reports',
             icon: iconCharts,
             name: 'Reports'
         },
         {
-            url: '/',
+            url: '/analytics',
             icon: iconAnalytics,
             name: 'Analytics'
         },
         {
-            url: '/',
+            url: '/promotions',
             icon: iconGiftCard,
             name: 'Promotions'
         },
         {
-            url: '/',
+            url: '/members',
             icon: iconMemberships,
             name: 'Members'
         },
@@ -93,7 +93,7 @@
 
         <div class="links">
             {#each routes as route}
-                <a href={'/admin' + route.url} class:is--active={$page.url.pathname === ('/admin' + route.url)}>
+                <a href={'/admin' + route.url} class:is--active={$page.url.pathname.startsWith('/admin' + route.url)}>
                     <div>
                         {@html route.icon}
                     </div>

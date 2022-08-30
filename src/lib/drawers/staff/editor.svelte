@@ -69,7 +69,7 @@
                 form_errors = form_errors;
                 return;
             }
-            
+
             if (data["password"].length < 8) {
                 form_errors["password"] = "Your new password must be at least 8 characters long.";
                 form_errors = form_errors;

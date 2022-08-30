@@ -9,6 +9,9 @@ const config = {
       define: {
         'import.meta.env.VERCEL_ANALYTICS_ID': JSON.stringify(process.env.VERCEL_ANALYTICS_ID),
         'CLOUDINARY_URL': process.env.CLOUDINARY_URL
+      },
+      ssr: {
+        noExternal: [ 'dayjs' ]
       }
     }
   },

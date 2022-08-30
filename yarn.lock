@@ -2,6 +2,15 @@
 # yarn lockfile v1
 
 
+"@beyonk/svelte-datepicker@^12.0.1":
+  version "12.0.1"
+  resolved "https://registry.yarnpkg.com/@beyonk/svelte-datepicker/-/svelte-datepicker-12.0.1.tgz#ce2128b287716e3ab818a6ee60187261c59f5810"
+  integrity sha512-9RH88EL/dGRZwSLS0Gxt61q/VUC1QYsa2JV1TJgY7crArZRmYKY7dgRejp+VkQcctoKfnz7wZGFA52KuZEjwbQ==
+  dependencies:
+    dayjs "^1.10.7"
+    es6-object-assign "^1.1.0"
+    svelte "^3.24.0"
+
 "@fastify/busboy@^1.1.0":
   version "1.1.0"
   resolved "https://registry.npmjs.org/@fastify/busboy/-/busboy-1.1.0.tgz"
@@ -1024,6 +1033,11 @@ data-uri-to-buffer@3:
   resolved "https://registry.yarnpkg.com/data-uri-to-buffer/-/data-uri-to-buffer-3.0.1.tgz#594b8973938c5bc2c33046535785341abc4f3636"
   integrity sha512-WboRycPNsVw3B3TL559F7kuBUM4d8CgMEvk6xEJlOp7OBPjt6G7z8WMWlD2rOFZLk6OYfFIUGsCOWzcQH9K2og==
 
+dayjs@^1.10.7:
+  version "1.11.5"
+  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.11.5.tgz#00e8cc627f231f9499c19b38af49f56dc0ac5e93"
+  integrity sha512-CAdX5Q3YW3Gclyo5Vpqkgpj8fSdLQcRuzfX6mC6Phy0nfJ0eGYOeS7m4mt2plDWLAtA4TqTakvbboHvUxfe4iA==
+
 debug@4, debug@^4.1.1, debug@^4.3.4:
   version "4.3.4"
   resolved "https://registry.npmjs.org/debug/-/debug-4.3.4.tgz"
@@ -1126,6 +1140,11 @@ ent@^2.2.0:
   version "2.2.0"
   resolved "https://registry.npmjs.org/ent/-/ent-2.2.0.tgz"
   integrity sha512-GHrMyVZQWvTIdDtpiEXdHZnFQKzeO09apj8Cbl4pKWy4i0Oprcq17usfDt5aO63swf0JOeMWjWQE/LzgSRuWpA==
+
+es6-object-assign@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/es6-object-assign/-/es6-object-assign-1.1.0.tgz#c2c3582656247c39ea107cb1e6652b6f9f24523c"
+  integrity sha512-MEl9uirslVwqQU369iHNWZXsI8yaZYGg/D65aOgZkeyFJwHYSxilf7rQzXKI7DdDuBPrBXbfk3sl9hJhmd5AUw==
 
 es6-promise@^3.1.2:
   version "3.3.1"
@@ -2939,7 +2958,7 @@ svelte-skeleton@^1.3.1:
   resolved "https://registry.yarnpkg.com/svelte-skeleton/-/svelte-skeleton-1.3.1.tgz#ab48c48969bd186b8bb58858b3f0bc9bbec2ce3a"
   integrity sha512-/dVf4Am8Rolo9DjQxmy8X8xXSKDzZWyGjf84CekWdQqvP+Y57lW1O8dxHUxqT1bGeER8ZMAOuyGEzx+gADEVWg==
 
-svelte@^3.46.0:
+svelte@^3.24.0, svelte@^3.46.0:
   version "3.49.0"
   resolved "https://registry.npmjs.org/svelte/-/svelte-3.49.0.tgz"
   integrity sha512-+lmjic1pApJWDfPCpUUTc1m8azDqYCG1JN9YEngrx/hUyIcFJo6VZhj0A1Ai0wqoHcEIuQy+e9tk+4uDgdtsFA==

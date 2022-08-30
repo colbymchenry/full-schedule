@@ -51,19 +51,19 @@
         {
             icon: iconClover,
             name: 'Clover',
-            info: 'Manage and connect to your Clover POS',
+            info: 'Connect your store to your Clover account',
             url: '/clover'
         },
         {
             icon: iconPayPal,
             name: 'PayPal',
-            info: 'Manage and connect to your PayPal account',
+            info: 'Connect your store to your PayPal account',
             url: '/paypal'
         },
         {
             icon: iconStripe,
             name: 'Stripe',
-            info: 'Manage and connect to your Stripe account',
+            info: 'Connect your store to your Stripe account',
             url: '/stripe'
         }
     ]
@@ -87,7 +87,7 @@
                     {@html route.icon}
                 </div>
                 <div>
-                    <span>{route.name}</span>
+                    <span>{@html route.name}</span>
                     <span>{route.info}</span>
                 </div>
             </div>
