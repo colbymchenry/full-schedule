@@ -1,6 +1,7 @@
 <script>
     import DatePicker from "@beyonk/svelte-datepicker/src/components/DatePicker.svelte";
     import Button from '$lib/forms/button.svelte';
+    import AppointmentsDrawer from './appointments-drawer.svelte';
     import {CalendarStyles} from "../../../../utils/CalendarStyles.js";
     import {iconChevronLeft, iconChevronRight} from "../../../../lib/icons.js";
 
@@ -17,7 +18,7 @@
 
 <div class="header">
     <div>
-        <Button type="button">New Appointment</Button>
+        <AppointmentsDrawer />
     </div>
     <div>
         <h1>{dateString}</h1>

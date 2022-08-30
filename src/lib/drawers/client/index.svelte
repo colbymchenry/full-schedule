@@ -6,6 +6,7 @@
     import Editor from './editor.svelte';
     import {iconBirthday, iconClose, iconEdit, iconMail, iconNotes, iconPhone, iconPin,} from "../../icons.js";
     import {MathHelper} from "../../../utils/MathHelper.js";
+    import {StringUtils} from "../../../utils/StringUtils.js";
 
     export let client;
     export let onComplete;
@@ -48,7 +49,11 @@
         </div>
         <div class="body">
             <div class="avatar">
-                <Avatar user={client} size="large" style="outline: 4px solid white;"/>
+                {#if client?.photoURL}
+                    <Avatar user={client} size="large" style="outline: 4px solid white;"/>
+                {:else}
+                    {StringUtils.getInitials(client?.displayName)}
+                {/if}
             </div>
             <div style="position: relative;">
 
@@ -159,6 +164,19 @@
   .avatar {
     position: absolute;
     margin-top: -9rem;
+    border-radius: 9999px;
+    background-color: #dee4eb;
+    color: rgb(71 85 105 / var(--tw-text-opacity))!important;
+    width: 120px;
+    height: 120px;
+    font-size: 4rem;
+    font-weight: 700!important;
+    text-transform: uppercase;
+    line-height: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    outline: 0.3rem solid white;
   }
 
   .phone {
