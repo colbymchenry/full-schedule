@@ -86,6 +86,7 @@
           border: none;
           transform: scale(0.75);
           cursor: pointer;
+          color: var(--secondary-color);
         }
       }
 

@@ -53,8 +53,9 @@
 
     &.has--icon {
       .icon {
-        transform: scale(0.5);
+        transform: scale(0.6);
         color: white;
+        margin-left: -1rem;
       }
 
       padding-right: 1rem !important;

@@ -162,17 +162,20 @@
         top: 0;
         left: 0;
 
+
         tr {
 
           // time slot in sticky header
           th:first-of-type {
             background-color: transparent;
+            box-shadow: none;
           }
 
           // staff sticky header
           th {
             background-color: white;
             padding: 0.5rem;
+            box-shadow: 0 0 #0000, 0 0 #0000, 0 2px 4px 0 rgb(0 0 0 / 0.2);
           }
         }
       }

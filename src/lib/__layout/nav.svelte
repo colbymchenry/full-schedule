@@ -4,7 +4,7 @@
         iconAnalytics,
         iconCalendar,
         iconCharts,
-        iconGiftCard, iconInventory,
+        iconGiftCard, iconInventory, iconLogo,
         iconMemberships,
         iconShieldUser,
         iconTools,
@@ -87,15 +87,18 @@
 <div id="nav" class="nav full-vh" class:is--open={$navStore}>
     <div class="container">
         <div class="header">
+            <div class="logo">
+                {@html iconLogo}
+            </div>
             <div class="icon">
                 {@html iconUser}
             </div>
         </div>
         <div class="user">
             <Avatar bind:user={$auth} size="medium" canEdit/>
-            <div class="name" contenteditable="true" bind:this={nameDiv}
+            <div class="name truncate" contenteditable="true" bind:this={nameDiv}
                  on:blur={updateDisplayName}>{$auth?.displayName || 'User'}</div>
-            <div class="email">{$auth?.email}</div>
+            <div class="email truncate">{$auth?.email}</div>
         </div>
 
         <div class="links">
@@ -131,7 +134,7 @@
       .header {
         display: flex;
         padding: 16px 16px 16px 24px;
-        justify-content: flex-end;
+        justify-content: space-between;
         align-items: center;
 
         .icon {
@@ -146,14 +149,17 @@
         justify-content: flex-start;
         align-items: center;
 
-        .name {
+        .name,.email {
           margin-top: 1.5rem;
+          line-height: 1.5rem;
+          font-weight: 500;
+          font-size: 0.8125rem;
           color: #fff;
           font-family: Inter var, sans-serif;
         }
 
         .email {
-          margin-top: 2px;
+          margin-top: -2px;
           color: rgb(148, 163, 182);
         }
       }

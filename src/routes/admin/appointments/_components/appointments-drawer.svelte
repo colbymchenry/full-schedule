@@ -49,7 +49,7 @@
       margin-left: -5.8rem;
       margin-top: -1.3rem;
       border-radius: 0.5rem;
-      transition: max-height 0.4s ease;
+      transition: max-height 0.4s cubic-bezier(.25,.8,.25,1);
       overflow: hidden;
 
       .container {
