@@ -1,37 +1,37 @@
 <svelte:head>
-    <title>FS • Clients</title>
+    <title>FS • Staff</title>
 </svelte:head>
 
 <script>
-    import ClientDrawer from '$lib/drawers/client/index.svelte';
+    import StaffDrawer from './_components/drawer/index.svelte';
     import Form from '$lib/forms/form.svelte';
     import InputField from '$lib/forms/input-field.svelte';
     import Button from '$lib/forms/button.svelte';
     import AlphabetizedList from '$lib/alphabetized-list.svelte';
-    import {iconSearch} from "../../lib/icons.js";
-    import {showToast} from "../../utils/logger.js";
-    import {FirebaseClient} from "../../utils/firebase/FirebaseClient.js";
-    import {Api} from "../../utils/Api.js";
-    import {StringUtils} from "../../utils/StringUtils.js";
     import Skeleton from 'svelte-skeleton/Skeleton.svelte'
-    import {MathHelper} from "../../utils/MathHelper.js";
+    import {Api} from "../../../utils/Api.js";
+    import {showToast} from "../../../utils/logger.js";
+    import {MathHelper} from "../../../utils/MathHelper.js";
+    import {StringUtils} from "../../../utils/StringUtils.js";
+    import {iconSearch} from "../../../lib/icons.js";
+    import {FirebaseClient} from "../../../utils/firebase/FirebaseClient.js";
 
-    let selectedClient = null;
+    let selectedStaff = null;
 
-    let clientAccounts = new Promise(fetchClients);
+    let staffAccounts = new Promise(fetchStaff);
 
-    async function fetchClients() {
+    async function fetchStaff() {
         try {
-            let accounts = await FirebaseClient.collection("clients");
+            let accounts = await FirebaseClient.collection("staff");
 
             if (!accounts.map(({uid}) => uid).join(",").length) {
-                clientAccounts = [];
+                staffAccounts = [];
                 return;
             }
 
             const {users} = await Api.get(`/api/user?ids=${accounts.map(({uid}) => uid).join(",")}`);
 
-            clientAccounts = accounts.map((account) => {
+            staffAccounts = accounts.map((account) => {
                 const user = users.find(({uid}) => uid === account?.uid);
                 if (user) {
                     account["displayName"] = user.displayName;
@@ -41,8 +41,6 @@
                     return account;
                 }
             }).filter((account) => account !== undefined);
-
-            return clientAccounts;
         } catch (error) {
             showToast();
         }
@@ -53,43 +51,44 @@
     }
 </script>
 
-<div class="container full-vh">
+<div class="container full-vh" >
     <div class="content">
         <div class="header">
             <div>
                 <div>
-                    Clients
+                    Staff
                 </div>
                 <div>
-                    {#await clientAccounts}
+                    {#await staffAccounts}
                         Fetching...
                     {:then data}
-                        {clientAccounts.length + " clients"}
+                        {staffAccounts.length + " staff"}
                     {:catch error}
                     {/await}
                 </div>
             </div>
 
             <Form onSubmit={performSearch} class="search-form" hideFooter>
-                <InputField placeholder="Search client" name="name" icon={iconSearch} class="br-20"/>
-                <Button type="button" callback={() => selectedClient = {editing: true}}>Add Client</Button>
+                <InputField placeholder="Search staff" name="name" icon={iconSearch} class="br-20"/>
+                <Button type="button" callback={() => selectedStaff = {editing: true}}>Add Staff</Button>
             </Form>
         </div>
 
-        {#await clientAccounts}
+        {#await staffAccounts}
             <!-- promise is pending -->
             <div style="max-width: 500px;">
-                {#each [0, 1, 2, 3, 4, 5] as number (number)}
+                {#each [0,1,2,3,4,5] as number (number)}
                     <Skeleton width="100%" height="75px">
-                        <circle cx="50" cy="50" r="24" stroke="black"/>
+                        <circle cx="50" cy="50" r="24" stroke="black" />
                         <rect width={MathHelper.getNumberFromRange(100, 280)} height="10" x="90" y="54" rx="5" ry="5"/>
                         <rect width={MathHelper.getNumberFromRange(100, 280)} height="10" x="90" y="35" rx="5" ry="5"/>
                     </Skeleton>
                 {/each}
             </div>
         {:then value}
-            <AlphabetizedList data={clientAccounts} key="displayName" let:data>
-                <div class="client-block" on:click={() => selectedClient = data}>
+            <!-- promise was fulfilled -->
+            <AlphabetizedList data={staffAccounts} key="displayName" let:data>
+                <div class="staff-block" on:click={() => selectedStaff = data}>
                     {#if data?.photoURL}
                         <img class="avatar" src={data.photoURL} loading="lazy" alt=""/>
                     {:else}
@@ -100,20 +99,23 @@
 
                     <div>
                         {data?.displayName}
+                        {#if data?.title}<span>{data.title}</span>{/if}
                     </div>
                 </div>
             </AlphabetizedList>
         {:catch error}
         {/await}
+
+
     </div>
 
-    <ClientDrawer bind:client={selectedClient} onComplete={async () => {
-        await fetchClients();
+    <StaffDrawer bind:staff={selectedStaff} onComplete={async () => {
+        await fetchStaff();
     }}/>
 </div>
 
 <style lang="scss">
-  .client-block {
+  .staff-block {
     padding: 1rem 2rem;
     display: flex;
     align-items: center;

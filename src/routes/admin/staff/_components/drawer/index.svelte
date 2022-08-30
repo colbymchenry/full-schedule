@@ -12,9 +12,9 @@
         iconNotes,
         iconPhone,
         iconPin,
-    } from "../../icons.js";
-    import {MathHelper} from "../../../utils/MathHelper.js";
-    import {StringUtils} from "../../../utils/StringUtils.js";
+    } from '$lib/icons.js';
+    import {MathHelper} from "../../../../../utils/MathHelper.js";
+    import {StringUtils} from "../../../../../utils/StringUtils.js";
 
     export let staff;
     export let onComplete;

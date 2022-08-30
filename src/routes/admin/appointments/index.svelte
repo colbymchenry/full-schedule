@@ -11,7 +11,6 @@
     import {showToast} from "../../../utils/logger.js";
     import {StringUtils} from "../../../utils/StringUtils.js";
     import {TimeHelper} from "../../../utils/TimeHelper.js";
-    import staff from "../staff.svelte";
     import Skeleton from 'svelte-skeleton/Skeleton.svelte'
     import {MathHelper} from "../../../utils/MathHelper.js";
 

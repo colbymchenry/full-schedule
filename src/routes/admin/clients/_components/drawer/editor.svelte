@@ -1,24 +1,16 @@
 <script>
     import Button from '$lib/forms/button.svelte';
     import InputField from '$lib/forms/input-field.svelte';
-    import Footer from '../footer.svelte';
     import Avatar from '$lib/avatar.svelte';
-    import {
-        iconBirthday,
-        iconClose,
-        iconMail,
-        iconPhone,
-        iconPin,
-        iconUser
-    } from "../../icons.js";
-    import {Api} from "../../../utils/Api.js";
-    import {FormHelper} from "../../../utils/FormHelper.js";
-    import {CloudinaryApi} from "../../../utils/CloudinaryApi.js";
-    import {showToast} from "../../../utils/logger.js";
-    import {MathHelper} from "../../../utils/MathHelper.js";
+    import Footer from '$lib/drawers/footer.svelte';
     import Swal from "sweetalert2";
-    import {ApiProgressBar} from "../../../utils/ApiProgressBar.js";
-
+    import {MathHelper} from "../../../../../utils/MathHelper.js";
+    import {ApiProgressBar} from "../../../../../utils/ApiProgressBar.js";
+    import {Api} from "../../../../../utils/Api.js";
+    import {CloudinaryApi} from "../../../../../utils/CloudinaryApi.js";
+    import {showToast} from "../../../../../utils/logger.js";
+    import {iconBirthday, iconClose, iconMail, iconPhone, iconPin, iconUser} from "../../../../../lib/icons.js";
+    import {FormHelper} from "../../../../../utils/FormHelper.js";
     export let client;
     export let onComplete, onClose;
     export let editing;

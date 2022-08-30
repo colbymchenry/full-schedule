@@ -4,9 +4,17 @@
     import Separator from '$lib/forms/separator.svelte';
     import Avatar from '$lib/avatar.svelte';
     import Editor from './editor.svelte';
-    import {iconBirthday, iconClose, iconEdit, iconMail, iconNotes, iconPhone, iconPin,} from "../../icons.js";
-    import {MathHelper} from "../../../utils/MathHelper.js";
-    import {StringUtils} from "../../../utils/StringUtils.js";
+    import {MathHelper} from "../../../../../utils/MathHelper.js";
+    import {
+        iconBirthday,
+        iconClose,
+        iconEdit,
+        iconMail,
+        iconNotes,
+        iconPhone,
+        iconPin
+    } from "../../../../../lib/icons.js";
+    import {StringUtils} from "../../../../../utils/StringUtils.js";
 
     export let client;
     export let onComplete;
