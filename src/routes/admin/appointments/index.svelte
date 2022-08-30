@@ -68,7 +68,7 @@
         {:then data}
             <Timeline />
             <table>
-                <thead>
+                <thead class="shadow">
                 <tr>
                     <!-- First empty slot for time slot -->
                     <th></th>
@@ -178,7 +178,6 @@
 
           // time slot in sticky header
           th:first-of-type {
-            box-shadow: none;
             background-color: transparent;
           }
 
@@ -186,7 +185,6 @@
           th {
             background-color: white;
             padding: 0.5rem;
-            box-shadow: 0 0 #0000, 0 0 #0000, 0 2px 4px 0 rgb(0 0 0 / 0.2);
           }
         }
       }

@@ -6,6 +6,7 @@
     import Form from '$lib/forms/form.svelte';
     import InputField from '$lib/forms/input-field.svelte';
     import Button from '$lib/forms/button.svelte';
+    import PaginatedList from '$lib/paginated-list.svelte';
     import {iconPlus, iconSearch} from "../../../lib/icons.js";
 
 
@@ -26,8 +27,7 @@
                 <Button type="button" icon={iconPlus}>Add</Button>
             </Form>
         </div>
-
-
+        <PaginatedList />
     </div>
 </div>
 
