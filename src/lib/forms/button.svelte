@@ -52,6 +52,7 @@
     justify-self: flex-start;
 
     &.has--icon {
+
       .icon {
         transform: scale(0.6);
         color: white;
@@ -172,6 +173,15 @@
     color: #637388;
     background: transparent;
     transition: all 0.3s ease;
+
+    &:disabled {
+      color: rgba(var(--fuse-text-disabled-rgb), 1);
+      cursor: default;
+
+      &:hover {
+        background-color: transparent;
+      }
+    }
 
     &:hover {
       background-color: #e8ebee;

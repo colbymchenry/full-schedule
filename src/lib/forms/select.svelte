@@ -4,6 +4,10 @@
     export let form_errors = {};
     export let value, label, name, type = "text", icon, disablePrefill, readOnly, hint, info;
     export let required = false;
+    export let hideDefault = false;
+    export let style;
+    export let small;
+    export let onChange;
 
     let focused = false;
 
@@ -21,6 +25,7 @@
         name,
         type,
         required,
+        style,
         "class": (icon ? "has--icon" : "")
     }
 
@@ -31,9 +36,11 @@
         mouseX = event.clientX;
         mouseY = event.clientY;
     }
+
+    $: selected = !value;
 </script>
 
-<svelte:window on:mousemove={handleMouseMove} />
+<svelte:window on:mousemove={handleMouseMove}/>
 
 <div class="input-field__container">
     {#if label}
@@ -46,17 +53,20 @@
             {/if}
         </label>
     {/if}
-    <div class="input-field" class:is--readonly={readOnly} class:is--error={form_errors[name]} class:is--focused={focused}>
+    <div class="input-field" class:is--readonly={readOnly} class:is--error={form_errors[name]}
+         class:is--focused={focused} class:is--small={small}>
         {#if icon}
             <div class="icon">
                 {@html icon}
             </div>
         {/if}
-            <select {...inputProps} bind:value={value} on:select={clear_error}
-                   on:focusin={() => focused = true} on:focusout={() => focused = false}>
-                <option value="" disabled selected={!value}>Make a selection</option>
-                <slot></slot>
-            </select>
+        <select {...inputProps} bind:value={value} on:select={clear_error}
+                on:focusin={() => focused = true} on:focusout={() => focused = false} on:change={onChange}>
+            {#if !hideDefault}
+                <option value="" disabled {selected}>Make a selection</option>
+            {/if}
+            <slot></slot>
+        </select>
     </div>
 
     {#if info}
@@ -83,7 +93,7 @@
 
     small {
       margin-top: 0.25rem;
-      color: rgba(var(--fuse-text-hint-rgb), );
+      color: rgba(var(--fuse-text-hint-rgb),);
       font-size: 13px;
     }
 
@@ -120,11 +130,15 @@
     border-style: solid;
     border-width: 1px;
     border-color: rgb(203 213 225 / 1);
-    padding: 2px 16px;
+    padding: 2px 1rem;
     border-radius: 6px;
     background: #fff;
     box-shadow: var(--input-box-shadow);
     position: relative;
+
+    &.is--small {
+      padding: 2px 0.25rem;
+    }
 
     &.is--error {
       outline-offset: 0;
