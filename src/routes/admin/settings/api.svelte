@@ -7,7 +7,6 @@
     import Button from '$lib/forms/button.svelte';
     import Separator from '$lib/forms/separator.svelte';
     import GoogleOAuthHandler from './google-oauth-handler.svelte';
-    import {ApiProgressBar} from "../../../lib/ApiProgressBar.js";
     import {FirebaseClient} from "../../../utils/firebase/FirebaseClient.js";
     import {showToast} from "../../../utils/logger.js";
     import {
@@ -25,6 +24,7 @@
     } from "../../../lib/icons.js";
     import {settings} from "../../../lib/stores.js";
     import {Api} from "../../../utils/Api.js";
+    import {ApiProgressBar} from "../../../utils/ApiProgressBar.js";
 
     let form_errors = {};
 

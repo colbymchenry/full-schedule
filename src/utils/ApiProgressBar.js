@@ -1,4 +1,4 @@
-import {progressBarStore} from "./stores.js";
+import {progressBarStore} from "../lib/stores.js";
 
 
 export class ApiProgressBar {

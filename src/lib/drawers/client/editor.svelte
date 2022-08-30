@@ -11,13 +11,13 @@
         iconPin,
         iconUser
     } from "../../icons.js";
-    import {ApiProgressBar} from "../../ApiProgressBar.js";
     import {Api} from "../../../utils/Api.js";
     import {FormHelper} from "../../../utils/FormHelper.js";
     import {CloudinaryApi} from "../../../utils/CloudinaryApi.js";
     import {showToast} from "../../../utils/logger.js";
     import {MathHelper} from "../../../utils/MathHelper.js";
     import Swal from "sweetalert2";
+    import {ApiProgressBar} from "../../../utils/ApiProgressBar.js";
 
     export let client;
     export let onComplete, onClose;

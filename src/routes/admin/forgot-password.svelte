@@ -8,7 +8,7 @@
     import Button from '$lib/forms/button.svelte'
     import {FirebaseClient} from "../../utils/firebase/FirebaseClient.js";
     import LoginLayout from "$lib/__layout/login-layout.svelte";
-    import AnimateCheckmark from "$lib/AnimateCheckmark.svelte";
+    import AnimatedCheckmark from "$lib/animated-checkmark.svelte";
 
     let response;
     let form_errors = {};
@@ -40,7 +40,7 @@
     <div slot="form">
 
         {#if response === true}
-            <AnimateCheckmark/>
+            <AnimatedCheckmark/>
             <h2>Password reset email sent!</h2>
         {:else}
             <Form class="login-form" onSubmit={onSubmit} hideFooter>

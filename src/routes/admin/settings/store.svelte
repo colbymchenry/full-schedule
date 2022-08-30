@@ -5,7 +5,6 @@
     import Section from '$lib/forms/section.svelte';
     import Row from '$lib/forms/row.svelte';
     import Separator from '$lib/forms/separator.svelte';
-    import {ApiProgressBar} from "../../../lib/ApiProgressBar.js";
     import {FirebaseClient} from "../../../utils/firebase/FirebaseClient.js";
     import {showToast} from "../../../utils/logger.js";
     import states from '../../../assets/states.json';
@@ -21,6 +20,7 @@
         iconTiktok, iconTwitter, iconYoutube
     } from "../../../lib/icons.js";
     import {settings} from "../../../lib/stores.js";
+    import {ApiProgressBar} from "../../../utils/ApiProgressBar.js";
 
     let form_errors = {};
 

@@ -3,11 +3,11 @@
     import Row from '$lib/forms/row.svelte';
     import Form from '$lib/forms/form.svelte';
     import Section from '$lib/forms/section.svelte';
-    import {ApiProgressBar} from "../../../lib/ApiProgressBar.js";
     import {showToast} from "../../../utils/logger.js";
     import {iconMail, iconPerson, iconPhone} from "../../../lib/icons.js";
     import {auth} from "../../../lib/stores.js";
     import {Api} from "../../../utils/Api.js";
+    import {ApiProgressBar} from "../../../utils/ApiProgressBar.js";
 
     let form_errors = {};
 

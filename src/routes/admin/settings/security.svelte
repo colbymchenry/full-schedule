@@ -3,11 +3,11 @@
     import Form from '$lib/forms/form.svelte';
     import Section from '$lib/forms/section.svelte';
     import {FirebaseClient} from "../../../utils/firebase/FirebaseClient.js";
-    import {ApiProgressBar} from "../../../lib/ApiProgressBar.js";
     import {auth} from "../../../lib/stores.js";
     import {showToast} from "../../../utils/logger.js";
     import {iconKey} from "../../../lib/icons.js";
     import {Api} from "../../../utils/Api.js";
+    import {ApiProgressBar} from "../../../utils/ApiProgressBar.js";
 
     let form_errors = {};
 
