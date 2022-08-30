@@ -1,3 +1,7 @@
+<svelte:head>
+    <title>FS • Admin Login</title>
+</svelte:head>
+
 <script>
     import InputField from '$lib/forms/input-field.svelte';
     import Checkbox from '$lib/forms/checkbox.svelte';
@@ -27,10 +31,6 @@
         }
     }
 </script>
-
-<svelte:head>
-    <title>FS • Admin Login</title>
-</svelte:head>
 
 <LoginLayout title="Sign in">
     <div slot="hint">

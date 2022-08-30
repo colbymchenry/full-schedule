@@ -1,3 +1,7 @@
+<svelte:head>
+    <title>FS • Clients</title>
+</svelte:head>
+
 <script>
     import ClientDrawer from '$lib/drawers/client/index.svelte';
     import Form from '$lib/forms/form.svelte';
@@ -48,10 +52,6 @@
 
     }
 </script>
-
-<svelte:head>
-    <title>FS • Clients</title>
-</svelte:head>
 
 <div class="container full-vh">
     <div class="content">

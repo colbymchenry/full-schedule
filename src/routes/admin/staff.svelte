@@ -1,3 +1,7 @@
+<svelte:head>
+    <title>FS • Staff</title>
+</svelte:head>
+
 <script>
     import StaffDrawer from '$lib/drawers/staff/index.svelte';
     import Form from '$lib/forms/form.svelte';
@@ -46,10 +50,6 @@
 
     }
 </script>
-
-<svelte:head>
-    <title>FS • Staff</title>
-</svelte:head>
 
 <div class="container full-vh" >
     <div class="content">

@@ -1,3 +1,7 @@
+<svelte:head>
+    <title>FS • Appointments</title>
+</svelte:head>
+
 <script>
     import Header from './_components/header.svelte';
     import Timestamp from './_components/timestamp.svelte';
@@ -8,6 +12,8 @@
     import {StringUtils} from "../../../utils/StringUtils.js";
     import {TimeHelper} from "../../../utils/TimeHelper.js";
     import staff from "../staff.svelte";
+    import Skeleton from 'svelte-skeleton/Skeleton.svelte'
+    import {MathHelper} from "../../../utils/MathHelper.js";
 
 
     let selectedDate = new Date();
@@ -51,7 +57,14 @@
 
     <div class="container">
         {#await staffAccounts}
-            <h2>Fetching...</h2>
+            <div style="max-width: 100%;display: flex;padding-left: 4.5rem;">
+                {#each [0,1,2,3] as number (number)}
+                    <Skeleton width="100%" height="75px">
+                        <circle cx="50" cy="50" r="24" stroke="black" />
+                        <rect width={MathHelper.getNumberFromRange(100, 280)} height="10" x="90" y="44" rx="5" ry="5"/>
+                    </Skeleton>
+                {/each}
+            </div>
         {:then data}
             <Timeline />
             <table>

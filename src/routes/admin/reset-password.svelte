@@ -1,3 +1,7 @@
+<svelte:head>
+    <title>FS • Reset Password</title>
+</svelte:head>
+
 <script>
     import InputField from '$lib/forms/input-field.svelte';
     import Form from '$lib/forms/form.svelte';
@@ -27,10 +31,6 @@
         }
     }
 </script>
-
-<svelte:head>
-    <title>FS • Reset Password</title>
-</svelte:head>
 
 <LoginLayout title="Reset your password">
     <div slot="hint">

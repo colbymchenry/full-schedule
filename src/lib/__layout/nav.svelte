@@ -4,7 +4,7 @@
         iconAnalytics,
         iconCalendar,
         iconCharts,
-        iconGiftCard,
+        iconGiftCard, iconInventory,
         iconMemberships,
         iconShieldUser,
         iconTools,
@@ -43,6 +43,11 @@
             name: 'Analytics'
         },
         {
+            url: '/inventory',
+            icon: iconInventory,
+            name: 'Inventory'
+        },
+        {
             url: '/promotions',
             icon: iconGiftCard,
             name: 'Promotions'
@@ -60,6 +65,7 @@
     ];
 
     let nameDiv;
+
     async function updateDisplayName() {
         try {
             await Api.patch('/api/user', {
@@ -68,7 +74,7 @@
             })
         } catch (error) {
             Swal.fire({
-               title: "Server error. Please try again later.",
+                title: "Server error. Please try again later.",
                 timer: 3000,
                 timerProgressBar: true,
                 toast: true
@@ -86,8 +92,9 @@
             </div>
         </div>
         <div class="user">
-            <Avatar bind:user={$auth} size="medium" canEdit />
-            <div class="name" contenteditable="true" bind:this={nameDiv} on:blur={updateDisplayName}>{$auth?.displayName || 'User'}</div>
+            <Avatar bind:user={$auth} size="medium" canEdit/>
+            <div class="name" contenteditable="true" bind:this={nameDiv}
+                 on:blur={updateDisplayName}>{$auth?.displayName || 'User'}</div>
             <div class="email">{$auth?.email}</div>
         </div>
 
@@ -168,7 +175,7 @@
           color: rgb(159, 162, 169);
           text-decoration: none;
 
-          &.is--active,&:hover {
+          &.is--active, &:hover {
             background-color: rgb(41, 48, 60);
             color: rgb(255, 255, 255);
           }

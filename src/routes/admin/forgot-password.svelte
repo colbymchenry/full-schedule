@@ -1,3 +1,7 @@
+<svelte:head>
+    <title>FS • Forgot Password</title>
+</svelte:head>
+
 <script>
     import InputField from '$lib/forms/input-field.svelte';
     import Form from '$lib/forms/form.svelte';
@@ -28,10 +32,6 @@
         }
     }
 </script>
-
-<svelte:head>
-    <title>FS • Forgot Password</title>
-</svelte:head>
 
 <LoginLayout title="Forgot password?">
     <div slot="hint">
