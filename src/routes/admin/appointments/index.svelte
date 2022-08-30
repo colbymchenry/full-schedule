@@ -79,7 +79,9 @@
                                 <div class="avatar">
                                     {StringUtils.getInitials(staff.displayName)}
                                 </div>
-                            {/if}{staff.displayName}</th>
+                            {/if}
+                            <span class="truncate">{staff.displayName}</span>
+                        </th>
                     {/each}
                 </tr>
                 </thead>

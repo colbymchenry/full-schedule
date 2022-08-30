@@ -8,6 +8,7 @@
     let visible = true;
 
     onMount(() => {
+        now.setHours(5)
         interval = setInterval(() => {
             now = new Date();
         }, 1000);
@@ -20,20 +21,19 @@
     let marginTop = 0;
 
     $: {
-        if (now.getHours() === 4) {
-            marginTop = now.getMinutes() * (100 / 30);
-            visible = true;
-            // make visible again
-        } else if (now.getHours() >= 20) {
-            // hide at the end of the day at 8pm
+        const timestampHeight = 100; // in pixels which equates to 30 minutes
+        const hoursPassed = now.getHours() - 4; // calendar starts at 4am
+        const minutes = now.getMinutes(); // get the minutes to adjust inside of timestamp
+        const minuteHeight = timestampHeight / 30;
+        const totalMinutes = (hoursPassed * 60) + minutes;
+
+        // hide if before 4am or after 8pm
+        if (hoursPassed < 0 || now.getHours() > 20) {
             visible = false;
+        } else {
+            marginTop = totalMinutes * minuteHeight;
+            marginTop += (hoursPassed * 3.65);
         }
-
-        const hours = now.getHours() - 4;
-        const minutes = now.getMinutes();
-        const totalMinutes = (hours * 60) + minutes;
-
-        marginTop = totalMinutes * (100 / 30);
     }
 
 </script>
@@ -49,10 +49,11 @@
     width: calc(100% - 20px);
     height: 1px;
     overflow: visible;
-    z-index: 2;
+    z-index: 4;
     border-top: 1px solid var(--primary-color);
     transition: all 0.3s ease;
     display: none;
+    top: 58px;
 
     &.visible {
       display: block;
