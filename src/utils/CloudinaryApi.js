@@ -15,7 +15,7 @@ export class CloudinaryApi {
     static async delete(imgName) {
         if (typeof document === 'undefined') {
             import('cloudinary').then(async (cloudinary) => {
-                cloudinary.config(JSON.parse(Env.getValue("VITE_CLOUDINARY_CONFIG")));
+                cloudinary.config(JSON.parse(Env.get("VITE_CLOUDINARY_CONFIG")));
                 await cloudinary.v2.uploader.destroy('my-uploads/' + imgName);
             })
         }

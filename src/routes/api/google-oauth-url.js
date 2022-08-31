@@ -1,6 +1,6 @@
 import {google} from "googleapis";
-import {GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET} from "../../lib/env.js";
 import {FirebaseAdmin} from "../../utils/firebase/FirebaseAdmin.js";
+import {Env} from "../../lib/env.js";
 
 export async function post({request}) {
 
@@ -9,8 +9,8 @@ export async function post({request}) {
     const res = await request.json();
 
     const oauth2Client = new google.auth.OAuth2(
-        GOOGLE_CLIENT_ID,
-        GOOGLE_CLIENT_SECRET,
+        Env.get("GOOGLE_CLIENT_ID"),
+        Env.get("GOOGLE_CLIENT_SECRET"),
         res.baseUrl + '/settings/api'
     );
 
