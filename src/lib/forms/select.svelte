@@ -91,6 +91,7 @@
     grid-template-rows: auto;
     font: 400 .875rem/1.2857142857 Inter var, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", Segoe UI Symbol, "Noto Color Emoji";
     align-self: flex-start;
+    width: 100%;
 
     small {
       margin-top: 0.25rem;
