@@ -1,3 +1,5 @@
+import {Env} from "../lib/env.js";
+
 export class CloudinaryApi {
     static async upload(fileData) {
         const formData = new FormData();
@@ -12,13 +14,9 @@ export class CloudinaryApi {
 
     static async delete(imgName) {
         if (typeof document === 'undefined') {
-            import('dotenv/config').then(() => {
-                import('cloudinary').then(async (cloudinary) => {
-                    cloudinary.config({
-                        secure: true
-                    });
-                    await cloudinary.v2.uploader.destroy('my-uploads/' + imgName);
-                })
+            import('cloudinary').then(async (cloudinary) => {
+                cloudinary.config(JSON.parse(Env.getValue("VITE_CLOUDINARY_CONFIG")));
+                await cloudinary.v2.uploader.destroy('my-uploads/' + imgName);
             })
         }
     }
