@@ -4,9 +4,9 @@
         iconAnalytics,
         iconCalendar,
         iconCharts,
-        iconGiftCard, iconInventory, iconLogo,
+        iconGiftCard, iconInventory, iconLogo, iconMedicalServices,
         iconMemberships,
-        iconShieldUser,
+        iconShieldUser, iconStars,
         iconTools,
         iconUser,
         iconUsers
@@ -44,18 +44,23 @@
         },
         {
             url: '/inventory',
-            icon: iconInventory,
-            name: 'Inventory'
+            icon: iconMedicalServices,
+            name: 'Services'
         },
         {
-            url: '/promotions',
-            icon: iconGiftCard,
-            name: 'Promotions'
+            url: '/inventory',
+            icon: iconInventory,
+            name: 'Inventory'
         },
         {
             url: '/members',
             icon: iconMemberships,
             name: 'Members'
+        },
+        {
+            url: '/promotions',
+            icon: iconGiftCard,
+            name: 'Promotions'
         },
         {
             url: '/settings',
