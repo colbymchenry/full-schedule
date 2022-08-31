@@ -7,6 +7,7 @@ const config = {
     adapter: adapter(),
     vite: {
       define: {
+        'process.env': process.env,
         'import.meta.env.VERCEL_ANALYTICS_ID': JSON.stringify(process.env.VERCEL_ANALYTICS_ID),
         'CLOUDINARY_URL': process.env.CLOUDINARY_URL
       },
