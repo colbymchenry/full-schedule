@@ -31,7 +31,7 @@ let firebaseApp;
 
 if (browser) {
     try {
-        firebaseApp = initializeApp(JSON.parse(process.env.VITE_PUBLIC_FIREBASE_CONFIG))
+        firebaseApp = initializeApp(JSON.parse(import.meta.env.VITE_PUBLIC_FIREBASE_CONFIG))
         // firebaseAnalytics = getAnalytics(firebaseApp);
     } catch (error) {
         /*
