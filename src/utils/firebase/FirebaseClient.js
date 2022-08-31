@@ -25,13 +25,13 @@ import {
     updateDoc
 } from 'firebase/firestore';
 import {browser} from "$app/env";
-import {Env} from "../../lib/env.js";
 
 let firebaseApp;
 
 if (browser) {
+    let fireBaseConf = import.meta.env.VITE_FIREBASE_CONFIG;
     try {
-        firebaseApp = initializeApp(JSON.parse(import.meta.env.VITE_PUBLIC_FIREBASE_CONFIG))
+        firebaseApp = initializeApp(JSON.parse(fireBaseConf))
         // firebaseAnalytics = getAnalytics(firebaseApp);
     } catch (error) {
         /*
