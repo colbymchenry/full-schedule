@@ -10,15 +10,36 @@
     export let hideFooter;
     export let style;
     let reset = false;
+    let footer;
 </script>
 
 
-<form {id} {style} class={clazz || ''} on:submit|preventDefault={(e) => onSubmit(FormHelper.getFormData(e.target))}>
+<form {id} style={`padding-bottom: ${footer?.clientHeight}px;${style}`} class={clazz || ''}
+      on:submit|preventDefault={(e) => onSubmit(FormHelper.getFormData(e.target))}>
     {#key reset}
         <slot></slot>
     {/key}
     {#if !hideFooter}
-        <Separator/>
-        <Footer onCancel={() => { reset = !reset }}/>
+        {#if $$slots.footer}
+            <slot name="footer"></slot>
+        {:else}
+            <div bind:this={footer}>
+                <Separator/>
+                <Footer onCancel={() => { reset = !reset }}/>
+            </div>
+        {/if}
     {/if}
 </form>
+
+<style lang="scss">
+  form {
+    position: relative;
+  }
+
+  div {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+  }
+</style>

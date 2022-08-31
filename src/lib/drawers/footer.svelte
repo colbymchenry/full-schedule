@@ -1,18 +1,22 @@
 <script>
     import Button from '$lib/forms/button.svelte';
 
-    export let onCancel, onSave, onDelete, hideDelete;
+    export let onCancel, onSave, onDelete, hideDelete, hideCancel, isUpdate, style;
 </script>
 
-<div class="footer">
+<div class="footer" {style}>
     {#if hideDelete}
         <div></div>
     {:else}
         <Button type="button" color="delete" callback={onDelete}>Delete</Button>
     {/if}
     <div>
-        <Button type="button" color="cancel" callback={onCancel}>Cancel</Button>
-        <Button color="primary" callback={onSave}>Save</Button>
+        {#if hideCancel}
+            <div></div>
+        {:else}
+            <Button type="button" color="cancel" callback={onCancel}>Cancel</Button>
+        {/if}
+        <Button color="primary" callback={onSave}>{isUpdate ? 'Update' : 'Save'}</Button>
     </div>
 
 </div>

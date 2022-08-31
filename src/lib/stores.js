@@ -1,5 +1,5 @@
 import {writable} from "svelte/store";
-import {JsonHelper} from "../utils/jsonhelper.js";
+import {JsonHelper} from "../utils/JsonHelper.js";
 
 export const navStore = writable(true);
 export const auth = writable(null);

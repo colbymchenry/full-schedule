@@ -10,7 +10,7 @@
     import {prettyLog} from "../utils/logger.js";
     import ApiProgressBar from '$lib/__layout/api-progress-bar.svelte';
     import {browser} from "$app/env";
-    import {JsonHelper} from "../utils/jsonhelper.js";
+    import {JsonHelper} from "../utils/JsonHelper.js";
     import {auth, progressBarStore, settings} from "../lib/stores.js";
 
 

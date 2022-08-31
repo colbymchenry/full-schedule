@@ -21,4 +21,12 @@ export class JsonHelper {
         keys.reduce(function (o, k) { return o[k] = o[k] || {}; }, this.object)[last] = value;
     }
 
+    static get(object, path) {
+        path = path.replace(/[\[]/gm, '.').replace(/[\]]/gm, ''); //to accept [index]
+        let keys = path.split('.'),
+            last = keys.pop();
+
+        return keys.reduce(function (o, k) { return o[k] = o[k] || {}; }, object)[last];
+    }
+
 }

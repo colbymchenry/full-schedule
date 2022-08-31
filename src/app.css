@@ -258,14 +258,13 @@ a:hover {
 }
 
 input.has--icon {
-    padding-left: 2rem;
     outline: none !important;
     border: none !important;
     margin-bottom: 0;
     color: #333 !important;
     display: block;
     width: 100%;
-    height: 38px;
+    padding: 14px 0 14px 2rem;
     line-height: 1.42857143;
     vertical-align: middle;
     background-color: #fff;
@@ -380,7 +379,9 @@ input.has--icon {
 }
 
 .shadow {
-    --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / .1), 0 1px 2px -1px rgb(0 0 0 / .1) !important;
-    --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color) !important;
-    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),var(--tw-ring-shadow, 0 0 #0000),var(--tw-shadow)!important;
+    box-shadow: 0 0 #0000, 0 0 #0000, 0 0 4px 0 rgb(0 0 0 / 0.21) !important;
+}
+
+.shadow-lg {
+    box-shadow: 0 0 #0000, 0 0 #0000, 0 10px 12px 0 rgb(0 0 0 / 0.1) !important;
 }

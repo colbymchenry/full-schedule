@@ -3,7 +3,6 @@
     import InputField from '$lib/forms/input-field.svelte';
     import Avatar from '$lib/avatar.svelte';
     import Footer from '$lib/drawers/footer.svelte';
-    import Swal from "sweetalert2";
     import {MathHelper} from "../../../../../utils/MathHelper.js";
     import {ApiProgressBar} from "../../../../../utils/ApiProgressBar.js";
     import {Api} from "../../../../../utils/Api.js";
@@ -11,6 +10,8 @@
     import {showToast} from "../../../../../utils/logger.js";
     import {iconBirthday, iconClose, iconMail, iconPhone, iconPin, iconUser} from "../../../../../lib/icons.js";
     import {FormHelper} from "../../../../../utils/FormHelper.js";
+    import {SwalHelper} from "../../../../../utils/SwalHelper.js";
+
     export let client;
     export let onComplete, onClose;
     export let editing;
@@ -25,17 +26,7 @@
     }
 
     async function deleteClient() {
-        Swal.fire({
-            icon: 'warning',
-            text: 'Are you sure? This is irreversible.',
-            confirmButtonText: 'Delete',
-            cancelButtonText: 'Never mind',
-            confirmButtonColor: 'var(--fuse-warn-600)',
-            cancelButtonColor: 'var(--nav-color)',
-            showCloseButton: true,
-            showCancelButton: true,
-            showConfirmButton: true
-        }).then(async (result) => {
+        SwalHelper.deleteConfirmation().then(async (result) => {
             if (result.isConfirmed) {
                 ApiProgressBar.start();
                 try {

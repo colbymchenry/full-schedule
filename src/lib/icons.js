@@ -195,3 +195,69 @@ export const iconInventory = `<svg xmlns="http://www.w3.org/2000/svg" height="48
 export const iconPlus = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="48" height="48" stroke="currentColor" preserveAspectRatio="xMidYMid meet" focusable="false">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
         </svg>`;
+
+export const iconCheck = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" height="48" width="48" preserveAspectRatio="xMidYMid meet" focusable="false">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+        </svg>`;
+
+export const iconChevronDown = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" height="48" width="48" preserveAspectRatio="xMidYMid meet" focusable="false">
+            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+        </svg>`;
+
+export const iconChevronUp = `<svg xmlns="http://www.w3.org/2000/svg" style="transform: rotateZ(180deg);" viewBox="0 0 20 20" fill="currentColor" height="48" width="48" preserveAspectRatio="xMidYMid meet" focusable="false">
+            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+        </svg>`;
+
+export const iconInfinity = `<svg xmlns="http://www.w3.org/2000/svg" 
+\t width="48" height="48" fill="currentColor" viewBox="0 0 150.223 150.223"
+\t xml:space="preserve">
+<g>
+\t<g>
+\t\t<path d="M115.885,38.631c-21.312,0-35.416,17.425-47.859,32.802c-10.631,13.136-20.67,25.54-32.897,25.54
+\t\t\tc-12.709,0-20.512-13.062-20.512-22.426c0-8.682,8.56-21.299,21.976-21.299c13.018,0,19.8,10.419,20.142,10.953
+\t\t\tc2.109,3.413,6.587,4.487,10.017,2.395c3.447-2.1,4.539-6.597,2.438-10.044c-0.446-0.73-11.167-17.92-32.597-17.92
+\t\t\tC15.029,38.632,0,57.562,0,74.548c0,17.521,14.427,37.043,35.128,37.043c19.199,0,31.94-15.74,44.259-30.963
+\t\t\tc11.396-14.078,22.161-27.379,36.498-27.379c8.53,0,14.135,2.894,17.131,8.84c2.596,5.16,2.594,10.999,2.592,13.022
+\t\t\tc0,1.16-0.613,6.978-3.451,12.217c-3.236,5.968-7.83,8.746-14.469,8.746c-13.369,0-20.592-8.69-23.312-11.963
+\t\t\tc-0.707-0.852-1.216-1.465-1.896-2.047c-3.062-2.623-7.678-2.271-10.306,0.795c-2.534,2.957-2.29,7.353,0.478,10.014
+\t\t\tc0.132,0.15,0.291,0.347,0.48,0.576c3.545,4.266,14.324,17.24,34.553,17.24c24.586,0,32.537-23.973,32.537-35.678
+\t\t\tc0.002-7.455-1.394-14.013-4.154-19.496C142.193,47.815,133.809,38.631,115.885,38.631z"/>
+\t</g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+</svg>`
+
+export const iconDollar = `<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" viewBox="0 0 48 48" fill="currentColor"><path d="M22.55 42v-4.2q-2.85-.5-4.675-2.175Q16.05 33.95 15.25 31.4l2.8-1.15q.85 2.4 2.45 3.575Q22.1 35 24.35 35q2.4 0 3.95-1.2 1.55-1.2 1.55-3.3 0-2.2-1.375-3.4-1.375-1.2-5.175-2.45-3.6-1.15-5.375-3.05t-1.775-4.75q0-2.75 1.775-4.6 1.775-1.85 4.625-2.1V6h3v4.15q2.25.25 3.875 1.475T31.9 14.75l-2.8 1.2q-.7-1.6-1.875-2.325-1.175-.725-3.075-.725-2.3 0-3.65 1.05t-1.35 2.85q0 1.9 1.5 3.075 1.5 1.175 5.55 2.425 3.4 1.05 5.025 3.025Q32.85 27.3 32.85 30.3q0 3.15-1.85 5.075-1.85 1.925-5.45 2.475V42Z"/></svg>`;
+
+export const iconPercent = `<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" viewBox="0 0 48 48" fill="currentColor"><path d="M14.5 21q-2.7 0-4.6-1.9Q8 17.2 8 14.5q0-2.7 1.9-4.6Q11.8 8 14.5 8q2.7 0 4.6 1.9 1.9 1.9 1.9 4.6 0 2.7-1.9 4.6-1.9 1.9-4.6 1.9Zm0-3q1.45 0 2.475-1.025Q18 15.95 18 14.5q0-1.45-1.025-2.475Q15.95 11 14.5 11q-1.45 0-2.475 1.025Q11 13.05 11 14.5q0 1.45 1.025 2.475Q13.05 18 14.5 18Zm19 22q-2.7 0-4.6-1.9-1.9-1.9-1.9-4.6 0-2.7 1.9-4.6 1.9-1.9 4.6-1.9 2.7 0 4.6 1.9 1.9 1.9 1.9 4.6 0 2.7-1.9 4.6-1.9 1.9-4.6 1.9Zm0-3q1.45 0 2.475-1.025Q37 34.95 37 33.5q0-1.45-1.025-2.475Q34.95 30 33.5 30q-1.45 0-2.475 1.025Q30 32.05 30 33.5q0 1.45 1.025 2.475Q32.05 37 33.5 37Zm-23.4 3L8 37.9 37.9 8l2.1 2.1Z"/></svg>`;
+
+export const iconWeight = `<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" viewBox="0 0 48 48" fill="currentColor"><path d="M10.85 39h26.3L34 17H14l-3.15 22ZM24 14q1.3 0 2.15-.875Q27 12.25 27 11q0-1.3-.85-2.15Q25.3 8 24 8q-1.25 0-2.125.85T21 11q0 1.25.875 2.125T24 14Zm5.2 0H34q1.15 0 2 .725.85.725 1 1.875l3.1 22q.2 1.35-.675 2.375T37.15 42h-26.3q-1.4 0-2.275-1.025T7.9 38.6l3.1-22q.15-1.15 1-1.875.85-.725 2-.725h4.8q-.4-.7-.6-1.425Q18 11.85 18 11q0-2.5 1.75-4.25T24 5q2.5 0 4.25 1.75T30 11q0 .85-.2 1.575T29.2 14ZM10.85 39h26.3Z"/></svg>`;

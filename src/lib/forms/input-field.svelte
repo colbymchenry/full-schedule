@@ -1,9 +1,9 @@
 <script>
     import MaskInput from "svelte-input-mask/MaskInput.svelte";
-    import {iconHelp} from "../icons.js";
+    import {iconHelp, iconSearch} from "../icons.js";
 
     export let form_errors = {};
-    export let value, label, name, type = "text", placeholder, icon, disablePrefill, readOnly, hint, info;
+    export let value, label, name, type = "text", placeholder, icon, disablePrefill, readOnly, hint, info, min, max, step;
     export let required = false;
 
     let clazz;
@@ -29,6 +29,9 @@
         placeholder,
         type,
         required,
+        step,
+        min,
+        max,
         "class": (icon ? "has--icon" : "")
     }
 
@@ -41,6 +44,8 @@
         mouseX = event.clientX;
         mouseY = event.clientY;
     }
+
+
 </script>
 
 <svelte:window on:mousemove={handleMouseMove} />
@@ -56,7 +61,7 @@
             {/if}
         </label>
     {/if}
-    <div class={"input-field" + (clazz ? " " + clazz : "")} class:is--readonly={readOnly} class:is--error={form_errors[name]} class:is--focused={focused} >
+    <div class={"input-field" + (clazz ? " " + clazz : "")} class:is--search={icon === iconSearch} class:has--icon={icon} class:is--readonly={readOnly} class:is--error={form_errors[name]} class:is--focused={focused} >
         {#if icon}
             <div class="icon">
                 {@html icon}
@@ -97,6 +102,7 @@
     grid-template-columns: auto;
     grid-template-rows: auto;
     font: 400 .875rem/1.2857142857 Inter var, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", Segoe UI Symbol, "Noto Color Emoji";
+    align-self: flex-start;
 
     small {
       margin-top: 0.25rem;
@@ -143,6 +149,18 @@
     box-shadow: var(--input-box-shadow);
     position: relative;
 
+    &.has--icon {
+      input {
+        padding-left: 2rem;
+      }
+    }
+
+    &.is--search {
+      input {
+        height: 38px;
+      }
+    }
+
     &.is--error {
       outline-offset: 0;
       outline: var(--error-color) solid 2px;
@@ -171,7 +189,8 @@
       color: #333;
       display: block;
       width: 100%;
-      height: 38px;
+      //height: 38px;
+      padding: 0.75rem 0;
       line-height: 1.42857143;
       vertical-align: middle;
       background-color: #fff;

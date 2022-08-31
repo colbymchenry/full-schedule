@@ -7,30 +7,32 @@
     import InputField from '$lib/forms/input-field.svelte';
     import Button from '$lib/forms/button.svelte';
     import PaginatedList from '$lib/paginated-list.svelte';
-    import {iconPlus, iconSearch} from "../../../lib/icons.js";
-    import {MathHelper} from "../../../utils/MathHelper.js";
+    import CellDetails from './_components/cell-details.svelte';
+    import CellStock from './_components/cell-stock.svelte';
+    import {iconCheck, iconClose, iconPlus, iconSearch} from "../../../lib/icons.js";
     import {StringUtils} from "../../../utils/StringUtils.js";
+    import {showToast} from "../../../utils/logger.js";
+    import {FirebaseClient} from "../../../utils/firebase/FirebaseClient.js";
 
-    const products = [];
+    let openIndex = -1;
 
-    for (let i = 0; i < MathHelper.getNumberFromRange(50, 100); i++) {
-        products.push({
-            id: 1,
-            name: 'Epithalon ' + i,
-            price: MathHelper.getNumberFromRange(3000, 30000),
-            cost: MathHelper.getNumberFromRange(1000, 2000),
-            sku: 'ADH-' + MathHelper.getNumberFromRange(1000, 9000),
-            category: 'wellness',
-            active: false,
-            stock: MathHelper.getNumberFromRange(1, 300),
-            priceType: 'unit'
-        })
+    let products = new Promise(fetchProducts);
+
+    async function fetchProducts() {
+        try {
+            products = await FirebaseClient.collection("products");
+            console.log(products)
+        } catch (error) {
+            showToast();
+            console.error(error);
+        }
     }
 
     async function performSearch(formData) {
 
     }
 
+    // used for adjusting max-height with inner content scrolling
     let header;
 </script>
 
@@ -43,15 +45,27 @@
 
             <Form onSubmit={performSearch} class="search-form" hideFooter>
                 <InputField placeholder="Search inventory" name="name" icon={iconSearch} class="br-20"/>
-                <Button type="button" icon={iconPlus}>Add</Button>
+                <Button type="button" icon={iconPlus} callback={() => {
+                    products.unshift({
+                        name: "A New Product"
+                    });
+                    products = products;
+                    setTimeout(() => {
+                        openIndex = 0;
+                    }, 200);
+                }}>Add
+                </Button>
             </Form>
         </div>
-        <PaginatedList data={products}
-                       style={`max-height: calc(100vh - ${header?.clientHeight || 0}px - var(--top-bar-height));min-height: calc(100vh - ${header?.clientHeight || 0}px - var(--top-bar-height))`}
-                       columns={{
+        {#await products}
+            <h1>Fetching</h1>
+        {:then data}
+            <PaginatedList data={products}
+                           style={`max-height: calc(100vh - ${header?.clientHeight || 0}px - var(--top-bar-height));min-height: calc(100vh - ${header?.clientHeight || 0}px - var(--top-bar-height))`}
+                           columns={{
                 "SKU": {
                     key: "sku",
-                    style: "text-align: center;"
+                    style: "text-align: center;max-width: 50px;"
                 },
                 "Name": {
                     key: "name",
@@ -61,7 +75,7 @@
                     key: "price"
                 },
                 "Stock": {
-                    key: "stock"
+                    key: "stock.amount"
                 },
                 "Active": {
                     key: "active"
@@ -70,22 +84,43 @@
                     key: "details"
                 }
         }}>
-            <div slot="row" let:key let:data>
-                {#if key === 'details'}
+                <div slot="cell" class="truncate" let:index let:key let:data let:rowData>
+                    {#if key === 'details'}
+                        <CellDetails bind:openIndex={openIndex} {index} {rowData} {fetchProducts} />
+                    {:else if key === 'stock.amount'}
+                        <CellStock {index} {key} {data} {rowData}/>
+                    {:else if key === 'active'}
+                        <div class="active" class:is--active={data}>
+                            {#if data === true}
+                                {@html iconCheck}
+                            {:else}
+                                {@html iconClose}
+                            {/if}
+                        </div>
+                    {:else if key === 'price'}
+                        {!data ? "" : StringUtils.formatCurrency(data)}
+                    {:else}
+                        {data || ""}
+                    {/if}
+                </div>
+            </PaginatedList>
+        {:catch error}
 
-                {:else if key === 'stock'}
-                {:else if key === 'active'}
-                {:else if key === 'price'}
-                    {StringUtils.formatCurrency(data / 100)}
-                {:else}
-                    {data}
-                {/if}
-            </div>
-        </PaginatedList>
+        {/await}
+
     </div>
 </div>
 
 <style lang="scss">
+  .active {
+    transform: scale(0.4);
+    color: #93a2b5;
+    float: left;
+
+    &.is--active {
+      color: #54dc87;
+    }
+  }
 
   .container {
     display: flex;

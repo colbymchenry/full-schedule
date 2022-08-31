@@ -53,7 +53,7 @@
             {/if}
         </label>
     {/if}
-    <div class="input-field" class:is--readonly={readOnly} class:is--error={form_errors[name]}
+    <div class="input-field" class:has--icon={icon} class:is--readonly={readOnly} class:is--error={form_errors[name]}
          class:is--focused={focused} class:is--small={small}>
         {#if icon}
             <div class="icon">
@@ -90,6 +90,7 @@
     grid-template-columns: auto;
     grid-template-rows: auto;
     font: 400 .875rem/1.2857142857 Inter var, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", Segoe UI Symbol, "Noto Color Emoji";
+    align-self: flex-start;
 
     small {
       margin-top: 0.25rem;
@@ -136,6 +137,12 @@
     box-shadow: var(--input-box-shadow);
     position: relative;
 
+    &.has--icon {
+      select {
+        padding: 0.75rem 0 0.75rem 2rem;
+      }
+    }
+
     &.is--small {
       padding: 2px 0.25rem;
     }
@@ -168,14 +175,14 @@
       color: #333;
       display: block;
       width: 100%;
-      height: 38px;
       line-height: 1.42857143;
       vertical-align: middle;
       background-color: #fff;
       font-size: 14px;
       font-weight: 500;
       font-family: inherit;
-      padding-left: 2rem;
+      padding: 0.75rem 0;
+      cursor: pointer;
     }
 
     .icon {

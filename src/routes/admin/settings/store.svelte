@@ -66,8 +66,7 @@
                         disablePrefill/>
             <Select label="State" name="address.state" icon={iconState} value={$settings.get("address.state")}>
                 {#each states as state}
-                    <option value={state.value}
-                            selected={state.value === $settings.get("address.state")}>{state.label}</option>
+                    <option value={state.value}>{state.label}</option>
                 {/each}
             </Select>
             <InputField label="City" name="address.city" icon={iconCity} value={$settings.get("address.city")}
@@ -77,8 +76,7 @@
             <Select label="Timezone" name="address.timezone" icon={iconClock}
                     value={$settings.get("address.timezone")}>
                 {#each timezones as timezone}
-                    <option value={timezone.value}
-                            selected={timezone.value === $settings.get("address.timezone")}>{timezone.label}</option>
+                    <option value={timezone.value}>{timezone.label}</option>
                 {/each}
             </Select>
         </Row>

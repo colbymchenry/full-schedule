@@ -1,6 +1,7 @@
 <script>
     import Select from '$lib/forms/select.svelte';
     import Button from '$lib/forms/button.svelte';
+    import {JsonHelper} from "../utils/JsonHelper";
 
     export let data = [];
     export let columns = {};
@@ -17,10 +18,6 @@
     const iconPageBack = `<svg viewBox="0 0 24 24" fill="currentColor" width="48" height="48" focusable="false"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path></svg>`;
     const iconPageForward = `<svg viewBox="0 0 24 24" fill="currentColor" width="48" height="48" focusable="false" style="transform: rotateY(180deg);"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path></svg>`;
     const iconToEnd = `<svg viewBox="0 0 24 24" focusable="false" fill="currentColor" width="48" height="48" style="transform: rotateY(180deg);"><path d="M18.41 16.59L13.82 12l4.59-4.59L17 6l-6 6 6 6zM6 6h2v12H6z"></path></svg>`;
-
-    function itemsPerPageChange() {
-        page = 0;
-    }
 </script>
 
 
@@ -40,7 +37,7 @@
                 <tr>
                     {#each Object.keys(columns) as column}
                         <td style={columns[column]?.style}>
-                            <slot name="row" key={columns[column].key} data={data[columns[column].key]}/>
+                            <slot name="cell" index={i} key={columns[column].key} data={JsonHelper.get(data, columns[column].key)} rowData={data} />
                         </td>
                     {/each}
                 </tr>
@@ -53,7 +50,7 @@
         <div>
             Items per page:
             <Select bind:value={itemsPerPage} hideDefault small
-                    style="padding-left: 0;padding-right: 0.25rem;height:24px;" onChange={itemsPerPageChange}>
+                    style="padding-left: 0;padding-right: 0.25rem;height:24px;" onChange={() => page = 0}>
                 <option value={10} selected>10</option>
                 <option value={25}>25</option>
                 <option value={50}>50</option>
@@ -66,8 +63,7 @@
         </div>
 
         <div>
-            <Button disabled={page === 0} color="icon" icon={iconToBeginning}
-                    callback={() => page = 0}></Button>
+            <Button disabled={page === 0} color="icon" icon={iconToBeginning} callback={() => page = 0}></Button>
             <Button disabled={page === 0} color="icon"
                     icon={iconPageBack} callback={() => page = Math.max(0, page - 1)}></Button>
             <Button disabled={page === lastPage} color="icon" icon={iconPageForward} callback={() => page = Math.min(lastPage, page + 1)}></Button>
@@ -148,6 +144,7 @@
     tr {
       height: 4rem;
       border-bottom: 1px solid var(--border-color);
+      position: relative;
     }
 
     td {
