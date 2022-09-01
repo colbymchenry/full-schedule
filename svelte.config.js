@@ -1,6 +1,5 @@
 import adapter from '@sveltejs/adapter-auto';
 import {sveltePreprocess} from "svelte-preprocess/dist/autoProcess.js";
-require('dotenv').config();
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {

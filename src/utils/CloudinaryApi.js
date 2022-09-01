@@ -12,10 +12,12 @@ export class CloudinaryApi {
     }
 
     static async delete(imgName) {
-        if (typeof document === 'undefined') {
-            import('cloudinary').then(async (cloudinary) => {
-                cloudinary.config(JSON.parse(import.meta.env.CLOUDINARY_CONFIG));
-                await cloudinary.v2.uploader.destroy('my-uploads/' + imgName);
+        if (process) {
+            import ('dotenv/config').then(() => {
+                import('cloudinary').then(async (cloudinary) => {
+                    cloudinary.config(JSON.parse(process.env.CLOUDINARY_CONFIG));
+                    await cloudinary.v2.uploader.destroy('my-uploads/' + imgName);
+                })
             })
         }
     }

@@ -1,8 +1,9 @@
 import admin from 'firebase-admin';
-
+import dotenv from "dotenv";
+dotenv.config()
 try {
     admin.initializeApp({
-        credential: admin.credential.cert(JSON.parse(import.meta.env.ADMIN_FIREBASE_CONFIG)),
+        credential: admin.credential.cert(JSON.parse(process.env.ADMIN_FIREBASE_CONFIG)),
     })
 
     admin.firestore().settings({
