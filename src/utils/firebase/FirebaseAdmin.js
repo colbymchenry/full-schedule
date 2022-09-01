@@ -1,9 +1,10 @@
 import admin from 'firebase-admin';
-import dotenv from "dotenv";
-dotenv.config()
+
 try {
+    console.log(import.meta.env)
+
     admin.initializeApp({
-        credential: admin.credential.cert(JSON.parse(process.env.ADMIN_FIREBASE_CONFIG)),
+        credential: admin.credential.cert(JSON.parse(process.env.SVELTEKIT_ADMIN_FIREBASE_CONFIG)),
     })
 
     admin.firestore().settings({
@@ -21,6 +22,7 @@ try {
 }
 
 export class FirebaseAdmin {
+
 
     static passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
 

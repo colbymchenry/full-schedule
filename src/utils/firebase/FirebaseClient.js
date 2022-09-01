@@ -29,7 +29,9 @@ import {browser} from "$app/env";
 let firebaseApp;
 
 if (browser) {
-    let fireBaseConf = import.meta.env.VITE_FIREBASE_CONFIG;
+    console.log(import.meta.env)
+
+    let fireBaseConf = import.meta.env.VITE_FIREBASE_CONFIG ;
     try {
         firebaseApp = initializeApp(JSON.parse(fireBaseConf))
         // firebaseAnalytics = getAnalytics(firebaseApp);
