@@ -29,13 +29,10 @@ import {browser} from "$app/env";
 let firebaseApp;
 
 if (browser) {
-    console.log(import.meta.env)
-    console.log(import.meta.env.VITE_FIREBASE_CONFIG)
-    console.log(JSON.parse(import.meta.env.VITE_FIREBASE_CONFIG))
-
-    let fireBaseConf = import.meta.env.VITE_FIREBASE_CONFIG ;
+    let fireBaseConf = JSON.parse(import.meta.env.VITE_FIREBASE_CONFIG);
     try {
-        firebaseApp = initializeApp(JSON.parse(fireBaseConf))
+        console.log(fireBaseConf)
+        firebaseApp = initializeApp(fireBaseConf)
         // firebaseAnalytics = getAnalytics(firebaseApp);
     } catch (error) {
         /*
