@@ -1,5 +1,8 @@
 <script>
   import {goto} from "$app/navigation";
+  import {browser} from "$app/env";
 
-  goto("/admin");
+  if (browser) {
+      goto("/admin");
+  }
 </script>
