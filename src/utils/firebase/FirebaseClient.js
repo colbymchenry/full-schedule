@@ -30,6 +30,8 @@ let firebaseApp;
 
 if (browser) {
     console.log(import.meta.env)
+    console.log(import.meta.env.VITE_FIREBASE_CONFIG)
+    console.log(JSON.parse(import.meta.env.VITE_FIREBASE_CONFIG))
 
     let fireBaseConf = import.meta.env.VITE_FIREBASE_CONFIG ;
     try {
