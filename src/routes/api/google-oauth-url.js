@@ -1,8 +1,5 @@
 import {google} from "googleapis";
 import {FirebaseAdmin} from "../../utils/firebase/FirebaseAdmin.js";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 export async function post({request}) {
 

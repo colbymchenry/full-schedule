@@ -1,6 +1,5 @@
 import { google } from 'googleapis';
-import dotenv from "dotenv";
-dotenv.config()
+
 // TODO: Implement freebusy to determine if blocked time with new appointments when scheduling
 // https://stackoverflow.com/questions/44133947/google-calendar-api-check-for-conflicts
 export class GoogleCalendarAPI {
@@ -9,7 +8,7 @@ export class GoogleCalendarAPI {
         this.oauth2Client = new google.auth.OAuth2(
             process.env.GOOGLE_CLIENT_ID,
             process.env.GOOGLE_CLIENT_SECRET,
-            'postmessage' 
+            'postmessage'
         );
         this.settings = null;
         this.calendar = null;
