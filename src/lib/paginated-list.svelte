@@ -51,7 +51,7 @@
             Items per page:
             <Select bind:value={itemsPerPage} hideDefault small
                     style="padding-left: 0;padding-right: 0.25rem;height:24px;" onChange={() => page = 0}>
-                <option value={10} selected>10</option>
+                <option value={10}>10</option>
                 <option value={25}>25</option>
                 <option value={50}>50</option>
                 <option value={100}>100</option>

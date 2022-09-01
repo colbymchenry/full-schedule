@@ -15,6 +15,13 @@
 
 
 <style lang="scss">
+  @media print {
+    .right-bar {
+      visibility: hidden;
+      display: none;
+    }
+  }
+
   .right-bar {
     display: flex;
     flex-direction: column;

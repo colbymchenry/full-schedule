@@ -347,6 +347,7 @@ input.has--icon {
     box-shadow: var(--input-box-shadow);
     font-size: 12px;
     z-index: 4;
+    white-space: pre-wrap;
 }
 
 .hint.is--visible {

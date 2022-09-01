@@ -26,10 +26,12 @@
     function toggleNav() {
         navStore.update((value) => !value);
     }
+
+    let topBar;
 </script>
 
 <div class="container">
-    <div class="top-bar">
+    <div class="top-bar" bind:this={topBar}>
         <div class="hamburger">
             <Button callback={toggleNav} icon={$navStore ? iconMenuOpen : iconMenu} color="icon" />
         </div>
@@ -41,12 +43,20 @@
             </Badge>
         </div>
     </div>
-    <div class="content">
+    <div class="content" style={`max-height: calc(100vh - ${topBar?.clientHeight}px);`}>
         <slot></slot>
     </div>
 </div>
 
 <style lang="scss">
+
+  @media print {
+    .top-bar {
+      visibility: hidden;
+      display: none;
+    }
+  }
+
   .container {
     display: flex;
     flex-direction: column;
@@ -56,7 +66,7 @@
 
   .content {
     position: relative;
-    max-height: calc(100vh - var(--top-bar-height));
+    overflow-y: auto;
   }
 
   .top-bar {

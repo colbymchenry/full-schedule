@@ -42,7 +42,7 @@
 
 <svelte:window on:mousemove={handleMouseMove}/>
 
-<div class="input-field__container">
+<div class="input-field__container" class:is--small={small}>
     {#if label}
         <label for={name}>
             {label}
@@ -54,7 +54,7 @@
         </label>
     {/if}
     <div class="input-field" class:has--icon={icon} class:is--readonly={readOnly} class:is--error={form_errors[name]}
-         class:is--focused={focused} class:is--small={small}>
+         class:is--focused={focused}>
         {#if icon}
             <div class="icon">
                 {@html icon}
@@ -92,6 +92,20 @@
     font: 400 .875rem/1.2857142857 Inter var, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", Segoe UI Symbol, "Noto Color Emoji";
     align-self: flex-start;
     width: 100%;
+
+    &.is--small {
+      width: auto !important;
+
+      .input-field {
+        padding: 2px 0.25rem !important;
+        width: auto !important;
+
+        select {
+          padding: 0 !important;
+        }
+      }
+    }
+
 
     small {
       margin-top: 0.25rem;
@@ -144,9 +158,7 @@
       }
     }
 
-    &.is--small {
-      padding: 2px 0.25rem;
-    }
+
 
     &.is--error {
       outline-offset: 0;
