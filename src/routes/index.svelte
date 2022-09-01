@@ -1,13 +1,13 @@
-<script context="module">
-  export const prerender = true;
+<script>
+  import {goto} from "$app/navigation";
+
+  goto("/admin");
 </script>
 
 <script>
 </script>
 
 <svelte:head>
-  <title>Home</title>
-  <meta name="description" content="Svelte demo app" />
 </svelte:head>
 
 <section>
