@@ -9,7 +9,7 @@ export class GoogleCalendarAPI {
         this.oauth2Client = new google.auth.OAuth2(
             process.env.GOOGLE_CLIENT_ID,
             process.env.GOOGLE_CLIENT_SECRET,
-            'postmessage'
+            'postmessage' 
         );
         this.settings = null;
         this.calendar = null;
