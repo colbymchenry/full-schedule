@@ -31,7 +31,6 @@ let firebaseApp;
 if (browser) {
     let fireBaseConf = JSON.parse(import.meta.env.VITE_FIREBASE_CONFIG);
     try {
-        console.log(import.meta.env)
         firebaseApp = initializeApp(fireBaseConf, "[DEFAULT]")
         // firebaseAnalytics = getAnalytics(firebaseApp);
     } catch (error) {
