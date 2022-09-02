@@ -6,8 +6,8 @@
     import Select from '$lib/forms/select.svelte';
     import CellDetails from '$lib/cell-details.svelte';
     import PaginatedList from '$lib/paginated-list.svelte';
-    import SearchWithResults from '$lib/search-with-results.svelte';
-    import {iconDollar, iconSearch} from "../../../../lib/icons.js";
+    import SearchWithResults from '$lib/forms/search-with-results.svelte';
+    import {iconDollar} from "../../../../lib/icons.js";
     import {showToast} from "../../../../utils/logger.js";
     import {FirebaseClient} from "../../../../utils/firebase/FirebaseClient.js";
     import {where} from 'firebase/firestore';
@@ -102,8 +102,17 @@
                     <div class="multi-select">
                         <div style="display: flex;align-items: center;margin-bottom: 0.5rem;position: relative;">
                             <label>Products Required</label>
-                            <InputField name="search_product" disablePrefill style="height: 20px;" icon={iconSearch} />
-                            <SearchWithResults>
+                            <SearchWithResults style="flex-grow: 1;" performSearch={async (text) => {
+                                if (text) {
+                                    try {
+                                        const end = text.replace(/.$/, c => String.fromCharCode(c.charCodeAt(0) + 1));
+                                        return await FirebaseClient.query("products", where('name', '>=', text.toLowerCase()), where('name', '<', end.toLowerCase()));
+                                    } catch (error) {
+                                        console.error(error);
+                                    }
+                                }
+                                return [];
+                            }}>
 
                             </SearchWithResults>
                         </div>
@@ -140,6 +149,7 @@
     display: flex;
     flex-direction: column;
     min-height: 100%;
+
     label {
       font-weight: 500;
       margin-right: 1rem;

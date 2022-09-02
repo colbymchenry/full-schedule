@@ -1,5 +1,5 @@
 import {initializeApp} from 'firebase/app';
-import {getFirestore} from 'firebase/firestore';
+import {getFirestore, where} from 'firebase/firestore';
 import {
     getAuth,
     createUserWithEmailAndPassword,
@@ -55,6 +55,11 @@ if (browser) {
 export class FirebaseClient { 
 
     static passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/;
+
+    static startsWithWheres(field, text) {
+        const end = text.replace(/.$/, c => String.fromCharCode(c.charCodeAt(0) + 1));
+        return [where(field, '>=', text), where(field, '<', end)]
+    }
 
     static db() {
         return firebaseDb;

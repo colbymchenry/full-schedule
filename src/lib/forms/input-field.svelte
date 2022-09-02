@@ -14,7 +14,7 @@
     function clear_error(e) {
         delete form_errors[name];
         form_errors = form_errors;
-        if (onChange) onChange(e);
+        if (onChange) onChange(e.target.value);
     }
 
     // masked input fields

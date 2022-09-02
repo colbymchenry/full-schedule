@@ -32,6 +32,10 @@
                 }
             }
 
+            if (formData?.name) {
+                formData['name_lower'] = formData['name'].toLowerCase();
+            }
+
             if (rowData?.doc_id) {
                 await FirebaseClient.update("products", rowData.doc_id, formData);
             } else {
