@@ -32,6 +32,7 @@
                 }
             }
 
+            // have to add lower case for search functionality else where in the code
             if (formData?.name) {
                 formData['name_lower'] = formData['name'].toLowerCase();
             }

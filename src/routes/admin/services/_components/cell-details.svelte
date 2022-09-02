@@ -105,6 +105,7 @@
                             <SearchWithResults style="flex-grow: 1;" performSearch={async (text) => {
                                 if (text) {
                                     try {
+                                        // this functionality allows for searching 'startsWith' basically.
                                         const end = text.replace(/.$/, c => String.fromCharCode(c.charCodeAt(0) + 1));
                                         return await FirebaseClient.query("products", where('name', '>=', text.toLowerCase()), where('name', '<', end.toLowerCase()));
                                     } catch (error) {
