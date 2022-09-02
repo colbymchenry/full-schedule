@@ -3,9 +3,9 @@
     import Form from '$lib/forms/form.svelte';
     import Row from '$lib/forms/row.svelte';
     import InputField from '$lib/forms/input-field.svelte';
-    import Button from '$lib/forms/button.svelte';
     import Select from '$lib/forms/select.svelte';
-    import {iconChevronDown, iconChevronUp, iconDollar, iconPercent, iconWeight} from "../../../../lib/icons.js";
+    import CellDetails from '$lib/cell-details.svelte';
+    import {iconDollar, iconPercent, iconWeight} from "../../../../lib/icons.js";
     import {showToast} from "../../../../utils/logger.js";
     import {FirebaseClient} from "../../../../utils/firebase/FirebaseClient.js";
     import {where} from 'firebase/firestore';
@@ -14,14 +14,6 @@
 
     export let openIndex, index, rowData, fetchProducts;
     let form_errors = {};
-
-    function buttonPress() {
-        if (openIndex === index) {
-            openIndex = -1;
-        } else {
-            openIndex = index;
-        }
-    }
 
     async function submitProduct(formData) {
         ApiProgressBar.start()
@@ -41,10 +33,8 @@
             }
 
             if (rowData?.doc_id) {
-                console.log("UPDATE")
                 await FirebaseClient.update("products", rowData.doc_id, formData);
             } else {
-                console.log("ADD")
                 await FirebaseClient.add("products", formData);
             }
             openIndex = -1;
@@ -83,104 +73,63 @@
     }
 </script>
 
-<Button type="button" color="icon" icon={openIndex === index ? iconChevronUp : iconChevronDown} callback={buttonPress}/>
+<CellDetails {index} bind:openIndex={openIndex}>
+    <Form onSubmit={submitProduct}
+          style="flex-grow: 1;max-height: 100%;overflow-y: auto;display: flex;flex-direction: column;">
+        <div style="padding: 2rem;flex-grow: 1;">
+            <Row>
+                <div style="display: grid;grid-auto-rows: 1fr;grid-template-columns: 1fr;row-gap: 1rem;">
+                    <InputField name="name" label="Name *" required value={rowData?.name} disablePrefill bind:form_errors={form_errors}/>
+                    <div style="display: grid;grid-template-columns: 0.48fr 1fr;grid-template-rows: 1fr;column-gap: 1rem;">
+                        <InputField name="sku" label="SKU" value={rowData?.sku} disablePrefill bind:form_errors={form_errors}/>
+                        <InputField name="barcode" label="Barcode" value={rowData?.barcode} disablePrefill bind:form_errors={form_errors}/>
+                    </div>
 
-<div class="details shadow-lg" class:is--open={openIndex === index}>
-    <div class="container">
-        <!-- add 4.5rem of height, height of footer -->
-        <Form onSubmit={submitProduct}
-              style="flex-grow: 1;max-height: 30rem;overflow-y: auto;">
-            <div style="padding: 2rem;">
-                <Row>
-                    <div style="display: grid;grid-auto-rows: 1fr;grid-template-columns: 1fr;row-gap: 1rem;">
-                        <InputField name="name" label="Name *" required value={rowData?.name} disablePrefill bind:form_errors={form_errors}/>
-                        <div style="display: grid;grid-template-columns: 0.48fr 1fr;grid-template-rows: 1fr;column-gap: 1rem;">
-                            <InputField name="sku" label="SKU" value={rowData?.sku} disablePrefill bind:form_errors={form_errors}/>
-                            <InputField name="barcode" label="Barcode" value={rowData?.barcode} disablePrefill bind:form_errors={form_errors}/>
-                        </div>
+                    <div style="display: grid;grid-template-columns: 1fr 1fr 1fr;grid-template-rows: 1fr;column-gap: 1rem;">
+                        <Select name="category" label="Category" value={rowData['category']} bind:form_errors={form_errors}>
+                            <option value="wellness">Wellness</option>
+                            <option value="aesthetics">Aesthetics</option>
+                        </Select>
+                        <InputField name="brand" label="Brand" value={rowData?.brand} disablePrefill bind:form_errors={form_errors}/>
+                        <InputField name="vendor" label="Vendor" value={rowData?.vendor} disablePrefill bind:form_errors={form_errors}/>
+                    </div>
 
-                        <div style="display: grid;grid-template-columns: 1fr 1fr 1fr;grid-template-rows: 1fr;column-gap: 1rem;">
-                            <Select name="category" label="Category" value={rowData['category']} bind:form_errors={form_errors}>
-                                <option value="wellness">Wellness</option>
-                                <option value="aesthetics">Aesthetics</option>
+                    <div style="display: grid;grid-template-columns: 1fr 1fr 1fr;grid-template-rows: 1fr;column-gap: 1rem;">
+                        <InputField name="stock.amount" label="Stock" type="number" step="1" min="0" disablePrefill
+                                    bind:form_errors={form_errors}
+                                    value={rowData?.stock?.amount} hint="Leave blank for unlimited stock"/>
+                        <InputField name="stock.target" label="Target Stock" type="number" step="1" min="0"
+                                    disablePrefill value={rowData?.stock?.target} bind:form_errors={form_errors}
+                                    hint="Receive alerts when stock is at half this number"/>
+                    </div>
+                </div>
+                <div>
+                    <Row>
+                        <InputField name="cost" label="Cost" icon={iconDollar} value={rowData?.cost}
+                                    disablePrefill bind:form_errors={form_errors}/>
+                        <InputField name="weight" label="Weight (lbs)" icon={iconWeight} value={rowData?.weight}
+                                    disablePrefill bind:form_errors={form_errors}/>
+                    </Row>
+                    <Row>
+                        <div style="display: grid;grid-auto-rows: 1fr;grid-template-columns: 1fr;row-gap: 1rem;margin-top: 1rem;">
+                            <Select name="priceType" label="Price Type" value={rowData['priceType']} bind:form_errors={form_errors}>
+                                <option value="fixed">Fixed</option>
+                                <option value="per_unit">Per Unit</option>
+                                <option value="variable">Variable</option>
                             </Select>
-                            <InputField name="brand" label="Brand" value={rowData?.brand} disablePrefill bind:form_errors={form_errors}/>
-                            <InputField name="vendor" label="Vendor" value={rowData?.vendor} disablePrefill bind:form_errors={form_errors}/>
-                        </div>
-
-                        <div style="display: grid;grid-template-columns: 1fr 1fr 1fr;grid-template-rows: 1fr;column-gap: 1rem;">
-                            <InputField name="stock.amount" label="Stock" type="number" step="1" min="0" disablePrefill
-                                        bind:form_errors={form_errors}
-                                        value={rowData?.stock?.amount} hint="Leave blank for unlimited stock"/>
-                            <InputField name="stock.target" label="Target Stock" type="number" step="1" min="0"
-                                        disablePrefill value={rowData?.stock?.target} bind:form_errors={form_errors}
-                                        hint="Receive alerts when stock is at half this number"/>
-                        </div>
-                    </div>
-                    <div>
-                        <Row>
-                            <InputField name="cost" label="Cost" icon={iconDollar} value={rowData?.cost}
+                            <InputField name="tax" label="Tax" icon={iconPercent} value={rowData?.tax}
                                         disablePrefill bind:form_errors={form_errors}/>
-                            <InputField name="weight" label="Weight (lbs)" icon={iconWeight} value={rowData?.weight}
+                            <InputField name="price" label="Price" icon={iconDollar} value={rowData?.price}
                                         disablePrefill bind:form_errors={form_errors}/>
-                        </Row>
-                        <Row>
-                            <div style="display: grid;grid-auto-rows: 1fr;grid-template-columns: 1fr;row-gap: 1rem;margin-top: 1rem;">
-                                <Select name="priceType" label="Price Type" value={rowData['priceType']} bind:form_errors={form_errors}>
-                                    <option value="fixed">Fixed</option>
-                                    <option value="per_unit">Per Unit</option>
-                                    <option value="variable">Variable</option>
-                                </Select>
-                                <InputField name="tax" label="Tax" icon={iconPercent} value={rowData?.tax}
-                                            disablePrefill bind:form_errors={form_errors}/>
-                                <InputField name="price" label="Price" icon={iconDollar} value={rowData?.price}
-                                            disablePrefill bind:form_errors={form_errors}/>
-                            </div>
-                        </Row>
-                    </div>
-                </Row>
+                        </div>
+                    </Row>
+                </div>
+            </Row>
 
-            </div>
+        </div>
 
-            <div slot="footer" style="position: sticky;left: 0;bottom: 0;width: 100%;">
-                <Footer hideCancel onDelete={() => deleteProduct(rowData)} isUpdate={rowData?.doc_id} style="background-color: white;"/>
-            </div>
-        </Form>
-    </div>
-</div>
-
-<style lang="scss">
-  .details {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    height: 30rem;
-    max-height: 0;
-    background-color: white;
-    transition: max-height 0.4s var(--transition-drawer);
-    z-index: 1;
-    overflow: hidden;
-    display: flex;
-    align-items: flex-end;
-
-    .container {
-      width: 100%;
-      min-height: 30rem;
-      max-height: 30rem;
-      display: flex;
-    }
-
-    &.is--open {
-      max-height: 50rem;
-      border-top: 1px solid var(--border-color);
-    }
-
-    .footer {
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      width: 100%;
-    }
-  }
-</style>
+        <div slot="footer" style="position: sticky;left: 0;bottom: 0;width: 100%;">
+            <Footer hideCancel onDelete={() => deleteProduct(rowData)} isUpdate={rowData?.doc_id} style="background-color: white;"/>
+        </div>
+    </Form>
+</CellDetails>

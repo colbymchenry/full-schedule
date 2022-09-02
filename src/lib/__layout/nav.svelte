@@ -43,7 +43,7 @@
             name: 'Analytics'
         },
         {
-            url: '/inventory',
+            url: '/services',
             icon: iconMedicalServices,
             name: 'Services'
         },

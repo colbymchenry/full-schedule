@@ -6,6 +6,7 @@
     export let data = [];
     export let columns = {};
     export let style = "";
+    export let slim = false;
     let page = 0;
     let itemsPerPage = 10;
 
@@ -21,7 +22,7 @@
 </script>
 
 
-<div class="paginated-list" style={style}>
+<div class="paginated-list" style={style} class:slim={slim}>
     <table>
         <thead class="shadow">
         <tr>
@@ -74,6 +75,16 @@
 
 
 <style lang="scss">
+
+  .slim {
+    .footer-controls {
+      min-height: 2rem;
+    }
+
+    thead, tr {
+      height: 3rem;
+    }
+  }
 
   .footer-controls {
     background-color: rgb(248 250 252 / 1);

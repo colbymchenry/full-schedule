@@ -62,6 +62,9 @@
     flex-direction: column;
     flex-grow: 1;
     max-height: -webkit-fill-available;
+    position: relative;
+    max-width: calc(100vw - var(--nav-width) - var(--top-bar-height));
+    overflow: hidden;
   }
 
   .content {

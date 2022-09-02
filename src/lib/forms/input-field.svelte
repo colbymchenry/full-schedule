@@ -3,7 +3,7 @@
     import {iconHelp, iconSearch} from "../icons.js";
 
     export let form_errors = {};
-    export let value, label, name, type = "text", placeholder, icon, disablePrefill, readOnly, hint, info, min, max, step;
+    export let value, label, name, type = "text", placeholder, icon, disablePrefill, readOnly, hint, info, min, max, step, style, onChange;
     export let required = false;
 
     let clazz;
@@ -11,9 +11,10 @@
 
     let focused = false;
 
-    function clear_error() {
+    function clear_error(e) {
         delete form_errors[name];
         form_errors = form_errors;
+        if (onChange) onChange(e);
     }
 
     // masked input fields
@@ -32,6 +33,7 @@
         step,
         min,
         max,
+        style,
         "class": (icon ? "has--icon" : "")
     }
 

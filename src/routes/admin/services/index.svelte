@@ -1,5 +1,5 @@
 <svelte:head>
-    <title>FS • Inventory</title>
+    <title>FS • Services</title>
 </svelte:head>
 
 <script>
@@ -8,7 +8,6 @@
     import Button from '$lib/forms/button.svelte';
     import PaginatedList from '$lib/paginated-list.svelte';
     import CellDetails from './_components/cell-details.svelte';
-    import CellStock from './_components/cell-stock.svelte';
     import Skeleton from 'svelte-skeleton/Skeleton.svelte'
     import {iconCheck, iconClose, iconPlus, iconSearch} from "../../../lib/icons.js";
     import {StringUtils} from "../../../utils/StringUtils.js";
@@ -18,11 +17,11 @@
 
     let openIndex = -1;
 
-    let products = new Promise(fetchProducts);
+    let services = new Promise(fetchServices);
 
-    async function fetchProducts() {
+    async function fetchServices() {
         try {
-            products = await FirebaseClient.collection("products");
+            services = await FirebaseClient.collection("services");
         } catch (error) {
             showToast();
             console.error(error);
@@ -41,16 +40,16 @@
     <div class="content">
         <div bind:this={header} class="header">
             <div>
-                Inventory
+                Services
             </div>
 
             <Form onSubmit={performSearch} class="search-form" hideFooter>
-                <InputField placeholder="Search inventory" name="name" icon={iconSearch} class="br-20"/>
+                <InputField placeholder="Search services" name="name" icon={iconSearch} class="br-20"/>
                 <Button type="button" icon={iconPlus} callback={() => {
-                    products.unshift({
-                        name: "A New Product"
+                    services.unshift({
+                        name: "A New Service"
                     });
-                    products = products;
+                    services = services;
                     setTimeout(() => {
                         openIndex = 0;
                     }, 200);
@@ -58,7 +57,7 @@
                 </Button>
             </Form>
         </div>
-        {#await products}
+        {#await services}
             {#each [0, 1, 2, 3, 4, 5] as number (number)}
                 <Skeleton width="100%" height="75px">
                     <rect width={MathHelper.getNumberFromRange(60, 80) + "%"} height="10" x="90" y="54" rx="5" ry="5"/>
@@ -66,22 +65,19 @@
                 </Skeleton>
             {/each}
         {:then data}
-            <PaginatedList data={products}
+            <PaginatedList data={services}
                            style={`max-height: calc(100vh - ${header?.clientHeight || 0}px - var(--top-bar-height));min-height: calc(100vh - ${header?.clientHeight || 0}px - var(--top-bar-height))`}
                            columns={{
-                "SKU": {
-                    key: "sku",
-                    style: "text-align: center;max-width: 50px;"
-                },
                 "Name": {
                     key: "name",
-                    style: "flex-grow: 1;width: 50%;"
+                    style: "flex-grow: 1;width: 50%;padding-left: 2rem;"
+                },
+                "Category": {
+                    key: "category",
+                    style: "flex-grow: 1;"
                 },
                 "Price": {
                     key: "price"
-                },
-                "Stock": {
-                    key: "stock.amount"
                 },
                 "Active": {
                     key: "active"
@@ -92,9 +88,8 @@
         }}>
                 <div slot="cell" class="truncate" let:index let:key let:data let:rowData>
                     {#if key === 'details'}
-                        <CellDetails bind:openIndex={openIndex} {index} {rowData} {fetchProducts} />
+                        <CellDetails bind:openIndex={openIndex} {index} {rowData} {fetchServices} />
                     {:else if key === 'stock.amount'}
-                        <CellStock {index} {key} {data} {rowData}/>
                     {:else if key === 'active'}
                         <div class="active" class:is--active={data}>
                             {#if data === true}
