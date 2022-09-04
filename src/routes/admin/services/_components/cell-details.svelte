@@ -17,27 +17,14 @@
     export let openIndex, index, rowData, fetchServices;
     let form_errors = {};
 
-    async function submitProduct(formData) {
+    async function submitService(formData) {
         ApiProgressBar.start()
 
         try {
-            if (formData?.sku) {
-                formData["sku"] = formData["sku"].toUpperCase().replace(/ /g, '');
-                const product = await FirebaseClient.query("products", where("sku", "==", formData["sku"].toUpperCase()));
-                if (product.length) {
-                    if (product[0].doc_id !== rowData?.doc_id) {
-                        form_errors["sku"] = "Already used by 1 other item.";
-                        form_errors = form_errors;
-                        ApiProgressBar.stop();
-                        return;
-                    }
-                }
-            }
-
             if (rowData?.doc_id) {
-                await FirebaseClient.update("products", rowData.doc_id, formData);
+                await FirebaseClient.update("services", rowData.doc_id, formData);
             } else {
-                await FirebaseClient.add("products", formData);
+                await FirebaseClient.add("services", formData);
             }
             openIndex = -1;
             await fetchServices();
@@ -76,7 +63,7 @@
 </script>
 
 <CellDetails {index} bind:openIndex={openIndex} maxHeight="25rem">
-    <Form onSubmit={submitProduct}
+    <Form onSubmit={submitService}
           style="flex-grow: 1;max-height: 100%;overflow-y: auto;display: flex;flex-direction: column;">
         <div style="padding: 2rem;flex-grow: 1;">
             <Row>
