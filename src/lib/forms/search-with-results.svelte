@@ -2,9 +2,11 @@
     import InputField from './input-field.svelte';
     import {iconLoader, iconSearch} from "../icons.js";
 
-    export let performSearch, style;
+    export let performSearch, style, onSelect;
     let searchResults = [];
     let showLoader = false;
+    let focused = false;
+    let visible = false;
 
     let callbackTimeout;
 
@@ -22,14 +24,32 @@
             showLoader = false;
         }
     }
+
+    $: if (!focused) {
+        // for some reason if focus is lost immediately the on:click functions of
+        // the search result children does not get called.
+        // Workaround is to wait
+        setTimeout(() => {
+            visible = false;
+        }, 100);
+    } else {
+        if (searchResults.length) {
+            visible = true;
+        }
+    }
+
 </script>
 
 <div class="container" {style}>
-    <InputField disablePrefill style="height: 20px;" icon={iconSearch} {onChange}/>
-    <div>
-        {#each searchResults as result}
-            <slot data={result}></slot>
-        {/each}
+    <InputField disablePrefill style="height: 20px;" icon={iconSearch} {onChange} bind:focused={focused}/>
+    <div class:is--visible={visible}>
+        <div>
+            {#each searchResults as result}
+                <div class="block" on:click={() => {
+                    if (onSelect) onSelect(result);
+                }}><slot data={result}></slot></div>
+            {/each}
+        </div>
     </div>
 
     <div class="loader" class:is--visible={showLoader}>
@@ -44,6 +64,7 @@
     display: none;
     justify-content: flex-end;
     align-items: center;
+    margin-top: unset !important;
 
     &.is--visible {
       display: flex !important;
@@ -67,14 +88,39 @@
       width: 100%;
       max-width: 100%;
       min-width: 100%;
-      max-height: 100px;
-      overflow: auto;
       position: absolute;
       top: 0;
       left: 0;
+      z-index: 3;
+      margin-top: 1.5rem;
 
       &.is--visible {
         display: block;
+      }
+
+      > div {
+        display: flex;
+        flex-direction: column;
+        background: white;
+        max-height: 100px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        border-left: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--border-color);
+        border-right: 1px solid var(--border-color);
+        border-bottom-left-radius: 0.5rem;
+        border-bottom-right-radius: 0.5rem;
+        box-shadow: 0 0 #0000, 0 0 #0000, 0 2px 2px 0 rgb(0 0 0 / 0.1);
+        padding-top: 1rem;
+
+        .block {
+          cursor: pointer;
+          padding: 0.5rem;
+
+          &:hover {
+            background-color: var(--fuse-accent-100);
+          }
+        }
       }
     }
   }

@@ -102,23 +102,37 @@
                     <div class="multi-select">
                         <div style="display: flex;align-items: center;margin-bottom: 0.5rem;position: relative;">
                             <label>Products Required</label>
-                            <SearchWithResults style="flex-grow: 1;" performSearch={async (text) => {
+                            <SearchWithResults let:data style="flex-grow: 1;" performSearch={async (text) => {
                                 if (text) {
                                     try {
                                         // this functionality allows for searching 'startsWith' basically.
                                         const end = text.replace(/.$/, c => String.fromCharCode(c.charCodeAt(0) + 1));
-                                        return await FirebaseClient.query("products", where('name', '>=', text.toLowerCase()), where('name', '<', end.toLowerCase()));
+                                        return await FirebaseClient.query("products", where('name_lower', '>=', text.toLowerCase()), where('name_lower', '<', end.toLowerCase()));
                                     } catch (error) {
                                         console.error(error);
                                     }
                                 }
                                 return [];
+                            }} onSelect={(value) => {
+                                if (rowData?.products) {
+                                     rowData["products"] = [...rowData["products"], {
+                                        name: value.name,
+                                        quantity: 0
+                                    }]
+                                } else {
+                                    rowData["products"] = [{
+                                        name: value.name,
+                                        quantity: 0
+                                    }]
+                                }
+                                console.log(rowData["products"])
                             }}>
-
+                                <!-- When clicked we need to add the product to the service-->
+                                {data.name}
                             </SearchWithResults>
                         </div>
-                        <PaginatedList data={rowData?.products} slim
-                                       style={`flex-grow: 1;border: 1px solid var(--border-color);`}
+                        <PaginatedList data={rowData["products"] || []} slim
+                                       style={`flex-grow: 1;border: 1px solid var(--border-color);max-height: 13.5rem;`}
                                        columns={{
                                                 "Product": {
                                                     key: "name",
@@ -129,7 +143,7 @@
                                                 }
                                 }}>
                             <div slot="cell" class="truncate" let:index let:key let:data let:rowData>
-
+                                {data || ""}
                             </div>
                         </PaginatedList>
                     </div>

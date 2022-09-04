@@ -3,13 +3,13 @@
     import {iconHelp, iconSearch} from "../icons.js";
 
     export let form_errors = {};
-    export let value, label, name, type = "text", placeholder, icon, disablePrefill, readOnly, hint, info, min, max, step, style, onChange;
+    export let value, label, name, type = "text", placeholder, icon, disablePrefill, readOnly, hint, info, min, max, step, style, onChange, onFocus;
     export let required = false;
 
     let clazz;
     export {clazz as class};
 
-    let focused = false;
+    export let focused = false;
 
     function clear_error(e) {
         delete form_errors[name];
