@@ -67,7 +67,8 @@
     overflow: hidden;
 
     &.nav-open {
-      //max-width: calc(100vw - var(--nav-width) - var(--top-bar-height));
+      transition: max-width 0s linear 0.3s; // 0.3s added as delay to account for nav animation duration
+      max-width: calc(100vw - var(--nav-width) - var(--top-bar-height));
     }
   }
 
