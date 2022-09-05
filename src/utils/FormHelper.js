@@ -20,8 +20,6 @@ export class FormHelper {
             setValue(data, key, value === "false" || value === "true" ? value === "true" : value);
         }
 
-        console.log(data)
-
         return data;
     }
 

@@ -5,22 +5,28 @@
     import Section from '$lib/forms/section.svelte';
     import Row from '$lib/forms/row.svelte';
     import Separator from '$lib/forms/separator.svelte';
+    import Avatar from '$lib/avatar.svelte';
     import {FirebaseClient} from "../../../utils/firebase/FirebaseClient.js";
     import {showToast} from "../../../utils/logger.js";
     import states from '../../../assets/states.json';
     import timezones from '../../../assets/timezones.json';
     import {
         iconCity,
-        iconClock, iconFacebook, iconInstagram,
+        iconClock,
+        iconFacebook,
+        iconInstagram,
         iconMap,
         iconPhone,
         iconRoadSign,
         iconState,
         iconStore,
-        iconTiktok, iconTwitter, iconYoutube
+        iconTiktok,
+        iconTwitter,
+        iconYoutube
     } from "../../../lib/icons.js";
     import {settings} from "../../../lib/stores.js";
     import {ApiProgressBar} from "../../../utils/ApiProgressBar.js";
+    import {JsonHelper} from "../../../utils/JsonHelper.js";
 
     let form_errors = {};
     let storeLogo;
@@ -28,10 +34,20 @@
     async function onSubmit(formData) {
         ApiProgressBar.start()
 
+        delete formData["image"];
+
+        let jsonHelper = new JsonHelper(formData);
         try {
-            await FirebaseClient.update("settings", "main", formData);
+            // If there is a new store logo we need to upload it to Cloud.
+            if (storeLogo) {
+                // Upload image to Cloud Storage
+                jsonHelper.set("store.logo", await FirebaseClient.uploadFile(storeLogo, 'logo'))
+            }
+
+            await FirebaseClient.update("settings", "main", jsonHelper.object);
         } catch (e) {
             showToast()
+            console.error(e);
         }
 
         ApiProgressBar.stop();
@@ -40,6 +56,11 @@
 </script>
 
 <Form onSubmit={onSubmit}>
+    <Section title="Logo" info="Your store logo is used in the booking process, dashboard, invoices, and more!">
+        <Avatar src={$settings.get("store.logo")} size="large" dontUpload onChange={(imgData) => storeLogo = imgData}
+                canEdit square/>
+    </Section>
+
     <Section title="Name & Phone Number" info="Following information is publicly displayed, be careful!">
         <Row>
             <InputField label="Name" name="store.name" icon={iconStore} value={$settings.get("store.name")}

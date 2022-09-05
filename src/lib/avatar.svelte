@@ -5,13 +5,15 @@
     import {FirebaseClient} from "../utils/firebase/FirebaseClient.js";
 
     export let user;
+    export let src;
     export let size;
     export let onChange;
     export let style;
     export let dontUpload = false
     export let canEdit = false;
+    export let square = false;
 
-    $: src = user?.photoURL;
+    $: photoSrc = src || user?.photoURL;
 
     let newSrc;
 
@@ -106,10 +108,10 @@
     }
 </script>
 
-<div class={`avatar ${clazz || ''} ${size || 'small'} ${uploading ? 'uploading' : ''}`}>
-    <div on:click={openFileDrawer} class:canEdit={canEdit}>
-        {#if src || newSrc}
-            <img {style} src={newSrc || src} loading="lazy" alt="">
+<div class={`avatar ${clazz || ''} ${size || 'small'} ${uploading ? 'uploading' : ''}`} class:is--square={square}>
+    <div on:click={openFileDrawer} class:canEdit={canEdit} style={files?.length || photoSrc ? "background-color: transparent !important;border: none !important;" : ""}>
+        {#if photoSrc || newSrc}
+            <img {style} src={newSrc || photoSrc} loading="lazy" alt="">
         {:else}
             {@html iconPhotoLibrary}
         {/if}
@@ -125,6 +127,12 @@
     img, div {
       border-radius: 100%;
       object-fit: cover;
+    }
+
+    &.is--square {
+      img, div {
+        border-radius: unset;
+      }
     }
 
     // 1062 is SweetAlerts z-index

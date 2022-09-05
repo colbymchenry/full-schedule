@@ -69,7 +69,7 @@
                 return;
             }
 
-            // If there is a new avatar image we need to upload it to Cloudinary.
+            // If there is a new avatar image we need to upload it to Cloud Firebase Storage.
             if (avatarImg) {
                 // Upload image to Cloud Storage
                 const photoURL = await FirebaseClient.uploadFile(avatarImg, 'avatar/' + (client?.uid || res.user.uid));
