@@ -40,6 +40,7 @@
         min,
         max,
         style,
+        ...(type === "email" && {pattern: "^(?=[^\s@]{1,64}@)[^\s@]+@[^\s@]+\.(.{2}|.{3})+$"}),
         "class": (icon ? "has--icon" : "")
     }
 

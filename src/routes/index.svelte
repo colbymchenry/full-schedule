@@ -23,8 +23,6 @@
             const formData = FormHelper.getFormData(form);
             const phone = formData.phone.replaceAll("_", "").replace("+1", "").replace("(", "").replace(")", "").replace("-", "").replace(/\s+/g, '');
 
-            console.log(phone.length)
-
             disabled = !formData?.name?.length || !formData?.email?.length || phone.length !== 9
         }
     }
