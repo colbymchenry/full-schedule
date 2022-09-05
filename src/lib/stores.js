@@ -10,4 +10,4 @@ export const progressBarStore = writable(false);
 // holds the settings for this store
 export const settings = writable(new JsonHelper({}));
 // hold the choices made during the booking process
-export const bookingStore = writable(new JsonHelper({}));
+export const bookingStore = writable(null);
