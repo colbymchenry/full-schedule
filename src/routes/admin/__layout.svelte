@@ -13,7 +13,6 @@
     import {browser} from "$app/env";
     import {JsonHelper} from "../../utils/JsonHelper.js";
 
-
     let analyticsId = import.meta.env.VERCEL_ANALYTICS_ID;
 
     $: if (browser && analyticsId) {

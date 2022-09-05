@@ -30,7 +30,7 @@
     let topBar;
 </script>
 
-<div class="container">
+<div class="container" class:nav-open={$navStore}>
     <div class="top-bar" bind:this={topBar}>
         <div class="hamburger">
             <Button callback={toggleNav} icon={$navStore ? iconMenuOpen : iconMenu} color="icon" />
@@ -63,8 +63,12 @@
     flex-grow: 1;
     max-height: -webkit-fill-available;
     position: relative;
-    max-width: calc(100vw - var(--nav-width) - var(--top-bar-height));
+    max-width: calc(100vw - var(--top-bar-height));
     overflow: hidden;
+
+    &.nav-open {
+      //max-width: calc(100vw - var(--nav-width) - var(--top-bar-height));
+    }
   }
 
   .content {
