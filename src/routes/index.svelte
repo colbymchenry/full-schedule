@@ -55,7 +55,7 @@
                             maskChar="_"
                             onChange={checkDisabled}
                 />
-                <Button style="min-height: 48px;margin-top: 2rem;" {disabled}>Continue</Button>
+                <Button style="min-height: 48px;margin-top: 2rem;justify-self: stretch;" {disabled}>Continue</Button>
                 <!--                <Separator label="Or continue with" height="1rem" />-->
                 <!--                -->
                 <!--                <div class="oauth-container">-->
@@ -140,9 +140,9 @@
     }
 
     * :global(.login-form) {
-      display: flex;
-      flex-direction: column;
-      grid-column-gap: 20px;
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-auto-rows: auto;
       grid-row-gap: 20px;
       padding: 2rem 0;
     }

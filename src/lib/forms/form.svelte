@@ -14,7 +14,7 @@
 </script>
 
 
-<form {id} style={`padding-bottom: ${footer?.clientHeight}px;${style}`} class={clazz || ''}
+<form {id} style={`${footer ? `padding-bottom: ${footer?.clientHeight}px;` : ``}${style ? ' ' + style : ''}`} class={clazz || ''}
       on:submit|preventDefault={(e) => onSubmit(FormHelper.getFormData(e.target))}>
     {#key reset}
         <slot></slot>

@@ -50,4 +50,10 @@
     flex: 1 1 auto;
     position: relative;
   }
+
+  @media screen and (max-width: 600px) {
+    .root {
+      height: auto !important;
+    }
+  }
 </style>
