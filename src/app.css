@@ -213,6 +213,8 @@ body {
 @media screen and (max-width: 600px) {
     html,body {
         height: 100vh;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
     }
 }
 
