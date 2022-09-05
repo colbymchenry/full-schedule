@@ -8,6 +8,10 @@
         step, style, onChange, onFocus;
     export let required = false;
 
+    // this is used for the Toggle component, it must ALWAYS be checked for FormData to pick it up,
+    // but the value can be true or false
+    let checked = true;
+
     let clazz;
     export {clazz as class};
 
@@ -68,8 +72,8 @@
     {#if type === "toggle"}
         <div class={"input-field toggle" + (clazz ? " " + clazz : "")} class:is--readonly={readOnly}
              class:is--error={form_errors[name]}>
-            <input {...inputProps} on:input={clear_error} checked={value} />
-            <Toggle onClick={() => {
+            <input {name} type="checkbox" on:input={clear_error} {checked} bind:value={value} />
+            <Toggle bind:active={value} onClick={() => {
                 value = !value;
             }} />
         </div>

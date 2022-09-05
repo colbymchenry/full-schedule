@@ -7,17 +7,20 @@ export class FormHelper {
 
             keys.reduce(function (o, k) {
                 return o[k] = o[k] || {};
-            }, object)[last] = value === "on" ? true : value === "off" ? false : value;
+            }, object)[last] = value === "false" || value === "true" ? value === "true" : value;
         }
 
         const formData = new FormData(form);
 
         let data = {};
 
+
         for (let field of formData) {
             const [key, value] = field;
-            setValue(data, key, value === "on" ? true : value === "off" ? false : value);
+            setValue(data, key, value === "false" || value === "true" ? value === "true" : value);
         }
+
+        console.log(data)
 
         return data;
     }
