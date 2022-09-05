@@ -3,6 +3,7 @@
     import InputField from '$lib/forms/input-field.svelte';
     import Avatar from '$lib/avatar.svelte';
     import Footer from '$lib/drawers/footer.svelte';
+    import _ from 'lodash';
     import {MathHelper} from "../../../../../utils/MathHelper.js";
     import {ApiProgressBar} from "../../../../../utils/ApiProgressBar.js";
     import {Api} from "../../../../../utils/Api.js";
@@ -73,7 +74,7 @@
                 // Upload image to Cloud Storage
                 const photoURL = await FirebaseClient.uploadFile(avatarImg, 'avatar/' + (client?.uid || res.user.uid));
                 // update Google User in the backend
-                await Api.patch('/api/user', { 
+                await Api.patch('/api/user', {
                     uid: client?.uid || res.user.uid,
                     photoURL
                 })
@@ -83,12 +84,15 @@
             }
 
             editing = false;
-            data.uid = client?.uid || res.user.uid;
-            client = data;
 
-            if (onComplete) {
-                onComplete();
-            }
+            setTimeout(() => {
+                client = _.merge(client, data);
+
+                if (onComplete) {
+                    onComplete();
+                }
+            }, 200);
+
         } catch (error) {
             console.error(error)
             showToast()

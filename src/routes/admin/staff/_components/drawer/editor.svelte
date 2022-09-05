@@ -20,6 +20,7 @@
     import {FormHelper} from "../../../../../utils/FormHelper.js";
     import {SwalHelper} from "../../../../../utils/SwalHelper.js";
     import {FirebaseClient} from "../../../../../utils/firebase/FirebaseClient.js";
+    import _ from "lodash";
 
     export let staff;
     export let onComplete, onClose;
@@ -112,12 +113,14 @@
             }
 
             editing = false;
-            data.uid = staff?.uid || res.user.uid;
-            staff = data;
 
-            if (onComplete) {
-                onComplete();
-            }
+            setTimeout(() => {
+                staff = _.merge(staff, data);
+
+                if (onComplete) {
+                    onComplete();
+                }
+            }, 200);
         } catch (error) {
             console.error(error)
             showToast()
