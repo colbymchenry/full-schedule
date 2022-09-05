@@ -73,7 +73,7 @@
                 // Upload image to Cloud Storage
                 const photoURL = await FirebaseClient.uploadFile(avatarImg, 'avatar/' + (client?.uid || res.user.uid));
                 // update Google User in the backend
-                await Api.patch('/api/user', {
+                await Api.patch('/api/user', { 
                     uid: client?.uid || res.user.uid,
                     photoURL
                 })
