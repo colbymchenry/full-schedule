@@ -51,6 +51,11 @@
     transition: all 0.3s ease;
     justify-self: flex-start;
 
+    &:disabled {
+      color: var(--fuse-accent-400);
+      background-color: var(--fuse-accent-200) !important;
+    }
+
     &.has--icon {
 
       .icon {
