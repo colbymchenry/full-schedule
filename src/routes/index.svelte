@@ -74,6 +74,7 @@
       height: 100% !important;
       background: transparent !important;
       padding: 10vw !important;
+      box-shadow: none !important;
 
       > div:first-of-type {
         min-width: auto !important;
