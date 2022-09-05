@@ -23,6 +23,7 @@
     import {ApiProgressBar} from "../../../utils/ApiProgressBar.js";
 
     let form_errors = {};
+    let storeLogo;
 
     async function onSubmit(formData) {
         ApiProgressBar.start()

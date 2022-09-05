@@ -17,9 +17,9 @@
     import {ApiProgressBar} from "../../../../../utils/ApiProgressBar.js";
     import {Api} from "../../../../../utils/Api.js";
     import {showToast} from "../../../../../utils/logger.js";
-    import {CloudinaryApi} from "../../../../../utils/CloudinaryApi.js";
     import {FormHelper} from "../../../../../utils/FormHelper.js";
     import {SwalHelper} from "../../../../../utils/SwalHelper.js";
+    import {FirebaseClient} from "../../../../../utils/firebase/FirebaseClient.js";
 
     export let staff;
     export let onComplete, onClose;
@@ -39,7 +39,8 @@
             if (result.isConfirmed) {
                 ApiProgressBar.start();
                 try {
-                    const res = await Api.post('/api/staff/delete?uid=' + staff?.uid);
+                    await Api.post('/api/staff/delete?uid=' + staff?.uid);
+                    await FirebaseClient.deleteFile('avatar/' + staff?.uid);
                     if (onClose) onClose();
                     if (onComplete) onComplete();
                 } catch (error) {
@@ -98,13 +99,14 @@
             }
 
             if (avatarImg) {
-                const resCloudinary = await CloudinaryApi.upload(avatarImg)
+                // Upload image to Cloud Storage
+                const photoURL = await FirebaseClient.uploadFile(avatarImg, 'avatar/' + (staff?.uid || res.user.uid));
                 // update Google User in the backend
                 await Api.patch('/api/user', {
-                    uid: staff?.uid || res.user.uid,
-                    photoURL: resCloudinary["secure_url"]
+                    uid:  staff?.uid || res.user.uid,
+                    photoURL
                 })
-                data.photoURL = resCloudinary["secure_url"];
+                data.photoURL = photoURL;
             } else {
                 data.photoURL = staff.photoURL;
             }

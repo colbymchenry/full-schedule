@@ -1,8 +1,9 @@
 <script>
-  import {goto} from "$app/navigation";
-  import {browser} from "$app/env";
 
-  if (browser) {
-      goto("/admin");
-  }
 </script>
+
+<h1>HOME PAGE</h1>
+
+<style lang="scss">
+
+</style>

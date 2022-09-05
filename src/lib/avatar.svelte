@@ -2,7 +2,7 @@
     import {iconPhotoLibrary} from "./icons.js";
     import Swal from "sweetalert2";
     import {Api} from "../utils/Api.js";
-    import {CloudinaryApi} from "../utils/CloudinaryApi.js";
+    import {FirebaseClient} from "../utils/firebase/FirebaseClient.js";
 
     export let user;
     export let size;
@@ -77,12 +77,12 @@
                 allowOutsideClick: () => !Swal.isLoading(),
                 preConfirm: async () => {
                     try {
-                        // upload image to cloudinary
-                        const res = await CloudinaryApi.upload(files[0]);
+                        // Upload image to Cloud Storage
+                        const res = await FirebaseClient.uploadFile(files[0], 'avatar/' + user.uid);
                         // update Google User in the backend
                         await Api.patch('/api/user', {
                             uid: user.uid,
-                            photoURL: res["secure_url"]
+                            photoURL: res
                         })
                     } catch (error) {
                         await Swal.fire({

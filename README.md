@@ -1,42 +1,45 @@
-# SvelteKit
+# Full Schedule
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte), deployed to [Vercel](https://vercel.com).
+Everything you need to run a private practice, powered by [`svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte), deployed to [Vercel](https://vercel.com).
 
-## Deploy Your Own
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fvercel%2Ftree%2Fmain%2Fexamples%2Fsveltekit&project-name=sveltekit-vercel&repository-name=sveltekit-vercel&demo-title=SvelteKit%20%2B%20Vercel&demo-description=A%20SvelteKit%20app%20optimized%20Edge-first.&demo-url=https%3A%2F%2Fsveltekit-template.vercel.app%2F)
 
-_Live Example: https://sveltekit-template.vercel.app_
+## Enable Firebase Cloud Storage
 
-## Creating a project
+Make sure to setup the proper <b>PERMISSIONS</b>
 
-If you're seeing this, you've probably already done this step. Congrats!
+For more info on Cloud Storage permissions go <a href="https://firebase.google.com/docs/storage/security/rules-conditions#public" target="_blank">here</a>.
 
 ```bash
-# create a new project in the current directory
-npm init svelte
-
-# create a new project in my-app
-npm init svelte my-app
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
 ```
 
-## Developing
+## Enable Firebase Firestore Database
 
-Once you've created a project and installed dependencies with `pnpm install`, start a development server:
+Make sure to setup the proper <b>PERMISSIONS</b>
 
+For more info on Firestore permissions go <a href="https://firebase.google.com/docs/firestore/security/get-started" target="_blank">here</a>.
 ```bash
-pnpm run dev
-
-# or start the server and open the app in a new browser tab
-pnpm run dev -- --open
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
 ```
 
-## Building
-
-To create a production version of your app:
-
+## Setup Environment Variables
 ```bash
-pnpm run build
+GOOGLE_CLIENT_SECRET=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
+GOOGLE_CLIENT_ID=766102917114-n2dnvdieq2c6alrrnasrhuidtufcqr64.apps.googleusercontent.com
+GOOGLE_API_KEY=AIzaSyC89dBUy8LxrKmMINw-YLLl3FbWhL6dcfs
 ```
-
-You can preview the production build with `npm run preview`.

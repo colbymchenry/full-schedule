@@ -1,16 +1,10 @@
 import {FirebaseAdmin} from "../../../utils/firebase/FirebaseAdmin.js";
-import {CloudinaryApi} from "../../../utils/CloudinaryApi.js";
 
 export async function patch({request, url}) {
     try {
         await FirebaseAdmin.auth().verifyIdToken(request.headers.get("authorization"));
 
         const res = await request.json();
-
-        const user = await FirebaseAdmin.auth().getUser(url.searchParams.get("uid"));
-        if (user?.photoURL) {
-            await CloudinaryApi.delete(CloudinaryApi.getFileNameFromURL(user.photoURL));
-        }
 
         await FirebaseAdmin.auth().updateUser(url.searchParams.get("uid"), {
             ...(res?.photoURL && { photoURL: res.photoURL }),

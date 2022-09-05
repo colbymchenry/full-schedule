@@ -6,11 +6,11 @@
     import {MathHelper} from "../../../../../utils/MathHelper.js";
     import {ApiProgressBar} from "../../../../../utils/ApiProgressBar.js";
     import {Api} from "../../../../../utils/Api.js";
-    import {CloudinaryApi} from "../../../../../utils/CloudinaryApi.js";
     import {showToast} from "../../../../../utils/logger.js";
     import {iconBirthday, iconClose, iconMail, iconPhone, iconPin, iconUser} from "../../../../../lib/icons.js";
     import {FormHelper} from "../../../../../utils/FormHelper.js";
     import {SwalHelper} from "../../../../../utils/SwalHelper.js";
+    import {FirebaseClient} from "../../../../../utils/firebase/FirebaseClient.js";
 
     export let client;
     export let onComplete, onClose;
@@ -30,7 +30,8 @@
             if (result.isConfirmed) {
                 ApiProgressBar.start();
                 try {
-                    const res = await Api.post('/api/client/delete?uid=' + client?.uid);
+                    await Api.post('/api/client/delete?uid=' + client?.uid);
+                    await FirebaseClient.deleteFile('avatar/' + client?.uid);
                     if (onClose) onClose();
                     if (onComplete) onComplete();
                 } catch (error) {
@@ -45,9 +46,13 @@
     async function onSubmit(data) {
         ApiProgressBar.start();
         try {
+            // Grab HTML from note editor
             data.notes = document.querySelector('.ql-editor').innerHTML;
+
+            // If there is now UID from the User create a new User, otherwise patch/update the User.
             const res = !client?.uid ? await Api.post('/api/client', data) : await Api.patch('/api/client?uid=' + client.uid, data)
 
+            // Email exists, throw error
             if (res?.code === 'auth/email-already-exists') {
                 form_errors["email"] = res.message;
                 form_errors = form_errors;
@@ -55,6 +60,7 @@
                 return;
             }
 
+            // Phone number exists, throw error
             if (res?.code === 'auth/invalid-phone-number') {
                 form_errors["phoneNumber"] = 'Invalid phone number.';
                 form_errors = form_errors;
@@ -62,14 +68,16 @@
                 return;
             }
 
+            // If there is a new avatar image we need to upload it to Cloudinary.
             if (avatarImg) {
-                const resCloudinary = await CloudinaryApi.upload(avatarImg)
+                // Upload image to Cloud Storage
+                const photoURL = await FirebaseClient.uploadFile(avatarImg, 'avatar/' + (client?.uid || res.user.uid));
                 // update Google User in the backend
                 await Api.patch('/api/user', {
                     uid: client?.uid || res.user.uid,
-                    photoURL: resCloudinary["secure_url"]
+                    photoURL
                 })
-                data.photoURL = resCloudinary["secure_url"];
+                data.photoURL = photoURL;
             } else {
                 data.photoURL = client.photoURL;
             }

@@ -24,6 +24,7 @@ import {
     deleteDoc,
     updateDoc
 } from 'firebase/firestore';
+import {getStorage, ref, uploadBytes, deleteObject, listAll, getDownloadURL} from "firebase/storage";
 import {browser} from "$app/env";
 
 let firebaseApp;
@@ -46,20 +47,17 @@ if (browser) {
 
 let firebaseDb;
 let firebaseAuth;
+let firebaseStorage;
 
 if (browser) {
     firebaseDb = getFirestore(firebaseApp)
     firebaseAuth = getAuth();
+    firebaseStorage = getStorage();
 }
 
-export class FirebaseClient { 
+export class FirebaseClient {
 
     static passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/;
-
-    static startsWithWheres(field, text) {
-        const end = text.replace(/.$/, c => String.fromCharCode(c.charCodeAt(0) + 1));
-        return [where(field, '>=', text), where(field, '<', end)]
-    }
 
     static db() {
         return firebaseDb;
@@ -69,8 +67,33 @@ export class FirebaseClient {
         return firebaseAuth;
     }
 
+    static storage() {
+        return firebaseStorage;
+    }
+
     static app() {
         return firebaseApp;
+    }
+
+    static async uploadFile(fileData, path) {
+        const storageRef = ref(firebaseStorage, path);
+        await uploadBytes(storageRef, fileData);
+        return await getDownloadURL(ref(firebaseStorage, path));
+    }
+
+    static async getFileURL(path) {
+        return await getDownloadURL(ref(firebaseStorage, path));
+    }
+
+    static async deleteFile(path) {
+        const fileRef = ref(firebaseStorage, path);
+        return await deleteObject(fileRef);
+    }
+
+    static async listFiles(path) {
+        const listRef = ref(firebaseStorage, path);
+        const res = await listAll(listRef);
+        return res.items;
     }
 
     static async getIdToken() {
