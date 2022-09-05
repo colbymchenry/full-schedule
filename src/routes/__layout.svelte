@@ -45,7 +45,8 @@
     min-height: 100%;
     height: 100vh;
     width: 100vw;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     display: flex;
     flex: 1 1 auto;
     position: relative;
