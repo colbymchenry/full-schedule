@@ -1,5 +1,5 @@
 import {initializeApp} from 'firebase/app';
-import {getFirestore, where} from 'firebase/firestore';
+import {getFirestore} from 'firebase/firestore';
 import {
     getAuth,
     createUserWithEmailAndPassword,
@@ -25,15 +25,20 @@ import {
     updateDoc
 } from 'firebase/firestore';
 import {getStorage, ref, uploadBytes, deleteObject, listAll, getDownloadURL} from "firebase/storage";
+import {getAnalytics} from "firebase/analytics";
 import {browser} from "$app/env";
 
 let firebaseApp;
+let firebaseAnalytics;
+let firebaseDb;
+let firebaseAuth;
+let firebaseStorage;
 
 if (browser) {
     let fireBaseConf = JSON.parse(import.meta.env.VITE_FIREBASE_CONFIG);
     try {
         firebaseApp = initializeApp(fireBaseConf, "[DEFAULT]")
-        // firebaseAnalytics = getAnalytics(firebaseApp);
+        firebaseAnalytics = getAnalytics(firebaseApp);
     } catch (error) {
         /*
          * We skip the "already exists" message which is
@@ -43,13 +48,7 @@ if (browser) {
             console.error('Firebase initialization error', error.stack)
         }
     }
-}
 
-let firebaseDb;
-let firebaseAuth;
-let firebaseStorage;
-
-if (browser) {
     firebaseDb = getFirestore(firebaseApp)
     firebaseAuth = getAuth();
     firebaseStorage = getStorage();

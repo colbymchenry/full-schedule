@@ -3,6 +3,8 @@
     import {page} from '$app/stores';
     import '../app.css';
     import {browser} from "$app/env";
+    // have to import FirebaseClient to init analytics
+    import {FirebaseClient} from "../utils/firebase/FirebaseClient.js";
 
     let analyticsId = import.meta.env.VERCEL_ANALYTICS_ID;
 
