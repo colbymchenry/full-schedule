@@ -1,9 +1,11 @@
 <script>
     import MaskInput from "svelte-input-mask/MaskInput.svelte";
+    import Toggle from "./toggle.svelte";
     import {iconHelp, iconSearch} from "../icons.js";
 
     export let form_errors = {};
-    export let value, label, name, type = "text", placeholder, icon, disablePrefill, readOnly, hint, info, min, max, step, style, onChange, onFocus;
+    export let value, label, name, type = "text", placeholder, icon, disablePrefill, readOnly, hint, info, min, max,
+        step, style, onChange, onFocus;
     export let required = false;
 
     let clazz;
@@ -28,7 +30,7 @@
         id: name,
         name,
         placeholder,
-        type,
+        type: type === "toggle" ? "checkbox" : type,
         required,
         step,
         min,
@@ -50,41 +52,53 @@
 
 </script>
 
-<svelte:window on:mousemove={handleMouseMove} />
+<svelte:window on:mousemove={handleMouseMove}/>
 
 <div class="input-field__container">
     {#if label}
         <label for={name}>
             {label}
             {#if hint}
-            <div on:mouseenter={() => showHint = true} on:mouseleave={() => showHint = false}>
-                <span>{@html iconHelp}</span>
-            </div>
+                <div on:mouseenter={() => showHint = true} on:mouseleave={() => showHint = false}>
+                    <span>{@html iconHelp}</span>
+                </div>
             {/if}
         </label>
     {/if}
-    <div class={"input-field" + (clazz ? " " + clazz : "")} class:is--search={icon === iconSearch} class:has--icon={icon} class:is--readonly={readOnly} class:is--error={form_errors[name]} class:is--focused={focused} >
-        {#if icon}
-            <div class="icon">
-                {@html icon}
-            </div>
-        {/if}
-        {#if alwaysShowMask || maskChar || mask}
-            <MaskInput {...inputProps} {alwaysShowMask} {maskChar} {mask} {size} {showMask} {readonly}
-                       on:focus={() => focused = true} on:blur={() => focused = false}
-                       on:change={clear_error} on:input={clear_error}
+    {#if type === "toggle"}
+        <div class={"input-field toggle" + (clazz ? " " + clazz : "")} class:is--readonly={readOnly}
+             class:is--error={form_errors[name]}>
+            <input {...inputProps} on:input={clear_error} checked={value} />
+            <Toggle onClick={() => {
+                value = !value;
+            }} />
+        </div>
+    {:else}
+        <div class={"input-field" + (clazz ? " " + clazz : "")} class:is--search={icon === iconSearch}
+             class:has--icon={icon} class:is--readonly={readOnly} class:is--error={form_errors[name]}
+             class:is--focused={focused}>
+            {#if icon}
+                <div class="icon">
+                    {@html icon}
+                </div>
+            {/if}
+            {#if alwaysShowMask || maskChar || mask}
+                <MaskInput {...inputProps} {alwaysShowMask} {maskChar} {mask} {size} {showMask} {readonly}
+                           on:focus={() => focused = true} on:blur={() => focused = false}
+                           on:change={clear_error} on:input={clear_error}
+                           value={value || ""}
+                />
+            {:else}
+                <input {...inputProps} {readonly} on:input={clear_error}
+                       on:focusin={() => focused = true} on:focusout={() => focused = false}
                        value={value || ""}
-            />
-        {:else}
-            <input {...inputProps} {readonly} on:input={clear_error}
-                   on:focusin={() => focused = true} on:focusout={() => focused = false}
-                   value={value || ""}
-            />
-        {/if}
-    </div>
+                />
+            {/if}
+        </div>
+    {/if}
 
     {#if info}
-    <small>{info}</small>
+        <small>{info}</small>
     {/if}
 
     {#if form_errors[name]}
@@ -109,7 +123,7 @@
 
     small {
       margin-top: 0.25rem;
-      color: rgba(var(--fuse-text-hint-rgb), );
+      color: rgba(var(--fuse-text-hint-rgb),);
       font-size: 13px;
     }
 
@@ -151,6 +165,18 @@
     background: #fff;
     box-shadow: var(--input-box-shadow);
     position: relative;
+
+    &.toggle {
+      border-color: transparent;
+      background: transparent;
+      box-shadow: none;
+      padding-top: 1rem;
+      padding-left: 0;
+
+      input {
+        display: none;
+      }
+    }
 
     &.has--icon {
       input {

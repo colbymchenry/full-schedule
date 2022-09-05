@@ -7,6 +7,7 @@
     import CellDetails from '$lib/cell-details.svelte';
     import PaginatedList from '$lib/paginated-list.svelte';
     import SearchWithResults from '$lib/forms/search-with-results.svelte';
+    import Toggle from '$lib/forms/toggle.svelte';
     import {iconDollar} from "../../../../lib/icons.js";
     import {showToast} from "../../../../utils/logger.js";
     import {FirebaseClient} from "../../../../utils/firebase/FirebaseClient.js";
@@ -68,8 +69,14 @@
         <div style="padding: 2rem;flex-grow: 1;">
             <Row>
                 <div style="display: grid;grid-auto-rows: 1fr;grid-template-columns: 1fr;row-gap: 1rem;">
-                    <InputField name="name" label="Name *" required value={rowData?.name} disablePrefill
-                                bind:form_errors={form_errors}/>
+
+                    <div style="display: grid;grid-template-columns: 1fr auto;grid-template-rows: 1fr;column-gap: 1rem;">
+                        <InputField name="name" label="Name *" required value={rowData?.name} disablePrefill
+                                    bind:form_errors={form_errors}/>
+                        <InputField name="active" type="toggle" label="Active" value={rowData?.active}
+                                    bind:form_errors={form_errors}
+                        />
+                    </div>
                     <div style="display: grid;grid-template-columns: 1fr 1fr;grid-template-rows: 1fr;column-gap: 1rem;">
                         <Select name="category" label="Category *" required value={rowData['category']}
                                 bind:form_errors={form_errors}>
@@ -81,9 +88,11 @@
                                     disablePrefill bind:form_errors={form_errors}/>
                     </div>
 
-                    <InputField name="more_info_url" label="More Info (URL)" value={rowData?.more_info_url}
-                                disablePrefill bind:form_errors={form_errors}
-                                hint="Provide a URL so a customer can get more info regarding this service."/>
+                    <div style="display: grid;grid-template-columns: 1fr;grid-template-rows: 1fr;column-gap: 1rem;">
+                        <InputField name="more_info_url" label="More Info (URL)" value={rowData?.more_info_url}
+                                    disablePrefill bind:form_errors={form_errors}
+                                    hint="Provide a URL so a customer can get more info regarding this service."/>
+                    </div>
                 </div>
                 <div>
                     <div class="multi-select">

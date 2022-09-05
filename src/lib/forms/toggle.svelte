@@ -1,10 +1,18 @@
 <script>
-
+    export let active = false, onClick;
 </script>
 
-<div class="track">
-    <div class="thumb-container">
 
+
+<div class="track" class:active={active} on:click={() => {
+    if (onClick) {
+        onClick(!active);
+    }
+
+     active = !active
+}}>
+    <div class="thumb-container">
+        <div class="thumb"></div>
     </div>
 </div>
 
@@ -21,6 +29,7 @@
     transition: all 80ms linear;
     transition-property: background-color;
     transition-delay: 50ms;
+    cursor: pointer;
 
     .thumb-container {
       position: absolute;
@@ -32,6 +41,21 @@
       transform: translate3d(0, 0, 0);
       transition: all 80ms linear;
       transition-property: transform;
+
+      &:hover {
+        &::before {
+          position: absolute;
+          content: '';
+          min-width: 40px;
+          min-height: 40px;
+          top: -10px;
+          left: -10px;
+          z-index: 1;
+          background-color: rgba(var(--fuse-accent-400-rgb), 0.1);
+          border-radius: 100%;
+        }
+      }
+
 
       .thumb {
         background-color: #fafafa;
@@ -51,6 +75,12 @@
 
       .thumb-container {
         transform: translate3d(16px, 0, 0);
+
+        &:hover {
+          &::before {
+            background-color: rgba(var(--fuse-primary-rgb), 0.1);
+          }
+        }
 
         .thumb {
           background-color: var(--fuse-primary);
