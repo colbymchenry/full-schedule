@@ -25,16 +25,23 @@
     import {settings} from "../../../lib/stores.js";
     import {Api} from "../../../utils/Api.js";
     import {ApiProgressBar} from "../../../utils/ApiProgressBar.js";
+    import {onMount} from "svelte";
+    import Swal from "sweetalert2";
+    import _ from "lodash";
+    import {browser} from "$app/env";
 
     let form_errors = {};
+    let calendars = [];
 
     async function onSubmit(formData) {
         ApiProgressBar.start()
 
         try {
-            await FirebaseClient.update("settings", "main", formData);
+            let oldSettings = await FirebaseClient.doc("settings", "main");
+            await FirebaseClient.update("settings", "main", _.merge(oldSettings, formData));
         } catch (e) {
             showToast()
+            console.error(e);
         }
 
         ApiProgressBar.stop();
@@ -44,11 +51,64 @@
         let getUrl = window.location;
         let baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
         try {
-            const { data } = await Api.post('/api/google-oauth-url', { baseUrl });
-            window.location.href = data;
+            const { authorizationUrl } = await Api.post('/api/google-oauth-url', { baseUrl });
+            window.location.href = authorizationUrl;
         } catch (e) {
             showToast()
+            console.error(e);
         }
+    }
+
+
+    onMount(async () => {
+        if (!calendars.length && browser) {
+            try {
+                const { data } = await Api.get("/api/google-calendar");
+                calendars = data.filter(({
+                                            accessRole,
+                                            id,
+                                            summary
+                                        }) => accessRole === "owner" && id !== summary).map(({
+                                                                                                 summary,
+                                                                                                 id,
+                                                                                                 timeZone
+                                                                                             }) => {
+                    return {
+                        summary, id, timeZone
+                    }
+                });
+            } catch (e) {
+                showToast();
+                console.error(e);
+            }
+        }
+    });
+
+    async function onCalendarChange(e) {
+        if (e.target.value !== "create") return;
+
+        const create = await Swal.fire({
+            title: "Are you sure?",
+            html: "This will create a new Google calendar called<br /><b>'Full Schedule - MASTER'</b>",
+            icon: 'warning',
+            confirmButtonText: 'Create',
+            denyButtonText: 'Cancel',
+            showDenyButton: true,
+            showCloseButton: true,
+            confirmButtonColor:  "var(--fuse-primary)",
+            denyButtonColor: "var(--fuse-accent-500)",
+            backdrop: true
+        });
+
+        if (!create.isConfirmed) return;
+
+        try {
+
+        } catch (error) {
+            showToast();
+            console.error(error);
+        }
+
     }
 
 </script>
@@ -59,19 +119,19 @@
     <Section title="Google"
              info={'API keys used for various Google APIs. <a href="https://console.cloud.google.com/welcome" target="_blank">Go to Google console.</a>'}>
         <Row>
-            {#if !$settings.get("google.token")}
+            {#if !$settings.object?.google?.token}
                 <!-- Needs to OAuth with Google Business Account -->
                 <Button icon={iconGoogle} color="input" type="button" callback={loginWithGoogle}>Login with Google
                 </Button>
-            {:else if !$settings.get("google.calendars.appointments")}
+            {:else}
                 <!-- Needs to select their Google Calendar -->
                 <Select label="Appointment Calendar" hint="Calendar used to keep track of appointments."
                         name="google.calendars.appointments" icon={iconEvent}
-                        value={$settings.get("google.calendars.appointments")}>
-                    <!--{#each states as state}-->
-                    <!--    <option value={state.value}-->
-                    <!--            selected={state.value === $settings.get("address.state")}>{state.label}</option>-->
-                    <!--{/each}-->
+                        value={$settings.object?.google?.calendars?.appointments} onChange={onCalendarChange}>
+                    {#each calendars as calendar}
+                        <option value={calendar.id}>{calendar.summary}</option>
+                    {/each}
+                    <option value={"create"}>Create Calendar</option>
                 </Select>
                 <Select label="Scheduling Calendar" hint="Calendar used to keep track of employee schedules."
                         name="google.calendars.schedules" icon={iconFreeAvailable}
@@ -81,9 +141,6 @@
                     <!--            selected={state.value === $settings.get("address.state")}>{state.label}</option>-->
                     <!--{/each}-->
                 </Select>
-            {:else}
-                <!-- Is all good -->
-
             {/if}
         </Row>
     </Section>

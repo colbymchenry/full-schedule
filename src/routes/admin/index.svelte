@@ -19,7 +19,7 @@
         try {
             response = await FirebaseClient.signIn(data["email"], data["password"]);
             $auth = response.user;
-            await goto("/admin/clients");
+            await goto("/admin/appointments");
         } catch (error) {
             if (error?.code === 'auth/user-not-found') {
                 form_errors['email'] = "User not found.";
@@ -42,7 +42,7 @@
             <InputField form_errors={form_errors} name="password" type="password" label="Password *"
                         required/>
             <div class="remember-container">
-                <Checkbox name="remember" label="Remember me"/>
+                <Checkbox name="remember">Remember me</Checkbox>
                 <a href="/admin/forgot-password" style="justify-self: flex-end;">Forgot password?</a>
             </div>
             <Button style="min-height: 48px;">Sign in</Button>

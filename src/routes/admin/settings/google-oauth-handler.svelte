@@ -16,14 +16,14 @@
         if (searchParams.has("code")) {
             (async () => {
                 try {
-                    let { data } = await Api.post('/api/google-oauth-url', {
+                    let { tokens } = await Api.post('/api/google-oauth-url', {
                         code: searchParams.get("code"),
                         baseUrl
                     })
 
                     await FirebaseClient.update("settings", "main", {
                         "google": {
-                            "token": data
+                            "token": tokens
                         }
                     });
                     history.pushState({}, null, "/admin/settings/api");

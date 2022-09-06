@@ -1,6 +1,7 @@
 import {FirebaseAdmin} from "../../utils/firebase/FirebaseAdmin.js";
 
-export async function get({url}) {
+export async function get({request, url}) {
+    await FirebaseAdmin.auth().verifyIdToken(request.headers.get("authorization"));
     const ids = url.searchParams.get("ids").includes(",") ? url.searchParams.get("ids").split(",").filter((id) => id) : [url.searchParams.get("ids")];
     const users = await FirebaseAdmin.auth().getUsers(ids.map((uid) => {
         return {uid}

@@ -1,4 +1,8 @@
 import { google } from 'googleapis';
+import {config} from 'dotenv';
+import {FirebaseAdmin} from "./firebase/FirebaseAdmin.js";
+
+config();
 
 // TODO: Implement freebusy to determine if blocked time with new appointments when scheduling
 // https://stackoverflow.com/questions/44133947/google-calendar-api-check-for-conflicts
@@ -17,11 +21,11 @@ export class GoogleCalendarAPI {
 
     static async getInstance() {
         const calendarApi = new GoogleCalendarAPI();
-        const settings = await Settings.getInstance();
-        const tokens = await settings.get("google_tokens");
+        const settings = await (await FirebaseAdmin.firestore().collection("settings").doc("main").get()).data();
+        const tokens = await settings?.google?.token;
         await calendarApi.oauth2Client.setCredentials(tokens);
         calendarApi.calendar = google.calendar({version: 'v3', auth: calendarApi.oauth2Client});
-        calendarApi.calendarId = settings.get("google_calendar_id");
+        calendarApi.calendarId = settings?.google?.calendars?.appointments;
         calendarApi.settings = settings;
         return calendarApi;
     }
@@ -77,8 +81,7 @@ export class GoogleCalendarAPI {
 // ),
 // ));
     async postEvent(location, summary, description, startTime, endTime, attendees, extendedProperties) {
-        const settings = await Settings.getInstance();
-        const timeZone = await settings.get("time_zone");
+        const timeZone = await this.settings?.address?.timezone;
         const res = await this.calendar.events.insert({
             calendarId: this.calendarId,
             resource: {

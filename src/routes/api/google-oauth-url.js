@@ -21,7 +21,7 @@ export async function post({request}) {
             let {tokens} = await oauth2Client.getToken(res["code"]);
             return {
                 status: 200,
-                body: tokens
+                body: { tokens }
             }
         } catch (error) {
             console.error(error)
@@ -49,7 +49,7 @@ export async function post({request}) {
 
     return {
         status: 200,
-        body: authorizationUrl
+        body: { authorizationUrl }
     }
 }
 

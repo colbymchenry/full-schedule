@@ -141,6 +141,7 @@
         position: absolute;
         color: var(--icon-gray);
         left: 0;
+        margin-left: 0;
       }
     }
   }

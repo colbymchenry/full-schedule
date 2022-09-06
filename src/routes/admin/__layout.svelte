@@ -18,7 +18,6 @@
                 prettyLog("AUTHENTICATION UPDATED");
             } else {
                 prettyLog("LOGGED OUT");
-
                 if ($page.url.pathname !== '/admin' &&
                     $page.url.pathname !== '/admin/reset-password' &&
                     $page.url.pathname !== '/admin/forgot-password') {
@@ -29,8 +28,7 @@
         if (!Object.keys($settings.object).length) {
             FirebaseClient.doc("settings", "main").then((data) => {
                 if (!data) return;
-                const jsonObj = new JsonHelper(data);
-                settings.set(jsonObj)
+                $settings = new JsonHelper(data);
             })
 
         }

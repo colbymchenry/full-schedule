@@ -10,7 +10,9 @@ export class Api {
             cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
             credentials: 'same-origin', // include, *same-origin, omit
             headers: headers || {
-                'authorization': await FirebaseClient.getIdToken()
+                'authorization': await FirebaseClient.getIdToken(),
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
                 // 'Content-Type': 'application/x-www-form-urlencoded',
             },
             redirect: 'follow', // manual, *follow, error
@@ -26,7 +28,9 @@ export class Api {
             cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
             credentials: 'same-origin', // include, *same-origin, omit
             headers: headers || {
-                'authorization': await FirebaseClient.getIdToken()
+                'authorization': await FirebaseClient.getIdToken(),
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
                 // 'Content-Type': 'application/x-www-form-urlencoded',
             },
             redirect: 'follow', // manual, *follow, error
@@ -47,8 +51,9 @@ export class Api {
             cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
             credentials: 'same-origin', // include, *same-origin, omit
             headers: headers || {
-                'Content-Type': 'application/json',
-                'authorization': await FirebaseClient.getIdToken()
+                'authorization': await FirebaseClient.getIdToken(),
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
                 // 'Content-Type': 'application/x-www-form-urlencoded',
             },
             redirect: 'follow', // manual, *follow, error
@@ -72,6 +77,7 @@ export class Api {
             credentials: 'same-origin', // include, *same-origin, omit
             headers: headers || {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'authorization': await FirebaseClient.getIdToken()
                 // 'Content-Type': 'application/x-www-form-urlencoded',
             },
