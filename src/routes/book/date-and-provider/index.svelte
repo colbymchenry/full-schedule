@@ -15,7 +15,7 @@
 
 
 
-<BookingLayout title="Services" tip="Please select the services you're interested in.">
+<BookingLayout title="Date & Provider" tip="Please select your preferred date and provider.">
 
     <Form id="login-form" class="login-form" onSubmit={onSubmit} hideFooter>
         <DatePicker styling={CalendarStyles.appointments()} format='MM / DD / YYYY' continueText={"Select"} bind:selected={selectedDate}></DatePicker>
