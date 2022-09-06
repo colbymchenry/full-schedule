@@ -28,7 +28,7 @@
     }
 </script>
 
-<BookingLayout title="Hi there!" tip="Please provide us with some basic information so we can get started.">
+<BookingLayout title="Hi there!" tip="Let's get started with some basic information about yourself.">
     <Form id="login-form" class="login-form" onSubmit={onSubmit} hideFooter>
 
         <InputField form_errors={form_errors} name="name" type="text" label="Full Name *" icon={iconPerson}

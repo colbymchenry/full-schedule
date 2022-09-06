@@ -1,12 +1,13 @@
 <script>
     export let form_errors = [];
-    export let label = "Checkbox", name = "text";
+    export let name, value, id = Math.random();
     export let required = false;
+    export let onChange;
 </script>
 
-<label class="checkbox" class:is--error={form_errors[name]} for={name}>
-    <input type="checkbox" id={name} {name} {required}/>
-    <span>{label}</span>
+<label class="checkbox" class:is--error={form_errors[name]} for={id}>
+    <input type="checkbox" {id} {name} {value} {required} on:change={onChange} />
+    <span><slot></slot></span>
 </label>
 
 {#if form_errors[name]}
@@ -18,6 +19,7 @@
     display: block;
     margin-bottom: 5px;
     padding-left: 20px;
+    cursor: pointer;
 
     &.is--error {
 
@@ -27,6 +29,17 @@
       float: left;
       margin: 4px 0 0 -20px;
       line-height: normal;
+      cursor: pointer;
+      //border: 2px solid #64748b;
+      //background-color: rgba(0,0,0,0);
+      //transition: border-color 90ms cubic-bezier(0, 0, 0.2, 0.1);
+      //border-radius: 2px;
+      //box-sizing: border-box;
+      //-webkit-appearance: none;
+      //-moz-appearance: none;
+      //appearance: none;
+      //width: 1rem;
+      //height: 1rem;
     }
 
     span {

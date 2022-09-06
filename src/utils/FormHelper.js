@@ -7,13 +7,12 @@ export class FormHelper {
 
             keys.reduce(function (o, k) {
                 return o[k] = o[k] || {};
-            }, object)[last] = value === "false" || value === "true" ? value === "true" : value;
+            }, object)[last] = value;
         }
 
         const formData = new FormData(form);
 
         let data = {};
-
 
         for (let field of formData) {
             const [key, value] = field;

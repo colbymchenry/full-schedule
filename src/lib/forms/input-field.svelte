@@ -20,7 +20,7 @@
     function clear_error(e) {
         delete form_errors[name];
         form_errors = form_errors;
-        if (onChange) onChange(e?.detail?.inputState?.unmaskedValue || e.target.value);
+        if (onChange) onChange(e?.detail?.inputState?.unmaskedValue || e?.target?.value);
     }
 
     // masked input fields
