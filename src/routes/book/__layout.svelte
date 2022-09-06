@@ -1,3 +1,7 @@
+<svelte:head>
+    <title>FS • Book</title>
+</svelte:head>
+
 <script context="module">
     export async function load({url, params}) {
         const res = await fetch(`${url.origin}/api/booking-setup?store=true`);

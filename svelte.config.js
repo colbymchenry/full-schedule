@@ -7,7 +7,7 @@ const config = {
     adapter: adapter(),
     vite: {
       ssr: {
-        noExternal: [ 'dayjs' ]
+        // noExternal: [ 'dayjs' ]
       }
     }
   },

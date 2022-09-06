@@ -381,7 +381,7 @@ input.has--icon {
     margin-top: 6px;
 }
 
-/* Fix date picker */
+/* Fix date-and-provider picker */
 .contents-wrapper .wrapper, .contents-wrapper .wrapper .contents-inner .contents {
     box-shadow: 0 0 #0000, 0 0 #0000, 0 0 12px 0 rgb(0 0 0 / 0.38) !important;
     border-radius: 0.25rem;

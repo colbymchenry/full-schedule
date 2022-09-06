@@ -15,6 +15,7 @@
     import BookingLayout from "../_components/BookingLayout.svelte";
     import {browser} from "$app/env";
     import {FormHelper} from "../../../utils/FormHelper.js";
+    import {goto} from "$app/navigation";
 
     export let services;
 
@@ -23,7 +24,10 @@
     }
 
     async function onSubmit(formData) {
-        console.log(formData);
+        let choices = $bookingStore.get("choices");
+        choices["services"] = Object.keys(formData);
+        $bookingStore.set("choices", choices);
+        await goto('/book/date-and-provider');
     }
 
     let disabled = true;
@@ -43,7 +47,7 @@
         <div class="container">
             {#each $bookingStore.get("services") as service}
                 <div>
-                    <Checkbox name={"service" + service.doc_id} onChange={checkDisabled}>{service.name}</Checkbox>
+                    <Checkbox name={service.doc_id} onChange={checkDisabled}>{service.name}</Checkbox>
                 </div>
             {/each}
         </div>

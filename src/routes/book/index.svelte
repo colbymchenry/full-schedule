@@ -8,10 +8,12 @@
     import {browser} from "$app/env";
     import {goto} from "$app/navigation";
     import BookingLayout from "./_components/BookingLayout.svelte";
+    import {bookingStore} from "../../lib/stores.js";
 
     let form_errors = {};
 
     async function onSubmit(formData) {
+        $bookingStore.set("choices", formData);
         await goto('/book/service');
     }
 
