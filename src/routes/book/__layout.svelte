@@ -26,19 +26,28 @@
 
     if ($page.url.pathname !== "/book" && !$bookingStore && booking_setup) {
         if (browser) {
-            $bookingStore = new JsonHelper({ "store": booking_setup });
+            $bookingStore = new JsonHelper({"store": booking_setup});
             goto("/book");
         }
     } else if (booking_setup) {
-        $bookingStore = new JsonHelper({ "store": booking_setup });
+        $bookingStore = new JsonHelper({"store": booking_setup});
     }
+
+    let smallArrow = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="24" height="24" style="margin-right: 0.5rem;" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
+</svg>
+`;
 
 </script>
 
 <div class="root">
     <div class="container">
         <div>
-          <slot></slot>
+            {#if !booking_setup}
+                <h1>Setup is not complete...</h1><p>Check for empty/blank fields in settings.<br /><br /><a href="/admin" style="display: flex;align-items: center;">{@html smallArrow} Admin Login</a></p>
+            {:else}
+                <slot></slot>
+            {/if}
         </div>
     </div>
 </div>
