@@ -38,6 +38,7 @@
 </svg>
 `;
 
+    console.log("SETUP", booking_setup)
 </script>
 
 <div class="root">
