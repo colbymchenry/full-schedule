@@ -2,7 +2,7 @@
 
     import {iconClose, iconEditCalendar} from "../icons.js";
 
-    export let title;
+    export let label, icon;
     let visible = false;
     let button;
 
@@ -15,7 +15,7 @@
 }} />
 
 <div bind:this={button} class="button">
-    <div on:click={() => visible = true}><span class="icon">{@html iconEditCalendar}</span>{title}</div>
+    <div on:click={() => visible = true}><span class="icon">{@html icon}</span>{label}</div>
 
     <div class="drawer" class:visible={visible}>
         <div class="container">
@@ -74,6 +74,8 @@
         width: 50rem;
         height: 30rem;
         max-height: 30rem;
+        color: #1e293b;
+        position: relative;
 
         .close-button {
           position: absolute;

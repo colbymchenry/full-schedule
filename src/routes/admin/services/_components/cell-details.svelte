@@ -110,18 +110,22 @@
                                 }
                                 return [];
                             }} onSelect={(value) => {
+                                // check if the service has any products already
                                 if (rowData?.products) {
+                                    // add the product at quantity 1 to the products array
                                      rowData["products"] = [...rowData["products"], {
                                         name: value.name,
-                                        quantity: 0
+                                        doc_id: value.doc_id,
+                                        quantity: 1
                                     }]
                                 } else {
+                                    // add the product at quantity 1 and initialize the product array
                                     rowData["products"] = [{
                                         name: value.name,
-                                        quantity: 0
+                                        doc_id: value.doc_id,
+                                        quantity: 1
                                     }]
                                 }
-                                console.log(rowData["products"])
                             }}>
                                 <!-- When clicked we need to add the product to the service-->
                                 {data.name}

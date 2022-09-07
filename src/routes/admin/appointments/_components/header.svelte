@@ -51,7 +51,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 0 3rem;
-    z-index: 4;
+    z-index: 5;
 
     h1 {
       letter-spacing: -.025em;

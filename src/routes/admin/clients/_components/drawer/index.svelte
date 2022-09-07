@@ -66,7 +66,7 @@
             <div style="position: relative;">
 
                 <div style="display: flex; align-items: center;justify-content: space-between">
-                    <h1 class="truncate">{client?.displayName}</h1>
+                    <h1 class="truncate" style="text-transform: capitalize;">{client?.displayName}</h1>
                     <Button type="button" color="secondary" icon={iconEdit} callback={() => editing = true}>Edit
                     </Button>
                 </div>

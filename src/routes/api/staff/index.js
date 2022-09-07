@@ -15,9 +15,9 @@ export async function patch({request, url}) {
         });
 
         delete res['photoURL']
-        delete res['displayName']
+        res['displayName'] = res['displayName'].toLowerCase();
+        res['email'] = res['email'].toLowerCase();
         delete res['phoneNumber']
-        delete res['email']
         delete res['disabled']
 
         await FirebaseAdmin.firestore().collection("staff").doc(url.searchParams.get("uid")).update(res);
@@ -62,7 +62,10 @@ export async function post({request}) {
             birthday: data.birthday,
             notes: data.notes,
             title: data.title,
-            uid: user.uid
+            uid: user.uid,
+            email: data.email.toLowerCase(),
+            phoneNumber: data.phoneNumber,
+            displayName: data.displayName.toLowerCase()
         });
 
         return {

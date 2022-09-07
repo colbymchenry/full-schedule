@@ -67,7 +67,7 @@
         {:then data}
             <Timeline />
             <table>
-                <thead class="shadow">
+                <thead class="shadow" class:fill={!staffAccounts || !staffAccounts.length}>
                 <tr>
                     <!-- First empty slot for time slot -->
                     <th></th>
@@ -165,6 +165,7 @@
           left: 0;
           background-color: var(--bg-color);
           z-index: 3;
+          display: flex;
         }
       }
 
@@ -174,6 +175,11 @@
         top: 0;
         left: 0;
         z-index: 4;
+        height: var(--top-bar-height);
+
+        &.fill {
+          background: white;
+        }
 
         tr {
 

@@ -1,8 +1,7 @@
 <script>
     import {
-        iconApi, iconClover,
+        iconApi, iconBolt, iconClover,
         iconCreditCard, iconPayPal,
-        iconSmartDevices,
         iconStore, iconStripe,
         iconUser,
         iconUserLock,
@@ -47,6 +46,12 @@
             name: 'API',
             info: 'Manage your API keys for your store',
             url: '/api'
+        },
+        {
+            icon: iconBolt,
+            name: 'Importing',
+            info: 'Import clients, inventory, and staff from CSV files',
+            url: '/importing'
         },
         {
             icon: iconClover,

@@ -31,8 +31,8 @@
             if (result.isConfirmed) {
                 ApiProgressBar.start();
                 try {
-                    await Api.post('/api/client/delete?uid=' + client?.uid);
-                    await FirebaseClient.deleteFile('avatar/' + client?.uid);
+                    await FirebaseClient.delete("clients", client?.doc_id);
+                    await FirebaseClient.deleteFile('avatar/' + client?.doc_id);
                     if (onClose) onClose();
                     if (onComplete) onComplete();
                 } catch (error) {
@@ -50,34 +50,37 @@
             // Grab HTML from note editor
             data.notes = document.querySelector('.ql-editor').innerHTML;
 
-            // If there is now UID from the User create a new User, otherwise patch/update the User.
-            const res = !client?.uid ? await Api.post('/api/client', data) : await Api.patch('/api/client?uid=' + client.uid, data)
+            // clean up the phone number
+            data["phoneNumber"] = "+1" + data["phoneNumber"].replace('+1', '').replace(/[^a-zA-Z0-9 ]/g, '').replace(/\s+/g, '');
 
-            // Email exists, throw error
-            if (res?.code === 'auth/email-already-exists') {
-                form_errors["email"] = res.message;
-                form_errors = form_errors;
-                ApiProgressBar.stop();
-                return;
+            // clean up form data with lower cases (for searching)
+            let formData = {
+                address: data.address,
+                birthday: data.birthday,
+                notes: data.notes,
+                title: data.title,
+                email: data.email.toLowerCase(),
+                phoneNumber: data.phoneNumber,
+                displayName: data.displayName.toLowerCase()
             }
 
-            // Phone number exists, throw error
-            if (res?.code === 'auth/invalid-phone-number') {
-                form_errors["phoneNumber"] = 'Invalid phone number.';
-                form_errors = form_errors;
-                ApiProgressBar.stop();
-                return;
+            let result;
+
+            // update if doc Id
+            if (client?.doc_id) {
+                result = await FirebaseClient.update("clients", client.doc_id, formData);
+            }
+            // create if no doc Id
+            else {
+                result = await FirebaseClient.add("clients", formData);
             }
 
             // If there is a new avatar image we need to upload it to Cloud Firebase Storage.
             if (avatarImg) {
                 // Upload image to Cloud Storage
-                const photoURL = await FirebaseClient.uploadFile(avatarImg, 'avatar/' + (client?.uid || res.user.uid));
-                // update Google User in the backend
-                await Api.patch('/api/user', {
-                    uid: client?.uid || res.user.uid,
-                    photoURL
-                })
+                const photoURL = await FirebaseClient.uploadFile(avatarImg, 'avatar/' + result.doc_id);
+                // update client with new photo
+                await FirebaseClient.update("clients", result.doc_id, { photoURL });
                 data.photoURL = photoURL;
             } else {
                 data.photoURL = client.photoURL;
@@ -90,14 +93,16 @@
 
                 if (onComplete) {
                     onComplete();
+                    ApiProgressBar.stop();
                 }
             }, 200);
 
         } catch (error) {
             console.error(error)
             showToast()
+            ApiProgressBar.stop();
+
         }
-        ApiProgressBar.stop();
     }
 
     setTimeout(() => {

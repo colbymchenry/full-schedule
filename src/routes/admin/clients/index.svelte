@@ -22,27 +22,7 @@
 
     async function fetchClients() {
         try {
-            let accounts = await FirebaseClient.collection("clients");
-
-            if (!accounts.map(({uid}) => uid).join(",").length) {
-                clientAccounts = [];
-                return;
-            }
-
-            const {users} = await Api.get(`/api/user?ids=${accounts.map(({uid}) => uid).join(",")}`);
-
-            clientAccounts = accounts.map((account) => {
-                const user = users.find(({uid}) => uid === account?.uid);
-                if (user) {
-                    account["displayName"] = user.displayName;
-                    account["email"] = user.email;
-                    account["photoURL"] = user.photoURL;
-                    account["phoneNumber"] = user.phoneNumber;
-                    return account;
-                }
-            }).filter((account) => account !== undefined);
-
-            return clientAccounts;
+            clientAccounts = await FirebaseClient.collection("clients");
         } catch (error) {
             showToast();
         }
@@ -55,7 +35,7 @@
 
 <div class="container full-vh">
     <div class="content">
-        <div class="header">
+        <div class="header shadow">
             <div>
                 <div>
                     Clients
@@ -98,7 +78,7 @@
                         </div>
                     {/if}
 
-                    <div>
+                    <div style="text-transform: capitalize;">
                         {data?.displayName}
                     </div>
                 </div>
@@ -159,7 +139,8 @@
 
     .content {
       flex-grow: 1;
-
+      overflow-x: hidden;
+      overflow-y: auto;
 
       .header {
         padding: 2rem !important;
@@ -167,6 +148,10 @@
         display: flex;
         flex: 1 1 auto !important;
         border-bottom: 1px solid var(--border-color);
+        position: sticky;
+        top: 0;
+        left: 0;
+        background: white;
 
         > div {
           margin-bottom: 1rem;

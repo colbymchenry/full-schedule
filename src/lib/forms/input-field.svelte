@@ -4,7 +4,7 @@
     import {iconHelp, iconSearch} from "../icons.js";
 
     export let form_errors = {};
-    export let value, label, name, type = "text", placeholder, icon, disablePrefill, readOnly, hint, info, min, max,
+    export let value, label, name, type = "text", placeholder, icon, accept, disablePrefill, readOnly, hint, info, min, max,
         step, style, onChange, onFocus;
     export let required = false;
 
@@ -20,7 +20,7 @@
     function clear_error(e) {
         delete form_errors[name];
         form_errors = form_errors;
-        if (onChange) onChange(e?.detail?.inputState?.unmaskedValue || e?.target?.value);
+        if (onChange) onChange(type === "file" ? e?.target?.files : e?.detail?.inputState?.unmaskedValue || e?.target?.value);
     }
 
     // masked input fields
@@ -40,6 +40,7 @@
         min,
         max,
         style,
+        accept,
         ...(type === "email" && {pattern: "^(?=[^\s@]{1,64}@)[^\s@]+@[^\s@]+\.(.{2}|.{3})+$"}),
         "class": (icon ? "has--icon" : "")
     }
@@ -231,6 +232,17 @@
       font-size: 14px;
       font-weight: 500;
       font-family: inherit;
+
+      &::-webkit-file-upload-button {
+        display: none;
+      }
+      &::file-selector-button {
+        display: none;
+      }
+    }
+
+    input[type="file"] {
+      cursor: pointer;
     }
 
     .icon {
