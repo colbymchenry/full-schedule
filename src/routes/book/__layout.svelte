@@ -7,7 +7,9 @@
         try {
             const res = await fetch(`${url.origin}/api/booking-setup?store=true`);
             const data = await res.json();
-            return {props: {booking_setup: data}}
+            if (!data?.error) {
+                return {props: {booking_setup: data}}
+            }
         } catch (error) {
 
         }
@@ -37,8 +39,6 @@
   <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
 </svg>
 `;
-
-    console.log("SETUP", booking_setup)
 </script>
 
 <div class="root">
