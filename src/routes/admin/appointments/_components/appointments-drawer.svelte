@@ -123,6 +123,7 @@
 
 
   .customer-info {
+    margin-top: 1rem;
     .name {
       display: flex;
       align-items: center;
@@ -141,7 +142,7 @@
       grid-template-columns: 48px auto;
       align-items: flex-start;
       padding: 0 0.5rem;
-      border-top: 1px solid var(--border-color);
+      border-top: 2px solid var(--border-color);
       margin-top: 1rem;
 
       .icon {

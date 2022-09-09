@@ -46,16 +46,16 @@
 
             // if there is no docs pulled yet, pull them
             if (!allDocs.length) {
-                allDocs = (await FirebaseClient.queryAdv(query(ref, orderBy("name", "desc"))));
+                allDocs = (await FirebaseClient.queryAdv(query(ref, orderBy("name", "asc"))));
             }
 
             // get last document to paginate
             const docSnap = await getDoc(doc(ref, allDocs[page * itemsPerPage].doc_id));
 
             if (data.length) {
-                data = await FirebaseClient.queryAdv(query(ref, orderBy("name", "desc"), startAfter(docSnap), limit(itemsPerPage)));
+                data = await FirebaseClient.queryAdv(query(ref, orderBy("name", "asc"), startAfter(docSnap), limit(itemsPerPage)));
             } else {
-                data = await FirebaseClient.queryAdv(query(ref, orderBy("name", "desc"), limit(itemsPerPage)));
+                data = await FirebaseClient.queryAdv(query(ref, orderBy("name", "asc"), limit(itemsPerPage)));
             }
         } catch (error) {
             showToast();
@@ -93,7 +93,11 @@
         <div>
             Items per page:
             <Select bind:value={itemsPerPage} hideDefault small
-                    style="padding-left: 0;padding-right: 0.25rem;height:24px;" onChange={() => page = 0}>
+                    style="padding-left: 0;padding-right: 0.25rem;height:24px;" onChange={() => {
+                        page = 0;
+                        data = [];
+                        fetchData();
+                    }}>
                 <option value={10}>10</option>
                 <option value={25}>25</option>
                 <option value={50}>50</option>
