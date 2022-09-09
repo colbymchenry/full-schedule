@@ -7,7 +7,6 @@
     import CellDetails from '$lib/cell-details.svelte';
     import PaginatedList from '$lib/paginated-list.svelte';
     import SearchWithResults from '$lib/forms/search-with-results.svelte';
-    import Toggle from '$lib/forms/toggle.svelte';
     import {iconDollar} from "../../../../lib/icons.js";
     import {showToast} from "../../../../utils/logger.js";
     import {FirebaseClient} from "../../../../utils/firebase/FirebaseClient.js";
@@ -40,6 +39,7 @@
     async function deleteProduct(product) {
         SwalHelper.deleteConfirmation().then(async (result) => {
             if (result.isConfirmed) {
+                // did nothing, cancelled basically
                 if (!product?.doc_id) {
                     openIndex = -1;
                     await fetchServices();
@@ -49,7 +49,8 @@
                 ApiProgressBar.start()
 
                 try {
-                    await FirebaseClient.delete("products", product.doc_id);
+                    console.log(product.doc_id)
+                    await FirebaseClient.delete("services", product.doc_id);
                     openIndex = -1;
                     await fetchServices();
                 } catch (error) {

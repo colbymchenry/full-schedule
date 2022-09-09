@@ -12,7 +12,6 @@
     export let slim = false;
     export let table;
 
-
     export let data = [];
 
     let allDocs = [];
@@ -27,8 +26,6 @@
 
     $: lastPage = Math.max(0, Math.ceil(totalSize / itemsPerPage) - 1);
 
-
-
     const iconToBeginning = `<svg viewBox="0 0 24 24" focusable="false" fill="currentColor" width="48" height="48"><path d="M18.41 16.59L13.82 12l4.59-4.59L17 6l-6 6 6 6zM6 6h2v12H6z"></path></svg>`;
     const iconPageBack = `<svg viewBox="0 0 24 24" fill="currentColor" width="48" height="48" focusable="false"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path></svg>`;
     const iconPageForward = `<svg viewBox="0 0 24 24" fill="currentColor" width="48" height="48" focusable="false" style="transform: rotateY(180deg);"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path></svg>`;
@@ -41,6 +38,8 @@
     });
 
     async function fetchData() {
+        if (!table) return;
+
         fetching = true;
         try {
             let ref = collection(FirebaseClient.db(), table);

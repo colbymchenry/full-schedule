@@ -8,25 +8,13 @@
     import Button from '$lib/forms/button.svelte';
     import PaginatedList from '$lib/paginated-list.svelte';
     import CellDetails from './_components/cell-details.svelte';
-    import Skeleton from 'svelte-skeleton/Skeleton.svelte'
     import {iconCheck, iconClose, iconPlus, iconSearch} from "../../../lib/icons.js";
     import {StringUtils} from "../../../utils/StringUtils.js";
-    import {showToast} from "../../../utils/logger.js";
-    import {FirebaseClient} from "../../../utils/firebase/FirebaseClient.js";
-    import {MathHelper} from "../../../utils/MathHelper.js";
 
     let openIndex = -1;
 
-    let services = new Promise(fetchServices);
-
-    async function fetchServices() {
-        try {
-            services = await FirebaseClient.collection("services");
-        } catch (error) {
-            showToast();
-            console.error(error);
-        }
-    }
+    let services = [];
+    let refresh = false;
 
     async function performSearch(formData) {
 
@@ -57,15 +45,8 @@
                 </Button>
             </Form>
         </div>
-        {#await services}
-            {#each [0, 1, 2, 3, 4, 5] as number (number)}
-                <Skeleton width="100%" height="75px">
-                    <rect width={MathHelper.getNumberFromRange(60, 80) + "%"} height="10" x="90" y="54" rx="5" ry="5"/>
-                    <rect width={MathHelper.getNumberFromRange(60, 80) + "%"} height="10" x="90" y="35" rx="5" ry="5"/>
-                </Skeleton>
-            {/each}
-        {:then data}
-            <PaginatedList data={services}
+        {#key refresh}
+            <PaginatedList bind:data={services} table="services"
                            style={`max-height: calc(100vh - ${header?.clientHeight || 0}px - var(--top-bar-height));min-height: calc(100vh - ${header?.clientHeight || 0}px - var(--top-bar-height))`}
                            columns={{
                 "Name": {
@@ -88,7 +69,11 @@
         }}>
                 <div slot="cell" class="truncate" let:index let:key let:data let:rowData>
                     {#if key === 'details'}
-                        <CellDetails bind:openIndex={openIndex} {index} {rowData} {fetchServices} />
+                        <CellDetails bind:openIndex={openIndex} {index} {rowData}
+                                     fetchServices={() => {
+                                          services = []; // empty products to force repull
+                                        refresh = !refresh; // trigger re-render
+                                     }}/>
                     {:else if key === 'stock.amount'}
                     {:else if key === 'active'}
                         <div class="active" class:is--active={data}>
@@ -105,10 +90,7 @@
                     {/if}
                 </div>
             </PaginatedList>
-        {:catch error}
-
-        {/await}
-
+        {/key}
     </div>
 </div>
 

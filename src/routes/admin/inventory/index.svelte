@@ -15,7 +15,7 @@
     let openIndex = -1;
 
     let products = [];
-
+    let refresh = false;
 
     async function performSearch(formData) {
 
@@ -46,9 +46,10 @@
                 </Button>
             </Form>
         </div>
-        <PaginatedList bind:data={products} table={"products"} orderBy="name,desc"
-                       style={`max-height: calc(100vh - ${header?.clientHeight || 0}px - var(--top-bar-height));min-height: calc(100vh - ${header?.clientHeight || 0}px - var(--top-bar-height))`}
-                       columns={{
+        {#key refresh}
+            <PaginatedList bind:data={products} table={"products"}
+                           style={`max-height: calc(100vh - ${header?.clientHeight || 0}px - var(--top-bar-height));min-height: calc(100vh - ${header?.clientHeight || 0}px - var(--top-bar-height))`}
+                           columns={{
                 "SKU": {
                     key: "sku",
                     style: "text-align: center;max-width: 50px;"
@@ -70,26 +71,30 @@
                     key: "details"
                 }
         }}>
-            <div slot="cell" class="truncate" let:index let:key let:data let:rowData>
-                {#if key === 'details'}
-                    <CellDetails bind:openIndex={openIndex} {index} {rowData} />
-                {:else if key === 'stock.amount'}
-                    <CellStock {index} {key} {data} {rowData}/>
-                {:else if key === 'active'}
-                    <div class="active" class:is--active={data}>
-                        {#if data === true}
-                            {@html iconCheck}
-                        {:else}
-                            {@html iconClose}
-                        {/if}
-                    </div>
-                {:else if key === 'price'}
-                    {!data ? "" : StringUtils.formatCurrency(data)}
-                {:else}
-                    {data || ""}
-                {/if}
-            </div>
-        </PaginatedList>
+                <div slot="cell" class="truncate" let:index let:key let:data let:rowData>
+                    {#if key === 'details'}
+                        <CellDetails bind:openIndex={openIndex} {index} {rowData} fetchProducts={() => {
+                            products = []; // empty products to force repull
+                            refresh = !refresh; // trigger re-render
+                        }}/>
+                    {:else if key === 'stock.amount'}
+                        <CellStock {index} {key} {data} {rowData}/>
+                    {:else if key === 'active'}
+                        <div class="active" class:is--active={data}>
+                            {#if data === true}
+                                {@html iconCheck}
+                            {:else}
+                                {@html iconClose}
+                            {/if}
+                        </div>
+                    {:else if key === 'price'}
+                        {!data ? "" : StringUtils.formatCurrency(data)}
+                    {:else}
+                        {data || ""}
+                    {/if}
+                </div>
+            </PaginatedList>
+        {/key}
     </div>
 </div>
 
