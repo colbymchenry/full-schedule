@@ -1,25 +1,55 @@
 <script>
 
-    import {iconClose, iconEditCalendar} from "../icons.js";
+    import {iconClose} from "../icons.js";
+    import {browser} from "$app/env";
 
-    export let label, icon;
+    export let label, icon, onClose;
     let visible = false;
+    let drawer;
     let button;
+    let marginAdjust;
 
+    // Move drawer to the left if it is going off screen
+    $: if (visible && drawer && browser) {
+        if (drawer.getBoundingClientRect().right > window.innerWidth) {
+            marginAdjust = `margin-left: -${drawer.getBoundingClientRect().right - window.innerWidth + 73}px;`;
+        }
+
+
+        // TODO: Figure out if it's going out of bounds on the Y axis
+        // console.log(drawer.getBoundingClientRect().top + ":" + drawer.getBoundingClientRect().bottom)
+        // console.log(window.innerHeight)
+        //
+        // if (drawer.getBoundingClientRect().bottom > window.innerHeight) {
+        //     marginAdjust += `margin-top: -${drawer.getBoundingClientRect().bottom - window.innerHeight + 73}px;`;
+        // }
+    }
+
+    function closeDrawer() {
+        visible = false;
+        if (onClose) {
+            // wait 400ms for animation closing
+            setTimeout(() => {
+                onClose();
+            }, 400);
+        }
+    }
 </script>
 
 <svelte:window on:click={(e) => {
     if (visible && !button.contains(e.target)) {
-        visible = false;
+        closeDrawer();
     }
-}} />
+}}/>
 
 <div bind:this={button} class="button">
-    <div on:click={() => visible = true}><span class="icon">{@html icon}</span>{label}</div>
+    <div on:click={() => visible = true}><span class="icon">{@html icon}</span>
+        {#if label}{label}{/if}
+    </div>
 
-    <div class="drawer" class:visible={visible}>
+    <div bind:this={drawer} class="drawer" style={marginAdjust ? marginAdjust : ""} class:visible={visible}>
         <div class="container">
-            <button class="close-button" type="button" on:click={() => visible = false}><span>{@html iconClose}</span>
+            <button class="close-button" type="button" on:click={closeDrawer}><span>{@html iconClose}</span>
             </button>
 
             <slot></slot>
@@ -30,29 +60,42 @@
 
 <style lang="scss">
   .button {
-    background: #0f1728;
+    background: var(--primary-color);
     color: white;
-    border-radius: 7px;
-    box-shadow: 0 0 3px rgb(0 0 0 / 10%);
-    height: 2.4rem;
+    box-shadow: 0 0 #0003, 0 0 #00000024, 0 0 #0000001f;
+    font-weight: 500;
+    height: 40px;
+    min-height: 40px;
+    max-height: 40px;
+    line-height: 1 !important;
+    border-radius: 9999px !important;
     position: relative;
+
+    &:hover {
+      background-color: #473fc6;
+    }
 
     > div:first-of-type {
       display: flex;
       align-items: center;
       justify-content: center;
       text-decoration: none;
-      height: 2.4rem;
-      font-size: 13px;
-      padding: 0 1rem;
+      height: 40px;
+      min-height: 40px;
+      max-height: 40px;
+      width: 40px;
+      min-width: 40px;
+      max-width: 40px;
+      font-size: .875rem;
       cursor: pointer;
     }
 
     .icon {
-      transform: scale(0.4);
+      transform: scale(0.6);
       overflow: hidden;
-      margin-right: -0.25rem;
-      margin-left: -0.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .drawer {

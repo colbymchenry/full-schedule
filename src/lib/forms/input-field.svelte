@@ -2,9 +2,11 @@
     import MaskInput from "svelte-input-mask/MaskInput.svelte";
     import Toggle from "./toggle.svelte";
     import {iconHelp, iconSearch} from "../icons.js";
+    import {DateInput} from "date-picker-svelte";
 
     export let form_errors = {};
-    export let value, label, name, type = "text", placeholder, icon, accept, disablePrefill, readOnly, hint, info, min, max,
+    export let value, label, name, type = "text", placeholder, icon, accept, disablePrefill, readOnly, hint, info, min,
+        max,
         step, style, onChange, onFocus;
     export let required = false;
 
@@ -54,8 +56,6 @@
         mouseX = event.clientX;
         mouseY = event.clientY;
     }
-
-
 </script>
 
 <svelte:window on:mousemove={handleMouseMove}/>
@@ -74,10 +74,21 @@
     {#if type === "toggle"}
         <div class={"input-field toggle" + (clazz ? " " + clazz : "")} class:is--readonly={readOnly}
              class:is--error={form_errors[name]}>
-            <input {name} type="checkbox" on:input={clear_error} {checked} bind:value={value} />
+            <input {name} type="checkbox" on:input={clear_error} {checked} bind:value={value}/>
             <Toggle bind:active={value} onClick={() => {
                 value = !value;
-            }} />
+            }}/>
+        </div>
+    {:else if type === "date"}
+        <div class={"input-field" + (clazz ? " " + clazz : "")} class:is--search={icon === iconSearch}
+             class:has--icon={icon} class:is--readonly={readOnly} class:is--error={form_errors[name]}
+             class:is--focused={focused}>
+            {#if icon}
+                <div class="icon">
+                    {@html icon}
+                </div>
+            {/if}
+            <DateInput bind:value={value} format="MM/dd/yyyy"/>
         </div>
     {:else}
         <div class={"input-field" + (clazz ? " " + clazz : "")} class:is--search={icon === iconSearch}
@@ -236,6 +247,7 @@
       &::-webkit-file-upload-button {
         display: none;
       }
+
       &::file-selector-button {
         display: none;
       }

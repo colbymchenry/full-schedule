@@ -9,25 +9,13 @@
     import PaginatedList from '$lib/paginated-list.svelte';
     import CellDetails from './_components/cell-details.svelte';
     import CellStock from './_components/cell-stock.svelte';
-    import Skeleton from 'svelte-skeleton/Skeleton.svelte'
     import {iconCheck, iconClose, iconPlus, iconSearch} from "../../../lib/icons.js";
     import {StringUtils} from "../../../utils/StringUtils.js";
-    import {showToast} from "../../../utils/logger.js";
-    import {FirebaseClient} from "../../../utils/firebase/FirebaseClient.js";
-    import {MathHelper} from "../../../utils/MathHelper.js";
 
     let openIndex = -1;
 
-    let products = new Promise(fetchProducts);
+    let products = [];
 
-    async function fetchProducts() {
-        try {
-            products = await FirebaseClient.collection("products");
-        } catch (error) {
-            showToast();
-            console.error(error);
-        }
-    }
 
     async function performSearch(formData) {
 
@@ -58,17 +46,9 @@
                 </Button>
             </Form>
         </div>
-        {#await products}
-            {#each [0, 1, 2, 3, 4, 5] as number (number)}
-                <Skeleton width="100%" height="75px">
-                    <rect width={MathHelper.getNumberFromRange(60, 80) + "%"} height="10" x="90" y="54" rx="5" ry="5"/>
-                    <rect width={MathHelper.getNumberFromRange(60, 80) + "%"} height="10" x="90" y="35" rx="5" ry="5"/>
-                </Skeleton>
-            {/each}
-        {:then data}
-            <PaginatedList data={products}
-                           style={`max-height: calc(100vh - ${header?.clientHeight || 0}px - var(--top-bar-height));min-height: calc(100vh - ${header?.clientHeight || 0}px - var(--top-bar-height))`}
-                           columns={{
+        <PaginatedList bind:data={products} table={"products"} orderBy="name,desc"
+                       style={`max-height: calc(100vh - ${header?.clientHeight || 0}px - var(--top-bar-height));min-height: calc(100vh - ${header?.clientHeight || 0}px - var(--top-bar-height))`}
+                       columns={{
                 "SKU": {
                     key: "sku",
                     style: "text-align: center;max-width: 50px;"
@@ -90,30 +70,26 @@
                     key: "details"
                 }
         }}>
-                <div slot="cell" class="truncate" let:index let:key let:data let:rowData>
-                    {#if key === 'details'}
-                        <CellDetails bind:openIndex={openIndex} {index} {rowData} {fetchProducts} />
-                    {:else if key === 'stock.amount'}
-                        <CellStock {index} {key} {data} {rowData}/>
-                    {:else if key === 'active'}
-                        <div class="active" class:is--active={data}>
-                            {#if data === true}
-                                {@html iconCheck}
-                            {:else}
-                                {@html iconClose}
-                            {/if}
-                        </div>
-                    {:else if key === 'price'}
-                        {!data ? "" : StringUtils.formatCurrency(data)}
-                    {:else}
-                        {data || ""}
-                    {/if}
-                </div>
-            </PaginatedList>
-        {:catch error}
-
-        {/await}
-
+            <div slot="cell" class="truncate" let:index let:key let:data let:rowData>
+                {#if key === 'details'}
+                    <CellDetails bind:openIndex={openIndex} {index} {rowData} />
+                {:else if key === 'stock.amount'}
+                    <CellStock {index} {key} {data} {rowData}/>
+                {:else if key === 'active'}
+                    <div class="active" class:is--active={data}>
+                        {#if data === true}
+                            {@html iconCheck}
+                        {:else}
+                            {@html iconClose}
+                        {/if}
+                    </div>
+                {:else if key === 'price'}
+                    {!data ? "" : StringUtils.formatCurrency(data)}
+                {:else}
+                    {data || ""}
+                {/if}
+            </div>
+        </PaginatedList>
     </div>
 </div>
 

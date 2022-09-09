@@ -1,11 +1,10 @@
 <script>
-    import DatePicker from "@beyonk/svelte-datepicker/src/components/DatePicker.svelte";
     import Button from '$lib/forms/button.svelte';
-    import AppointmentsDrawer from './appointments-drawer.svelte';
-    import {CalendarStyles} from "../../../../utils/CalendarStyles.js";
-    import {iconChevronLeft, iconChevronRight} from "../../../../lib/icons.js";
+    import InputField from '$lib/forms/input-field.svelte';
+    import {iconCalendar, iconChevronLeft, iconChevronRight} from "../../../../lib/icons.js";
 
-    export let selectedDate;
+    export let selectedDate = new Date();
+    let reRender = false;
 
     $: dateString = selectedDate ? selectedDate.toLocaleDateString('en-US', {
         weekday: 'long',
@@ -18,7 +17,7 @@
 
 <div class="header">
     <div>
-        <AppointmentsDrawer />
+<!--        <AppointmentsDrawer/>-->
     </div>
     <div>
         <h1>{dateString}</h1>
@@ -27,12 +26,16 @@
         <Button type="button" color="icon" icon={iconChevronLeft} callback={() => {
                 selectedDate.setDate(selectedDate.getDate() - 1);
                 selectedDate = selectedDate;
-            }} />
-        <DatePicker styling={CalendarStyles.appointments()} format='MM / DD / YYYY' continueText={"Select"} bind:selected={selectedDate}></DatePicker>
+                reRender = !reRender;
+            }}/>
+        {#key reRender}
+            <InputField type="date" icon={iconCalendar} bind:value={selectedDate}/>
+        {/key}
         <Button type="button" color="icon" icon={iconChevronRight} callback={() => {
                 selectedDate.setDate(selectedDate.getDate() + 1);
                 selectedDate = selectedDate;
-            }} />
+                reRender = !reRender;
+            }}/>
     </div>
 </div>
 
@@ -47,7 +50,9 @@
     border-top: 1px solid var(--border-color);
     border-right: 1px solid var(--border-color);
     background-color: white;
-    display: flex;
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     align-items: center;
     justify-content: space-between;
     padding: 0 3rem;
@@ -58,6 +63,7 @@
       line-height: 1;
       font-weight: 800;
       font-size: 2rem;
+      text-align: center;
 
       @media screen and (max-width: 800px) {
         font-size: 1.2rem;
@@ -68,6 +74,7 @@
       display: flex;
       align-items: center;
       gap: 0.25rem;
+      justify-self: flex-end;
     }
   }
 </style>

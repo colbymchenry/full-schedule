@@ -6,6 +6,7 @@
     import Header from './_components/header.svelte';
     import Timestamp from './_components/timestamp.svelte';
     import Timeline from './_components/timeline.svelte';
+    import AppointmentsDrawer from './_components/appointments-drawer.svelte';
     import {FirebaseClient} from "../../../utils/firebase/FirebaseClient.js";
     import {Api} from "../../../utils/Api.js";
     import {showToast} from "../../../utils/logger.js";
@@ -17,6 +18,8 @@
 
     let selectedDate = new Date();
     selectedDate.setHours(0, 0, 0, 0);
+
+    let slotVisible;
 
     let staffAccounts = new Promise(fetchStaff);
 
@@ -57,15 +60,15 @@
     <div class="container">
         {#await staffAccounts}
             <div style="max-width: 100%;display: flex;padding-left: 4.5rem;">
-                {#each [0,1,2,3] as number (number)}
+                {#each [0, 1, 2, 3] as number (number)}
                     <Skeleton width="100%" height="75px">
-                        <circle cx="50" cy="50" r="24" stroke="black" />
+                        <circle cx="50" cy="50" r="24" stroke="black"/>
                         <rect width={MathHelper.getNumberFromRange(100, 280)} height="10" x="90" y="44" rx="5" ry="5"/>
                     </Skeleton>
                 {/each}
             </div>
         {:then data}
-            <Timeline />
+            <Timeline/>
             <table>
                 <thead class="shadow" class:fill={!staffAccounts || !staffAccounts.length}>
                 <tr>
@@ -96,6 +99,12 @@
                         {#each staffAccounts as staff}
                             <td>
                                 <Timestamp timestamp={timestamp} staffAccounts={staffAccounts} staff={staff}/>
+                                <span class="new-app-drawer" class:visible={slotVisible === timestamp + staff.doc_id}
+                                      on:click={() => slotVisible = timestamp + staff.doc_id}>
+                                    {#key slotVisible}
+                                        <AppointmentsDrawer bind:slotVisible={slotVisible}/>
+                                    {/key}
+                                </span>
                             </td>
                         {/each}
                     </tr>
@@ -114,6 +123,21 @@
 
   section {
     position: relative;
+  }
+
+  .new-app-drawer {
+    position: absolute;
+    top: 0.25rem;
+    right: 0.25rem;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+
+    &.visible {
+      visibility: visible;
+      opacity: 1;
+      pointer-events: all;
+    }
   }
 
   .container {
@@ -153,12 +177,23 @@
       tbody > tr {
         height: 100px;
 
+        // each actual time slot to display an appointment
         td {
           border-right: 1px solid var(--border-color);
           border-top: 1px solid var(--border-color);
           min-width: 300px;
+          position: relative;
+
+          &:hover {
+            .new-app-drawer {
+              visibility: visible;
+              opacity: 1;
+              pointer-events: all;
+            }
+          }
         }
 
+        // first column with the time stamp
         td:first-of-type {
           min-width: unset;
           position: sticky;

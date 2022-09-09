@@ -6,7 +6,6 @@
     import _ from 'lodash';
     import {MathHelper} from "../../../../../utils/MathHelper.js";
     import {ApiProgressBar} from "../../../../../utils/ApiProgressBar.js";
-    import {Api} from "../../../../../utils/Api.js";
     import {showToast} from "../../../../../utils/logger.js";
     import {iconBirthday, iconClose, iconMail, iconPhone, iconPin, iconUser} from "../../../../../lib/icons.js";
     import {FormHelper} from "../../../../../utils/FormHelper.js";
@@ -146,7 +145,7 @@
             <InputField label="Address" name="address" icon={iconPin} value={client?.address}
                         disablePrefill bind:form_errors={form_errors}/>
 
-            <InputField label="Birthday" name="birthday" type="date" icon={iconBirthday} value={client?.birthday}
+            <InputField label="Birthday" name="birthday" type="date" icon={iconBirthday} value={client?.birthday ? new Date(client.birthday) : null}
                         disablePrefill bind:form_errors={form_errors}
             />
 

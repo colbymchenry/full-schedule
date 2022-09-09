@@ -147,6 +147,7 @@
     h1 {
       font-weight: 700;
       font-size: 2rem;
+      text-transform: capitalize;
     }
 
     .content {

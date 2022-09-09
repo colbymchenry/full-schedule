@@ -160,6 +160,19 @@ export class FirebaseClient {
         return undefined;
     }
 
+    static async queryAdv(q) {
+        if (browser) {
+            const querySnapshot = await getDocs(q);
+            let result = []
+            querySnapshot.forEach((doc) => {
+                result.push({...doc.data(), doc_id: doc.id})
+            });
+            return result;
+        }
+
+        return undefined;
+    }
+
     static async doc(collectionName, docId) {
         if (browser) {
             const docRef = doc(firebaseDb, collectionName, docId)

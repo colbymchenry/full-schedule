@@ -3,6 +3,7 @@
     import Swal from "sweetalert2";
     import {Api} from "../utils/Api.js";
     import {FirebaseClient} from "../utils/firebase/FirebaseClient.js";
+    import {StringUtils} from "../utils/StringUtils.js";
 
     export let user;
     export let src;
@@ -109,9 +110,12 @@
 </script>
 
 <div class={`avatar ${clazz || ''} ${size || 'small'} ${uploading ? 'uploading' : ''}`} class:is--square={square}>
-    <div on:click={openFileDrawer} class:canEdit={canEdit} style={files?.length || photoSrc ? "background-color: transparent !important;border: none !important;" : ""}>
+    <div on:click={openFileDrawer} class:canEdit={canEdit}
+         style={files?.length || photoSrc ? "background-color: transparent !important;border: none !important;" : ""}>
         {#if photoSrc || newSrc}
             <img {style} src={newSrc || photoSrc} loading="lazy" alt="">
+        {:else if !canEdit}
+            <span>{StringUtils.getInitials(user?.displayName)}</span>
         {:else}
             {@html iconPhotoLibrary}
         {/if}
@@ -124,6 +128,10 @@
 <style lang="scss">
 
   .avatar {
+    span {
+      font-size: 0.8rem;
+    }
+
     img, div {
       border-radius: 100%;
       object-fit: cover;
@@ -140,6 +148,16 @@
       z-index: 1066;
     }
 
+    &.xxx-small img, &.xxx-small div {
+      width: 16px;
+      height: 16px;
+    }
+
+    &.xx-small img, &.xx-small div {
+      width: 24px;
+      height: 24px;
+    }
+
     &.x-small img, &.x-small div {
       width: 32px;
       height: 32px;
@@ -148,6 +166,11 @@
     &.small img, &.small div {
       width: 48px;
       height: 48px;
+    }
+
+    &.normal img, &.normal div {
+      width: 62px;
+      height: 62px;
     }
 
     &.medium img, &.medium div {

@@ -26,7 +26,7 @@ export async function get({request, url}) {
     }))
 
     console.log("FAILED", failed);
-    console.log("SUCCESS", failed);
+    console.log("SUCCESS", success);
 
     return {
         status: 200,

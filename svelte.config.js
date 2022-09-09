@@ -4,12 +4,7 @@ import {sveltePreprocess} from "svelte-preprocess/dist/autoProcess.js";
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
   kit: {
-    adapter: adapter(),
-    vite: {
-      ssr: {
-        noExternal: [ 'dayjs' ]
-      }
-    }
+    adapter: adapter()
   },
   preprocess: sveltePreprocess()
 };

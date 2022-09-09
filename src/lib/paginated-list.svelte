@@ -2,27 +2,72 @@
     import Select from '$lib/forms/select.svelte';
     import Button from '$lib/forms/button.svelte';
     import {JsonHelper} from "../utils/JsonHelper";
+    import {collection, doc, getDoc, limit, orderBy, query, startAfter} from "firebase/firestore";
+    import {FirebaseClient} from "../utils/firebase/FirebaseClient.js";
+    import {showToast} from "../utils/logger.js";
+    import {onMount} from "svelte";
 
-    export let data = [];
     export let columns = {};
     export let style = "";
     export let slim = false;
+    export let table;
+
+
+    export let data = [];
+
+    let allDocs = [];
     let page = 0;
     let itemsPerPage = 10;
+    let fetching = false;
 
-    $: indexStart = Math.floor((page * itemsPerPage));
-    $: indexEnd = (Math.floor((page * itemsPerPage)) + Math.floor(itemsPerPage));
+    $: totalSize = allDocs.length;
 
-    $: lastPage = Math.max(0, Math.ceil(data.length / itemsPerPage) - 1);
+    $: indexStart = page * itemsPerPage;
+    $: indexEnd = indexStart + itemsPerPage;
+
+    $: lastPage = Math.max(0, Math.ceil(totalSize / itemsPerPage) - 1);
+
+
 
     const iconToBeginning = `<svg viewBox="0 0 24 24" focusable="false" fill="currentColor" width="48" height="48"><path d="M18.41 16.59L13.82 12l4.59-4.59L17 6l-6 6 6 6zM6 6h2v12H6z"></path></svg>`;
     const iconPageBack = `<svg viewBox="0 0 24 24" fill="currentColor" width="48" height="48" focusable="false"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path></svg>`;
     const iconPageForward = `<svg viewBox="0 0 24 24" fill="currentColor" width="48" height="48" focusable="false" style="transform: rotateY(180deg);"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path></svg>`;
     const iconToEnd = `<svg viewBox="0 0 24 24" focusable="false" fill="currentColor" width="48" height="48" style="transform: rotateY(180deg);"><path d="M18.41 16.59L13.82 12l4.59-4.59L17 6l-6 6 6 6zM6 6h2v12H6z"></path></svg>`;
+
+    // TODO: https://firebase.google.com/docs/firestore/query-data/query-cursors
+
+    onMount(async () => {
+        await fetchData();
+    });
+
+    async function fetchData() {
+        fetching = true;
+        try {
+            let ref = collection(FirebaseClient.db(), table);
+
+            // if there is no docs pulled yet, pull them
+            if (!allDocs.length) {
+                allDocs = (await FirebaseClient.queryAdv(query(ref, orderBy("name", "desc"))));
+            }
+
+            // get last document to paginate
+            const docSnap = await getDoc(doc(ref, allDocs[page * itemsPerPage].doc_id));
+
+            if (data.length) {
+                data = await FirebaseClient.queryAdv(query(ref, orderBy("name", "desc"), startAfter(docSnap), limit(itemsPerPage)));
+            } else {
+                data = await FirebaseClient.queryAdv(query(ref, orderBy("name", "desc"), limit(itemsPerPage)));
+            }
+        } catch (error) {
+            showToast();
+            console.error(error);
+        }
+        fetching = false;
+    }
 </script>
 
 
-<div class="paginated-list" style={style} class:slim={slim}>
+<div class="paginated-list" {style} class:slim={slim}>
     <table>
         <thead class="shadow">
         <tr>
@@ -30,19 +75,17 @@
                 <th style={columns[column]?.style}>{column}</th>
             {/each}
         </tr>
-
         </thead>
         <tbody>
         {#each data as data, i}
-            {#if i >= indexStart && i < indexEnd}
-                <tr>
-                    {#each Object.keys(columns) as column}
-                        <td style={columns[column]?.style}>
-                            <slot name="cell" index={i} key={columns[column].key} data={JsonHelper.get(data, columns[column].key)} rowData={data} />
-                        </td>
-                    {/each}
-                </tr>
-            {/if}
+            <tr>
+                {#each Object.keys(columns) as column}
+                    <td style={columns[column]?.style}>
+                        <slot name="cell" index={i} key={columns[column].key}
+                              data={JsonHelper.get(data, columns[column].key)} rowData={data}/>
+                    </td>
+                {/each}
+            </tr>
         {/each}
         </tbody>
     </table>
@@ -60,15 +103,29 @@
         </div>
 
         <div>
-            <span>{indexStart + 1} - {indexEnd > data?.length ? data?.length : indexEnd} of {data?.length}</span>
+            <span>{indexStart + 1} - {Math.min(totalSize, indexEnd + 1)} of {totalSize}</span>
         </div>
 
         <div>
-            <Button disabled={page === 0} color="icon" icon={iconToBeginning} callback={() => page = 0}></Button>
-            <Button disabled={page === 0} color="icon"
-                    icon={iconPageBack} callback={() => page = Math.max(0, page - 1)}></Button>
-            <Button disabled={page === lastPage} color="icon" icon={iconPageForward} callback={() => page = Math.min(lastPage, page + 1)}></Button>
-            <Button disabled={page === lastPage} color="icon" icon={iconToEnd} callback={() => page = lastPage}></Button>
+            <Button disabled={fetching || page === 0} color="icon" icon={iconToBeginning} callback={() => {
+                page = 0;
+                fetchData();
+            }}></Button>
+            <Button disabled={fetching || page === 0} color="icon" icon={iconPageBack}
+                    callback={() => {
+                        page = Math.max(0, page - 1);
+                          fetchData();
+                    }}></Button>
+            <Button disabled={fetching || page === lastPage} color="icon" icon={iconPageForward}
+                    callback={() => {
+                        page = Math.min(lastPage, page + 1);
+                          fetchData();
+                    }}></Button>
+            <Button disabled={fetching || page === lastPage} color="icon" icon={iconToEnd}
+                    callback={() => {
+                        page = lastPage;
+                          fetchData();
+                    }}></Button>
         </div>
     </div>
 </div>
