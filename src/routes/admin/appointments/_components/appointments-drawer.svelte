@@ -2,14 +2,24 @@
     import AppDrawer from '$lib/drawers/app-drawer.svelte';
     import SearchWithResults from '$lib/forms/search-with-results.svelte';
     import Form from '$lib/forms/form.svelte';
-    import Row from '$lib/forms/row.svelte';
     import Avatar from '$lib/avatar.svelte';
+    import Checkbox from '$lib/forms/checkbox.svelte';
     import {iconBirthday, iconMail, iconNotes, iconPhone, iconPin, iconPlus} from "../../../../lib/icons.js";
     import {FirebaseClient} from "../../../../utils/firebase/FirebaseClient.js";
     import {where} from "firebase/firestore";
 
-    export let date, onClose, slotVisible;
+
+    export let date, slotVisible;
     let customer;
+    let services = new Promise(fetchServices);
+
+    async function fetchServices() {
+        try {
+            services = await FirebaseClient.query("services", where("active", "==", true));
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     async function onSubmit(formData) {
 
@@ -24,10 +34,12 @@
         <h3>New Appointment</h3>
 
         <Form onSubmit={onSubmit} hideFooter style="margin-top: 1rem;">
-            <Row>
-                <div class="search-container">
-                    <label>Client</label>
-                    <SearchWithResults let:data style="flex-grow: 1;" performSearch={async (text) => {
+            <div class="form-container">
+                <!-- left side -->
+                <div>
+                    <div class="search-container">
+                        <label>Client</label>
+                        <SearchWithResults let:data style="flex-grow: 1;" performSearch={async (text) => {
                                 if (text) {
                                     try {
                                         // this functionality allows for searching 'startsWith' basically.
@@ -47,83 +59,113 @@
                             }} onSelect={(value) => {
                                 customer = value;
                             }}>
-                        <!-- When clicked we need to add the product to the service-->
-                        <span class="result">
+                            <!-- When clicked we need to add the product to the service-->
+                            <span class="result">
                             <Avatar user={data} size="xx-small"/>
                             <span>{data.displayName}</span>
                         </span>
-                    </SearchWithResults>
-                </div>
-            </Row>
-
-            <Row>
-                {#if customer}
-                    <div class="customer-info">
-                        <div class="name">
-                            <Avatar user={customer} size="small"/>
-                            <h3>{customer?.displayName || "No Name"}</h3>
-                        </div>
-
-                        <section class="content">
-                            <div class="icon">
-                                {@html iconMail}
-                            </div>
-                            <div class="info">
-                                <a href={`mailto:${customer?.email}`}>{customer?.email}</a>
-                            </div>
-                            {#if customer?.phoneNumber}
-                                <div class="icon">
-                                    {@html iconPhone}
-                                </div>
-                                <div class="info">
-                                    <a href={`tel:${customer.phoneNumber}`} class="font-mono">{customer.phoneNumber.replace(/^(?:\+?1[-.●]?)?\(?([0-9]{3})\)?[-.●]?([0-9]{3})[-.●]?([0-9]{4})$/, '+1 $1 $2 $3')}</a>
-                                </div>
-                            {/if}
-                            {#if customer?.address}
-                                <div class="icon">
-                                    {@html iconPin}
-                                </div>
-                                <div class="info">
-                                    {customer.address}
-                                </div>
-                            {/if}
-                            {#if customer?.birthday}
-                                <div class="icon">
-                                    {@html iconBirthday}
-                                </div>
-                                <div class="info">
-                                    {new Date(customer.birthday).toLocaleDateString('en-US', {
-                                        year: 'numeric',
-                                        month: 'long',
-                                        day: 'numeric'
-                                    })}
-                                </div>
-                            {/if}
-                            {#if customer?.notes}
-                                <div class="icon">
-                                    {@html iconNotes}
-                                </div>
-                                <div class="info">
-                                    {@html customer.notes}
-                                </div>
-                            {/if}
-                        </section>
+                        </SearchWithResults>
                     </div>
-                {/if}
-            </Row>
-            <br/>
+                    {#if customer}
+                        <div class="customer-info">
+                            <div class="name">
+                                <Avatar user={customer} size="small"/>
+                                <h3>{customer?.displayName || "No Name"}</h3>
+                            </div>
+
+                            <section class="content">
+                                <div class="icon">
+                                    {@html iconMail}
+                                </div>
+                                <div class="info">
+                                    <a href={`mailto:${customer?.email}`}>{customer?.email}</a>
+                                </div>
+                                {#if customer?.phoneNumber}
+                                    <div class="icon">
+                                        {@html iconPhone}
+                                    </div>
+                                    <div class="info">
+                                        <a href={`tel:${customer.phoneNumber}`}
+                                           class="font-mono">{customer.phoneNumber.replace(/^(?:\+?1[-.●]?)?\(?([0-9]{3})\)?[-.●]?([0-9]{3})[-.●]?([0-9]{4})$/, '+1 $1 $2 $3')}</a>
+                                    </div>
+                                {/if}
+                                {#if customer?.address}
+                                    <div class="icon">
+                                        {@html iconPin}
+                                    </div>
+                                    <div class="info">
+                                        {customer.address}
+                                    </div>
+                                {/if}
+                                {#if customer?.birthday}
+                                    <div class="icon">
+                                        {@html iconBirthday}
+                                    </div>
+                                    <div class="info">
+                                        {new Date(customer.birthday).toLocaleDateString('en-US', {
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric'
+                                        })}
+                                    </div>
+                                {/if}
+                                {#if customer?.notes}
+                                    <div class="icon">
+                                        {@html iconNotes}
+                                    </div>
+                                    <div class="info">
+                                        {@html customer.notes}
+                                    </div>
+                                {/if}
+                            </section>
+                        </div>
+                    {/if}
+                </div>
+
+                <!-- Right Side -->
+                <div class="services-container">
+                    <div></div>
+                    <div>
+                        {#await services}
+                            <p>Fetching services...</p>
+                        {:then data}
+                            {#each data as service}
+                                <Checkbox name="services" value={service.doc_id}>{service.name}</Checkbox>
+                            {/each}
+                        {:catch error}
+                            <p>Error fetching services...</p>
+                        {/await}
+                    </div>
+                </div>
+            </div>
         </Form>
     </div>
 </AppDrawer>
 
 
 <style lang="scss">
+  .form-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 1rem;
+  }
 
+  .services-container {
+    border: 1px solid var(--border-color);
+    height: 100%;
 
+    > div:first-of-type {
 
+    }
+
+    > div:last-of-type {
+
+    }
+  }
 
   .customer-info {
     margin-top: 1rem;
+
     .name {
       display: flex;
       align-items: center;

@@ -17,12 +17,6 @@
 
 <div class="header">
     <div>
-<!--        <AppointmentsDrawer/>-->
-    </div>
-    <div>
-        <h1>{dateString}</h1>
-    </div>
-    <div>
         <Button type="button" color="icon" icon={iconChevronLeft} callback={() => {
                 selectedDate.setDate(selectedDate.getDate() - 1);
                 selectedDate = selectedDate;
@@ -36,6 +30,12 @@
                 selectedDate = selectedDate;
                 reRender = !reRender;
             }}/>
+    </div>
+    <div>
+        <h1>{dateString}</h1>
+    </div>
+    <div>
+
     </div>
 </div>
 
@@ -62,19 +62,20 @@
       letter-spacing: -.025em;
       line-height: 1;
       font-weight: 800;
-      font-size: 2rem;
+      font-size: 1.5rem;
       text-align: center;
+      white-space: nowrap;
 
       @media screen and (max-width: 800px) {
         font-size: 1.2rem;
       }
     }
 
-    > div:last-of-type {
+    > div:first-of-type {
       display: flex;
       align-items: center;
       gap: 0.25rem;
-      justify-self: flex-end;
+      justify-self: flex-start;
     }
   }
 </style>

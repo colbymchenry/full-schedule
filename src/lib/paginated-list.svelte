@@ -46,7 +46,7 @@
 
             // if there is no docs pulled yet, pull them
             if (!allDocs.length) {
-                allDocs = (await FirebaseClient.queryAdv(query(ref, orderBy("name", "asc"))));
+                allDocs = (await FirebaseClient.getSnapshot(query(ref, orderBy("name", "asc"))));
             }
 
             // get last document to paginate
