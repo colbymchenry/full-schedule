@@ -149,12 +149,12 @@
   .footer-controls {
     background-color: rgb(248 250 252 / 1);
     color: var(--secondary-color);
+    border-top: 1px solid var(--border-color);
+    padding: 0 2rem;
     min-height: 4.5rem;
     width: 100%;
-    padding: 0 2rem;
     display: flex;
     align-items: center;
-    border-top: 1px solid var(--border-color);
     position: sticky;
     bottom: 0;
     left: 0;

@@ -2,6 +2,7 @@
     import Spinner from "./spinner.svelte";
     export let color = "primary";
     export let type = "submit";
+    export let isIcon;
     export let icon;
     export let callback;
     export let style;
@@ -9,8 +10,8 @@
     export let disabled = loading;
 </script>
 
-{#if icon && color === "icon" }
-    <button {type} {style} {disabled} class={'icon'} class:loading={loading} on:click={callback}><span>{@html icon}</span></button>
+{#if (icon && color === "icon") || isIcon }
+    <button {type} {style} {disabled} class={`icon ${color ? color : ''}`} class:loading={loading} on:click={callback}><span>{@html icon}</span></button>
 {:else}
     <button {type} {style} {disabled} class={`btn ${icon ? 'has--icon ' : ''}` + color} class:loading={loading} on:click={callback}><span>{#if loading}<Spinner color="#fff" size="1.5rem" />{:else}{#if icon}<div class="icon">{@html icon}</div>{/if}<slot></slot> {/if}</span>
     </button>
@@ -104,7 +105,6 @@
     &.delete {
       background-color: transparent;
       color: var(--error-color);
-
       &:hover {
         background-color: #f4e4e5;
       }
@@ -201,6 +201,14 @@
       height: 100%;
       //z-index: 2;
       transform: scale(0.6);
+    }
+
+    &.delete {
+      background-color: transparent;
+      color: var(--error-color);
+      &:hover {
+        background-color: #f4e4e5;
+      }
     }
   }
 

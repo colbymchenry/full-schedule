@@ -4,7 +4,8 @@
     import Form from '$lib/forms/form.svelte';
     import Avatar from '$lib/avatar.svelte';
     import Checkbox from '$lib/forms/checkbox.svelte';
-    import {iconBirthday, iconMail, iconNotes, iconPhone, iconPin, iconPlus} from "../../../../lib/icons.js";
+    import Button from '$lib/forms/button.svelte';
+    import {iconBirthday, iconMail, iconNotes, iconPhone, iconPin, iconPlus, iconTrash} from "../../../../lib/icons.js";
     import {FirebaseClient} from "../../../../utils/firebase/FirebaseClient.js";
     import {where} from "firebase/firestore";
 
@@ -69,8 +70,11 @@
                     {#if customer}
                         <div class="customer-info">
                             <div class="name">
-                                <Avatar user={customer} size="small"/>
-                                <h3>{customer?.displayName || "No Name"}</h3>
+                                <div>
+                                    <Avatar user={customer} size="small"/>
+                                    <h3>{customer?.displayName || "No Name"}</h3>
+                                </div>
+                                <Button type="button" color="delete" icon={iconTrash} isIcon callback={() => customer = undefined} />
                             </div>
 
                             <section class="content">
@@ -124,7 +128,7 @@
 
                 <!-- Right Side -->
                 <div class="services-container">
-                    <div></div>
+                    <div>Services</div>
                     <div>
                         {#await services}
                             <p>Fetching services...</p>
@@ -155,11 +159,25 @@
     height: 100%;
 
     > div:first-of-type {
-
+      background-color: rgb(248 250 252 / 1);
+      color: var(--secondary-color);
+      border-bottom: 1px solid var(--border-color);
+      padding: 0 1rem;
+      height: 2rem;
+      display: flex;
+      align-items: center;
     }
 
     > div:last-of-type {
-
+      padding: 1rem;
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-auto-rows: 2rem;
+      row-gap: 0.5rem;
+      height: 20rem;
+      max-height: 20rem;
+      overflow-y: auto;
+      align-items: flex-start;
     }
   }
 
@@ -169,12 +187,18 @@
     .name {
       display: flex;
       align-items: center;
+      justify-content: space-between;
 
-      h3 {
-        text-transform: capitalize;
-        font-weight: 700;
-        font-size: 1.25rem;
-        margin-left: 1rem;
+      > div {
+        display: flex;
+        align-items: center;
+
+        h3 {
+          text-transform: capitalize;
+          font-weight: 700;
+          font-size: 1.25rem;
+          margin-left: 1rem;
+        }
       }
     }
 
