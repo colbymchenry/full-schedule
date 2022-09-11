@@ -102,7 +102,7 @@
                                 <span class="new-app-drawer" class:visible={slotVisible === timestamp + staff.doc_id}
                                       on:click={() => slotVisible = timestamp + staff.doc_id}>
                                     {#key slotVisible}
-                                        <AppointmentsDrawer bind:slotVisible={slotVisible}/>
+                                        <AppointmentsDrawer bind:slotVisible={slotVisible} date={selectedDate} staff={staff} timestamp={timestamp}/>
                                     {/key}
                                 </span>
                             </td>

@@ -44,7 +44,7 @@ export class GoogleCalendarAPI {
     }
 
     async createCalendar(name) {
-        const timeZone = await this.settings.get("time_zone");
+        const timeZone = this.settings?.address?.timeZone;
         return (await this.calendar.calendars.insert({
             requestBody: {
                 summary: name || "Full Schedule - MASTER",
@@ -81,7 +81,7 @@ export class GoogleCalendarAPI {
 // ),
 // ));
     async postEvent(location, summary, description, startTime, endTime, attendees, extendedProperties) {
-        const timeZone = await this.settings?.address?.timezone;
+        const timeZone = this.settings?.address?.timeZone;
         const res = await this.calendar.events.insert({
             calendarId: this.calendarId,
             resource: {

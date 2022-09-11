@@ -7,7 +7,7 @@
     import CellDetails from '$lib/cell-details.svelte';
     import PaginatedList from '$lib/paginated-list.svelte';
     import SearchWithResults from '$lib/forms/search-with-results.svelte';
-    import {iconDollar} from "../../../../lib/icons.js";
+    import {iconClock, iconDollar, iconHeroClock} from "../../../../lib/icons.js";
     import {showToast} from "../../../../utils/logger.js";
     import {FirebaseClient} from "../../../../utils/firebase/FirebaseClient.js";
     import {where} from 'firebase/firestore';
@@ -78,7 +78,7 @@
                                     bind:form_errors={form_errors}
                         />
                     </div>
-                    <div style="display: grid;grid-template-columns: 1fr 1fr;grid-template-rows: 1fr;column-gap: 1rem;">
+                    <div style="display: grid;grid-template-columns: 1fr 0.3fr 0.3fr ;grid-template-rows: 1fr;column-gap: 1rem;">
                         <Select name="category" label="Category *" required value={rowData['category']}
                                 bind:form_errors={form_errors}>
                             <option value="wellness">Wellness</option>
@@ -87,6 +87,11 @@
                         <InputField name="price" label="Price *" required type="number" min="0" step="1"
                                     icon={iconDollar} value={rowData?.price}
                                     disablePrefill bind:form_errors={form_errors}/>
+                        <InputField name="duration" label="Duration *" required type="number" min="0" step="1"
+                                    icon={iconHeroClock} value={rowData?.duration}
+                                    disablePrefill bind:form_errors={form_errors}
+                                    hint="Default duration in minutes."
+                        />
                     </div>
 
                     <div style="display: grid;grid-template-columns: 1fr;grid-template-rows: 1fr;column-gap: 1rem;">

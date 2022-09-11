@@ -8,10 +8,13 @@
     import {iconBirthday, iconMail, iconNotes, iconPhone, iconPin, iconPlus, iconTrash} from "../../../../lib/icons.js";
     import {FirebaseClient} from "../../../../utils/firebase/FirebaseClient.js";
     import {where} from "firebase/firestore";
+    import {TimeHelper} from "../../../../utils/TimeHelper.js";
 
 
-    export let date, slotVisible;
-    let customer;
+    export let date, timestamp, staff, slotVisible;
+
+    let client;
+    let form_errors = {};
     let services = new Promise(fetchServices);
 
     async function fetchServices() {
@@ -23,7 +26,16 @@
     }
 
     async function onSubmit(formData) {
+        console.log(formData)
+        if (!client) {
+            form_errors["client"] = true;
+            form_errors = form_errors;
+        }
 
+        if (!formData["services"]?.length) {
+            form_errors["services"] = true;
+            form_errors = form_errors;
+        }
     }
 </script>
 
@@ -34,12 +46,16 @@
     <div class="container">
         <h3>New Appointment</h3>
 
-        <Form onSubmit={onSubmit} hideFooter style="margin-top: 1rem;">
+        <Form onSubmit={onSubmit} hideFooter style="margin-top: 1rem;" onChange={(e) => {
+            console.log("HERE")
+            delete form_errors[e.target.name];
+            form_errors = form_errors;
+        }}>
             <div class="form-container">
                 <!-- left side -->
                 <div>
-                    <div class="search-container">
-                        <label>Client</label>
+                    <div class="search-container" class:error={form_errors["client"]}>
+                        <label >Client</label>
                         <SearchWithResults let:data style="flex-grow: 1;" performSearch={async (text) => {
                                 if (text) {
                                     try {
@@ -58,7 +74,7 @@
                                 }
                                 return [];
                             }} onSelect={(value) => {
-                                customer = value;
+                                client = value;
                             }}>
                             <!-- When clicked we need to add the product to the service-->
                             <span class="result">
@@ -67,14 +83,15 @@
                         </span>
                         </SearchWithResults>
                     </div>
-                    {#if customer}
-                        <div class="customer-info">
+                    {#if client}
+                        <input type="hidden" value={client.doc_id} name="client" />
+                        <div class="client-info">
                             <div class="name">
                                 <div>
-                                    <Avatar user={customer} size="small"/>
-                                    <h3>{customer?.displayName || "No Name"}</h3>
+                                    <Avatar user={client} size="small"/>
+                                    <h3>{client?.displayName || "No Name"}</h3>
                                 </div>
-                                <Button type="button" color="delete" icon={iconTrash} isIcon callback={() => customer = undefined} />
+                                <Button type="button" color="delete" icon={iconTrash} isIcon callback={() => client = undefined} />
                             </div>
 
                             <section class="content">
@@ -82,43 +99,43 @@
                                     {@html iconMail}
                                 </div>
                                 <div class="info">
-                                    <a href={`mailto:${customer?.email}`}>{customer?.email}</a>
+                                    <a href={`mailto:${client?.email}`}>{client?.email}</a>
                                 </div>
-                                {#if customer?.phoneNumber}
+                                {#if client?.phoneNumber}
                                     <div class="icon">
                                         {@html iconPhone}
                                     </div>
                                     <div class="info">
-                                        <a href={`tel:${customer.phoneNumber}`}
-                                           class="font-mono">{customer.phoneNumber.replace(/^(?:\+?1[-.●]?)?\(?([0-9]{3})\)?[-.●]?([0-9]{3})[-.●]?([0-9]{4})$/, '+1 $1 $2 $3')}</a>
+                                        <a href={`tel:${client.phoneNumber}`}
+                                           class="font-mono">{client.phoneNumber.replace(/^(?:\+?1[-.●]?)?\(?([0-9]{3})\)?[-.●]?([0-9]{3})[-.●]?([0-9]{4})$/, '+1 $1 $2 $3')}</a>
                                     </div>
                                 {/if}
-                                {#if customer?.address}
+                                {#if client?.address}
                                     <div class="icon">
                                         {@html iconPin}
                                     </div>
                                     <div class="info">
-                                        {customer.address}
+                                        {client.address}
                                     </div>
                                 {/if}
-                                {#if customer?.birthday}
+                                {#if client?.birthday}
                                     <div class="icon">
                                         {@html iconBirthday}
                                     </div>
                                     <div class="info">
-                                        {new Date(customer.birthday).toLocaleDateString('en-US', {
+                                        {new Date(client.birthday).toLocaleDateString('en-US', {
                                             year: 'numeric',
                                             month: 'long',
                                             day: 'numeric'
                                         })}
                                     </div>
                                 {/if}
-                                {#if customer?.notes}
+                                {#if client?.notes}
                                     <div class="icon">
                                         {@html iconNotes}
                                     </div>
                                     <div class="info">
-                                        {@html customer.notes}
+                                        {@html client.notes}
                                     </div>
                                 {/if}
                             </section>
@@ -127,7 +144,7 @@
                 </div>
 
                 <!-- Right Side -->
-                <div class="services-container">
+                <div class="services-container" class:error={form_errors["services"]}>
                     <div>Services</div>
                     <div>
                         {#await services}
@@ -142,21 +159,56 @@
                     </div>
                 </div>
             </div>
+            <div class="form-footer">
+                <div>
+                    <span>{date.toLocaleDateString('en-US', {
+                        weekday: 'long',
+                        month: 'long',
+                        day: 'numeric'
+                    })} @ {TimeHelper.convertTime24to12(timestamp)} with {staff?.displayName}</span>
+                </div>
+                <Button type="submit" disabledIf={!client}>Create</Button>
+            </div>
         </Form>
     </div>
 </AppDrawer>
 
 
 <style lang="scss">
+  .error {
+    color: red;
+    outline: 1px solid red;
+  }
+
   .form-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
     column-gap: 1rem;
+    min-height: 22.25rem;
+    max-height: 22.25rem;
+    overflow-y: hidden;
+    padding: 0.25rem;
+  }
+
+  .form-footer {
+    background-color: rgb(248 250 252 / 1);
+    color: var(--secondary-color);
+    border-top: 1px solid var(--border-color);
+    padding: 0 1rem;
+    height: 3rem;
+    margin-left: -1rem;
+    margin-right: -1rem;
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 
   .services-container {
     border: 1px solid var(--border-color);
-    height: 100%;
+    min-height: 21rem;
+    max-height: 21rem;
+    overflow-y: auto;
 
     > div:first-of-type {
       background-color: rgb(248 250 252 / 1);
@@ -174,15 +226,16 @@
       grid-template-columns: 1fr;
       grid-auto-rows: 2rem;
       row-gap: 0.5rem;
-      height: 20rem;
-      max-height: 20rem;
       overflow-y: auto;
       align-items: flex-start;
     }
   }
 
-  .customer-info {
+  .client-info {
     margin-top: 1rem;
+    overflow-y: auto;
+    min-height: 19rem;
+    max-height: 19rem;
 
     .name {
       display: flex;

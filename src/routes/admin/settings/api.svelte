@@ -59,20 +59,19 @@
         }
     }
 
-
-    onMount(async () => {
+    async function fetchCalendars() {
         if (!calendars.length && browser) {
             try {
                 const { data } = await Api.get("/api/google-calendar");
                 calendars = data.filter(({
-                                            accessRole,
-                                            id,
-                                            summary
-                                        }) => accessRole === "owner" && id !== summary).map(({
-                                                                                                 summary,
-                                                                                                 id,
-                                                                                                 timeZone
-                                                                                             }) => {
+                                             accessRole,
+                                             id,
+                                             summary
+                                         }) => accessRole === "owner" && id !== summary).map(({
+                                                                                                  summary,
+                                                                                                  id,
+                                                                                                  timeZone
+                                                                                              }) => {
                     return {
                         summary, id, timeZone
                     }
@@ -82,6 +81,11 @@
                 console.error(e);
             }
         }
+    }
+
+
+    onMount(async () => {
+        await fetchCalendars();
     });
 
     async function onCalendarChange(e) {
@@ -102,12 +106,17 @@
 
         if (!create.isConfirmed) return;
 
+        ApiProgressBar.start();
         try {
-
+            await Api.post('/api/google-calendar');
+            calendars = [];
+            await fetchCalendars();
         } catch (error) {
             showToast();
             console.error(error);
         }
+        showToast("Master calendar created!", "success");
+        ApiProgressBar.stop();
 
     }
 

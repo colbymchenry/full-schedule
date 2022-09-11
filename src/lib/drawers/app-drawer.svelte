@@ -36,12 +36,6 @@
     }
 </script>
 
-<svelte:window on:click={(e) => {
-    if (visible && !button.contains(e.target)) {
-        closeDrawer();
-    }
-}}/>
-
 <div bind:this={button} class="button">
     <div on:click={() => visible = true}><span class="icon">{@html icon}</span>
         {#if label}{label}{/if}
