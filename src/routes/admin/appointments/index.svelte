@@ -19,6 +19,13 @@
     let selectedDate = new Date();
     selectedDate.setHours(0, 0, 0, 0);
 
+    $: weekday = selectedDate ? selectedDate.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    }).split(",")[0].toLowerCase() : "";
+
     let slotVisible;
 
     let staffAccounts = new Promise(fetchStaff);
@@ -89,26 +96,33 @@
                 </tr>
                 </thead>
                 <tbody>
-                <!-- Each time stamp is a row -->
-                {#each timeMap as timestamp (timestamp)}
-                    <tr>
-                        <!-- Insert time stamp in first column of each row-->
-                        <td>
-                            <span class:small={TimeHelper.convertTime24to12(timestamp).split(":")[1].includes("30")}>{TimeHelper.convertTime24to12(timestamp)}</span>
-                        </td>
-                        {#each staffAccounts as staff}
+                <!-- Key weekday so it re-renders each time the date changes -->
+                {#key weekday}
+                    {#each timeMap as timestamp (timestamp)}
+                        <tr>
+                            <!-- Insert time stamp in first column of each row-->
                             <td>
-                                <Timestamp timestamp={timestamp} staffAccounts={staffAccounts} staff={staff}/>
-                                <span class="new-app-drawer" class:visible={slotVisible === timestamp + staff.doc_id}
-                                      on:click={() => slotVisible = timestamp + staff.doc_id}>
+                                <span class:small={TimeHelper.convertTime24to12(timestamp).split(":")[1].includes("30")}>{TimeHelper.convertTime24to12(timestamp)}</span>
+                            </td>
+                            {#each staffAccounts as staff}
+                                <td>
+                                    <div class="appointment-container">
+                                        <Timestamp timestamp={timestamp} staffAccounts={staffAccounts} staff={staff}
+                                                   weekday={weekday}/>
+                                        <span class="new-app-drawer"
+                                              class:visible={slotVisible === timestamp + staff.doc_id}
+                                              on:click={() => slotVisible = timestamp + staff.doc_id}>
                                     {#key slotVisible}
-                                        <AppointmentsDrawer bind:slotVisible={slotVisible} date={selectedDate} staff={staff} timestamp={timestamp}/>
+                                        <AppointmentsDrawer bind:slotVisible={slotVisible} date={selectedDate}
+                                                            staff={staff} timestamp={timestamp}/>
                                     {/key}
                                 </span>
-                            </td>
-                        {/each}
-                    </tr>
-                {/each}
+                                    </div>
+                                </td>
+                            {/each}
+                        </tr>
+                    {/each}
+                {/key}
 
                 </tbody>
             </table>
@@ -120,6 +134,12 @@
 </section>
 
 <style lang="scss">
+
+  .appointment-container {
+    max-width: 300px;
+    min-width: 300px;
+    position: relative;
+  }
 
   section {
     position: relative;
@@ -171,6 +191,10 @@
             color: var(--secondary-color);
           }
         }
+      }
+
+      tbody {
+        vertical-align: top;
       }
 
       // styles for each timestamp

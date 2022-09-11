@@ -273,6 +273,7 @@
       grid-template-rows: 1fr 1fr;
       column-gap: 0.5rem;
       row-gap: 0.25rem;
+      margin-top: -0.5rem;
     }
   }
 
