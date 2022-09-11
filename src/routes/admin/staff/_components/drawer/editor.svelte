@@ -190,7 +190,7 @@
             <div class="schedule">
                 {#each ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"] as dayOfWeek}
                     <h5>{dayOfWeek}</h5>
-                    <InputField name={`schedule.${dayOfWeek}.enabled`} type="toggle"
+                    <InputField name={`schedule.${dayOfWeek}.enabled`} type="toggle" style="padding-top: 0rem !important;"
                                 value={staff?.schedule ? staff?.schedule[dayOfWeek]?.enabled : null}
                                 bind:form_errors={form_errors} onChange={(val) => {
                                     if (!staff?.schedule)  staff["schedule"] = {};
@@ -203,25 +203,25 @@
                             {#if staff?.schedule && staff?.schedule[dayOfWeek]?.enabled}
 
                                 <Select name={`schedule.${dayOfWeek}.day.start`} value={staff?.schedule[dayOfWeek]?.day?.start}
-                                        bind:form_errors={form_errors} placeholder="Day start" small>
+                                        bind:form_errors={form_errors} placeholder="Day start" small infoTop="Day start">
                                     {#each timeMap as timestamp (timestamp)}
                                         <option value={timestamp}>{TimeHelper.convertTime24to12(timestamp)}</option>
                                     {/each}
                                 </Select>
                                 <Select name={`schedule.${dayOfWeek}.day.end`} value={staff?.schedule[dayOfWeek]?.day?.end}
-                                        bind:form_errors={form_errors} placeholder="Day end" small>
+                                        bind:form_errors={form_errors} placeholder="Day end" small infoTop="Day end">
                                     {#each timeMap as timestamp (timestamp)}
                                         <option value={timestamp}>{TimeHelper.convertTime24to12(timestamp)}</option>
                                     {/each}
                                 </Select>
                                 <Select name={`schedule.${dayOfWeek}.lunch.start`} value={staff?.schedule[dayOfWeek]?.lunch?.start}
-                                        bind:form_errors={form_errors} placeholder="Lunch start" small>
+                                        bind:form_errors={form_errors} placeholder="Lunch start" small infoTop="Lunch start">
                                     {#each timeMap as timestamp (timestamp)}
                                         <option value={timestamp}>{TimeHelper.convertTime24to12(timestamp)}</option>
                                     {/each}
                                 </Select>
                                 <Select name={`schedule.${dayOfWeek}.lunch.end`} value={staff?.schedule[dayOfWeek]?.lunch?.end}
-                                        bind:form_errors={form_errors} placeholder="Lunch end" small>
+                                        bind:form_errors={form_errors} placeholder="Lunch end" small infoTop="Lunch end">
                                     {#each timeMap as timestamp (timestamp)}
                                         <option value={timestamp}>{TimeHelper.convertTime24to12(timestamp)}</option>
                                     {/each}
@@ -260,8 +260,7 @@
   .schedule {
     display: grid;
     grid-template-columns: 0.35fr 0.35fr 1fr;
-    grid-auto-rows: 1fr;
-    align-items: center;
+    grid-auto-rows: auto;
     row-gap: 1rem;
 
     h5 {

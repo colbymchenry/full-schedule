@@ -2,7 +2,7 @@
     import {iconHelp} from "../icons.js";
 
     export let form_errors = {};
-    export let value, label, name, type = "text", icon, disablePrefill, readOnly, hint, info;
+    export let value, label, name, type = "text", icon, disablePrefill, readOnly, hint, info, infoTop;
     export let required = false;
     export let hideDefault = false;
     export let style;
@@ -54,6 +54,11 @@
             {/if}
         </label>
     {/if}
+
+    {#if infoTop}
+        <small style="margin-top: 0 !important;">{infoTop}</small>
+    {/if}
+
     <div class="input-field" class:has--icon={icon} class:is--readonly={readOnly} class:is--error={form_errors[name]}
          class:is--focused={focused}>
         {#if icon}
