@@ -6,7 +6,6 @@
     import Header from './_components/header.svelte';
     import Timestamp from './_components/timestamp.svelte';
     import Timeline from './_components/timeline.svelte';
-    import AppointmentsDrawer from './_components/appointments-drawer.svelte';
     import {FirebaseClient} from "../../../utils/firebase/FirebaseClient.js";
     import {Api} from "../../../utils/Api.js";
     import {showToast} from "../../../utils/logger.js";
@@ -108,15 +107,7 @@
                                 <td>
                                     <div class="appointment-container">
                                         <Timestamp timestamp={timestamp} staffAccounts={staffAccounts} staff={staff}
-                                                   weekday={weekday}/>
-                                        <span class="new-app-drawer"
-                                              class:visible={slotVisible === timestamp + staff.doc_id}
-                                              on:click={() => slotVisible = timestamp + staff.doc_id}>
-                                    {#key slotVisible}
-                                        <AppointmentsDrawer bind:slotVisible={slotVisible} date={selectedDate}
-                                                            staff={staff} timestamp={timestamp}/>
-                                    {/key}
-                                </span>
+                                                   weekday={weekday} bind:slotVisible={slotVisible} bind:date={selectedDate} />
                                     </div>
                                 </td>
                             {/each}
@@ -139,31 +130,17 @@
     max-width: 300px;
     min-width: 300px;
     position: relative;
+    border-left: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
   }
 
   section {
     position: relative;
   }
 
-  .new-app-drawer {
-    position: absolute;
-    top: 0.25rem;
-    right: 0.25rem;
-    visibility: hidden;
-    opacity: 0;
-    pointer-events: none;
-
-    &.visible {
-      visibility: visible;
-      opacity: 1;
-      pointer-events: all;
-    }
-  }
-
   .container {
     position: relative;
     min-width: 100%;
-    border-right: 1px solid var(--border-color);
     text-align: left;
     max-height: calc(100vh - var(--top-bar-height) - var(--top-bar-height));
     max-width: calc(100vw - var(--top-bar-height) - var(--nav-width));
@@ -208,13 +185,7 @@
           min-width: 300px;
           position: relative;
 
-          &:hover {
-            .new-app-drawer {
-              visibility: visible;
-              opacity: 1;
-              pointer-events: all;
-            }
-          }
+
         }
 
         // first column with the time stamp
