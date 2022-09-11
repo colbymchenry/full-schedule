@@ -27,6 +27,7 @@
     import {settings} from "../../../lib/stores.js";
     import {ApiProgressBar} from "../../../utils/ApiProgressBar.js";
     import {JsonHelper} from "../../../utils/JsonHelper.js";
+    import {Api} from "../../../utils/Api.js";
 
     let form_errors = {};
     let storeLogo;
@@ -45,6 +46,10 @@
             }
 
             await FirebaseClient.update("settings", "main", jsonHelper.object);
+
+            if (jsonHelper?.object?.address?.timezone) {
+                await Api.patch('/api/google-calendar', { timeZone: jsonHelper?.object?.address?.timezone})
+            }
         } catch (e) {
             showToast()
             console.error(e);

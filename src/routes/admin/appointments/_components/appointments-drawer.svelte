@@ -5,10 +5,13 @@
     import Avatar from '$lib/avatar.svelte';
     import Checkbox from '$lib/forms/checkbox.svelte';
     import Button from '$lib/forms/button.svelte';
+    import { showToast } from "../../../../utils/logger.js";
     import {iconBirthday, iconMail, iconNotes, iconPhone, iconPin, iconPlus, iconTrash} from "../../../../lib/icons.js";
     import {FirebaseClient} from "../../../../utils/firebase/FirebaseClient.js";
     import {where} from "firebase/firestore";
     import {TimeHelper} from "../../../../utils/TimeHelper.js";
+    import {Api} from "../../../../utils/Api.js";
+    import {ApiProgressBar} from "../../../../utils/ApiProgressBar.js";
 
 
     export let date, timestamp, staff, slotVisible;
@@ -16,6 +19,7 @@
     let client;
     let form_errors = {};
     let services = new Promise(fetchServices);
+    let submitted = false;
 
     async function fetchServices() {
         try {
@@ -26,16 +30,45 @@
     }
 
     async function onSubmit(formData) {
-        console.log(formData)
+        let foundError = false;
+
         if (!client) {
             form_errors["client"] = true;
             form_errors = form_errors;
+            foundError = true;
         }
 
         if (!formData["services"]?.length) {
             form_errors["services"] = true;
             form_errors = form_errors;
+            foundError = true;
         }
+
+        if (foundError) return;
+
+        ApiProgressBar.start();
+        try {
+            delete formData["image"];
+            const [hour, minute] = timestamp.split(":");
+            let payloadDate = new Date(date);
+            payloadDate.setHours(parseInt(hour), parseInt(minute));
+            formData["date"] = payloadDate;
+            formData["staff"] = staff.doc_id;
+            const res = await Api.post('/api/appointment', formData);
+
+            if (res?.code === 1) {
+                slotVisible = undefined;
+                showToast(res?.message)
+                return;
+            }
+
+            showToast("Appointment created!", "success");
+            slotVisible = undefined;
+        } catch (error) {
+            showToast();
+            console.error(error);
+        }
+        ApiProgressBar.stop();
     }
 </script>
 
@@ -47,7 +80,6 @@
         <h3>New Appointment</h3>
 
         <Form onSubmit={onSubmit} hideFooter style="margin-top: 1rem;" onChange={(e) => {
-            console.log("HERE")
             delete form_errors[e.target.name];
             form_errors = form_errors;
         }}>
@@ -55,7 +87,7 @@
                 <!-- left side -->
                 <div>
                     <div class="search-container" class:error={form_errors["client"]}>
-                        <label >Client</label>
+                        <label>Client</label>
                         <SearchWithResults let:data style="flex-grow: 1;" performSearch={async (text) => {
                                 if (text) {
                                     try {
@@ -75,6 +107,8 @@
                                 return [];
                             }} onSelect={(value) => {
                                 client = value;
+                                delete form_errors["client"];
+                                form_errors = form_errors;
                             }}>
                             <!-- When clicked we need to add the product to the service-->
                             <span class="result">
@@ -84,14 +118,15 @@
                         </SearchWithResults>
                     </div>
                     {#if client}
-                        <input type="hidden" value={client.doc_id} name="client" />
+                        <input type="hidden" value={client.doc_id} name="client"/>
                         <div class="client-info">
                             <div class="name">
                                 <div>
                                     <Avatar user={client} size="small"/>
                                     <h3>{client?.displayName || "No Name"}</h3>
                                 </div>
-                                <Button type="button" color="delete" icon={iconTrash} isIcon callback={() => client = undefined} />
+                                <Button type="button" color="delete" icon={iconTrash} isIcon
+                                        callback={() => client = undefined}/>
                             </div>
 
                             <section class="content">
@@ -167,7 +202,7 @@
                         day: 'numeric'
                     })} @ {TimeHelper.convertTime24to12(timestamp)} with {staff?.displayName}</span>
                 </div>
-                <Button type="submit" disabledIf={!client}>Create</Button>
+                <Button type="submit" disabledIf={!client} loading={submitted}>Create</Button>
             </div>
         </Form>
     </div>

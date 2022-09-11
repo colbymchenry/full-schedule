@@ -39,12 +39,18 @@ export class GoogleCalendarAPI {
         return events.data.items;
     }
 
+    // TODO: Not sure if we need to update time zone here, seems every event has it's own unique time zone
+    async updateCalendar(options) {
+        // console.log(this.calendar.settings)
+        // return await this.calendar.settings.update(options);
+    }
+
     async getCalendars() {
         return (await this.calendar.calendarList.list()).data.items;
     }
 
     async createCalendar(name) {
-        const timeZone = this.settings?.address?.timeZone;
+        const timeZone = this.settings?.address?.timezone;
         return (await this.calendar.calendars.insert({
             requestBody: {
                 summary: name || "Full Schedule - MASTER",
@@ -81,7 +87,8 @@ export class GoogleCalendarAPI {
 // ),
 // ));
     async postEvent(location, summary, description, startTime, endTime, attendees, extendedProperties) {
-        const timeZone = this.settings?.address?.timeZone;
+        const timeZone = this.settings?.address?.timezone;
+        console.log(timeZone)
         const res = await this.calendar.events.insert({
             calendarId: this.calendarId,
             resource: {

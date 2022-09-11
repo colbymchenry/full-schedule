@@ -35,11 +35,11 @@
     top: 0;
     left: 0;
     width: 100vw;
-    z-index: 4;
+    z-index: 1001;
     transition: all 0.3s ease;
 
     &::after {
-      z-index: 3;
+      z-index: 1000;
       content: '';
       position: fixed;
       top: 0;
@@ -60,7 +60,7 @@
     height: 5px;
     width: 100%;
     box-shadow: 0 1px 5px #000 inset, 0 1px 0 #444;
-    z-index: 4;
+    z-index: 1001;
   }
 
   .stripes {

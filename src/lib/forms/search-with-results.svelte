@@ -31,7 +31,7 @@
         // Workaround is to wait
         setTimeout(() => {
             visible = false;
-        }, 100);
+        }, 200);
     } else {
         if (searchResults.length) {
             visible = true;

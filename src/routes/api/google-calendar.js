@@ -27,3 +27,29 @@ export async function post({request}) {
         body: {data: await calendarApi.createCalendar()}
     }
 }
+
+export async function patch({request, url}) {
+    await FirebaseAdmin.auth().verifyIdToken(request.headers.get("authorization"));
+
+    try {
+        const res = await request.json();
+        const settings = await (await FirebaseAdmin.firestore().collection("settings").doc("main").get()).data();
+
+        if (settings?.google?.calendars?.appointments) {
+            const calendarApi = await GoogleCalendarAPI.getInstance();
+            await calendarApi.updateCalendar({
+                timeZone: res.timeZone
+            })
+        }
+
+        return {
+            status: 200
+        }
+    } catch (error) {
+        console.error(error);
+        return {
+            status: 500,
+            body: { message: error.message }
+        }
+    }
+}
