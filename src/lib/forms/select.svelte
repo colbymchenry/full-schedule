@@ -8,6 +8,7 @@
     export let style;
     export let small;
     export let onChange;
+    export let placeholder;
 
     let focused = false;
 
@@ -42,7 +43,7 @@
 
 <svelte:window on:mousemove={handleMouseMove}/>
 
-<div class="input-field__container" class:is--small={small}>
+<div class="input-field__container" class:is--small={small} >
     {#if label}
         <label for={name}>
             {label}
@@ -60,10 +61,14 @@
                 {@html icon}
             </div>
         {/if}
-        <select {...inputProps} bind:value={value} on:select={clear_error}
+        <select {...inputProps} bind:value={value} class:placeholder={placeholder} on:select={clear_error}
                 on:focusin={() => focused = true} on:focusout={() => focused = false} on:change={onChange}>
             {#if !hideDefault}
-                <option value="" disabled {selected}>Make a selection</option>
+                {#if placeholder}
+                    <option value="" disabled selected={true}>{placeholder}</option>
+                {:else}
+                    <option value="" disabled {selected}>{placeholder || "Make a selection"}</option>
+                {/if}
             {/if}
             <slot></slot>
         </select>
@@ -196,6 +201,10 @@
       font-family: inherit;
       padding: 0.75rem 0;
       cursor: pointer;
+
+      &.placeholder {
+      }
+
     }
 
     .icon {

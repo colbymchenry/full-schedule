@@ -74,9 +74,10 @@
     {#if type === "toggle"}
         <div class={"input-field toggle" + (clazz ? " " + clazz : "")} class:is--readonly={readOnly}
              class:is--error={form_errors[name]}>
-            <input {name} type="checkbox" on:input={clear_error} {checked} bind:value={value}/>
+            <input {name} type="checkbox" on:input={clear_error} {checked} bind:value={value} style="margin-top: 0 !important;"/>
             <Toggle bind:active={value} onClick={() => {
                 value = !value;
+                if (onChange) onChange(value);
             }}/>
         </div>
     {:else if type === "date"}

@@ -52,6 +52,7 @@ Services: ${services.map((service) => StringUtils.capitalize(service.name)).join
             orderBy: 'startTime'
         })
 
+        // Check to see if staff is already scheduled at that time
         if (events.filter((gEvent) => gEvent?.extendedProperties?.private?.staff === payload.staff).length) {
             return {
                 status: 400,

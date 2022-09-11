@@ -1,6 +1,8 @@
 <script>
     import Button from '$lib/forms/button.svelte';
     import InputField from '$lib/forms/input-field.svelte';
+    import Select from '$lib/forms/select.svelte';
+    import Row from '$lib/forms/row.svelte';
     import Footer from '$lib/drawers/footer.svelte';
     import Avatar from '$lib/avatar.svelte';
     import {
@@ -104,7 +106,7 @@
                 const photoURL = await FirebaseClient.uploadFile(avatarImg, 'avatar/' + (staff?.uid || res.user.uid));
                 // update Google User in the backend
                 await Api.patch('/api/user', {
-                    uid:  staff?.uid || res.user.uid,
+                    uid: staff?.uid || res.user.uid,
                     photoURL
                 })
                 data.photoURL = photoURL;
@@ -177,9 +179,65 @@
             <InputField label="Address" name="address" icon={iconPin} value={staff?.address}
                         disablePrefill bind:form_errors={form_errors}/>
 
-            <InputField label="Birthday" name="birthday" type="date" icon={iconBirthday} value={staff?.birthday}
+            <InputField label="Birthday" name="birthday" type="date" icon={iconBirthday} value={staff?.birthday || null}
                         disablePrefill bind:form_errors={form_errors}
             />
+
+            <label>Schedule</label>
+            <div class="schedule">
+                {#each ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"] as dayOfWeek}
+                    <h5>{dayOfWeek}</h5>
+                    <InputField name={`schedule.${dayOfWeek}.enabled`} type="toggle"
+                                value={staff?.schedule ? staff?.schedule[dayOfWeek]?.enabled : null}
+                                bind:form_errors={form_errors} onChange={(val) => {
+                                    if (!staff?.schedule)  staff["schedule"] = {};
+                                    staff["schedule"][dayOfWeek] = { enabled: val };
+                                    staff = staff;
+                                }}/>
+                    <div>
+                        <div class="time-container">
+
+                            {#if staff?.schedule && staff?.schedule[dayOfWeek]?.enabled}
+
+                                <Select name={`schedule.${dayOfWeek}.day.start`}
+                                        bind:form_errors={form_errors} placeholder="Day start" small>
+                                    <option value="12:00">12:00 AM</option>
+                                    <option value="12:15">12:15 AM</option>
+                                    <option value="12:30">12:30 AM</option>
+                                    <option value="12:45">12:45 AM</option>
+                                    <option value="01:00">01:00 AM</option>
+                                </Select>
+                                <Select name={`schedule.${dayOfWeek}.day.end`}
+                                        bind:form_errors={form_errors} placeholder="Day end" small>
+                                    <option value="12:00">12:00 AM</option>
+                                    <option value="12:15">12:15 AM</option>
+                                    <option value="12:30">12:30 AM</option>
+                                    <option value="12:45">12:45 AM</option>
+                                    <option value="01:00">01:00 AM</option>
+                                </Select>
+                                <Select name={`schedule.${dayOfWeek}.lunch.start`}
+                                        bind:form_errors={form_errors} placeholder="Lunch start" small>
+                                    <option value="12:00">12:00 AM</option>
+                                    <option value="12:15">12:15 AM</option>
+                                    <option value="12:30">12:30 AM</option>
+                                    <option value="12:45">12:45 AM</option>
+                                    <option value="01:00">01:00 AM</option>
+                                </Select>
+                                <Select name={`schedule.${dayOfWeek}.lunch.end`}
+                                        bind:form_errors={form_errors} placeholder="Lunch end" small>
+                                    <option value="12:00">12:00 AM</option>
+                                    <option value="12:15">12:15 AM</option>
+                                    <option value="12:30">12:30 AM</option>
+                                    <option value="12:45">12:45 AM</option>
+                                    <option value="01:00">01:00 AM</option>
+                                </Select>
+                            {:else}
+                                Closed
+                            {/if}
+                        </div>
+                    </div>
+                {/each}
+            </div>
 
             <div class="notes">
                 <span>Notes</span>
@@ -202,6 +260,28 @@
         onDelete={deleteStaff} hideDelete={!staff?.uid}/>
 
 <style lang="scss">
+
+
+  .schedule {
+    display: grid;
+    grid-template-columns: 0.35fr 0.35fr 1fr;
+    grid-auto-rows: 1fr;
+    align-items: center;
+    row-gap: 1rem;
+
+    h5 {
+      text-transform: capitalize;
+    }
+
+    .time-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      column-gap: 0.5rem;
+      row-gap: 0.25rem;
+    }
+  }
+
   .notes > span {
     font-weight: 500;
     margin-bottom: 6px;
