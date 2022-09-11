@@ -62,7 +62,7 @@
 
 <Form onSubmit={onSubmit}>
     <Section title="Logo" info="Your store logo is used in the booking process, dashboard, invoices, and more!">
-        <Avatar src={$settings.get("store.logo")} size="large" dontUpload onChange={(imgData) => storeLogo = imgData}
+        <Avatar src={$settings?.object?.store?.logo}  size="large" dontUpload onChange={(imgData) => storeLogo = imgData}
                 canEdit square/>
     </Section>
 

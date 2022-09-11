@@ -13,7 +13,6 @@ export async function post({request}) {
 
     // Grab all relevant Firebase documents from the IDs passed in the payload
     const staff = await (await FirebaseAdmin.firestore().collection("staff").doc(payload.staff).get()).data();
-    const client = await (await FirebaseAdmin.firestore().collection("clients").doc(payload.client).get()).data();
 
     // Make sure if only one service is selected it is passed as an array
     if (typeof payload.services === 'string') payload["services"] = [payload["services"]];
@@ -73,13 +72,15 @@ Services: ${services.map((service) => StringUtils.capitalize(service.name)).join
             }
         ], {
             staff: payload.staff,
-            client: payload.client
+            ...(payload?.client && { client: payload.client }),
+            ...(payload?.lead && { lead: payload.lead })
         });
 
         // Add appointment to DB
         await FirebaseAdmin.firestore().collection("appointments").add({
             staff: payload.staff,
-            client: payload.client,
+            ...(payload?.client && { client: payload.client }),
+            ...(payload?.lead && { lead: payload.lead }),
             google_event_id: postedEvent.id,
             google_event_link: postedEvent.htmlLink,
             start: postedEvent.start,
