@@ -2,7 +2,6 @@
     import Button from '$lib/forms/button.svelte';
     import InputField from '$lib/forms/input-field.svelte';
     import Select from '$lib/forms/select.svelte';
-    import Row from '$lib/forms/row.svelte';
     import Footer from '$lib/drawers/footer.svelte';
     import Avatar from '$lib/avatar.svelte';
     import {
@@ -23,6 +22,7 @@
     import {SwalHelper} from "../../../../../utils/SwalHelper.js";
     import {FirebaseClient} from "../../../../../utils/firebase/FirebaseClient.js";
     import _ from "lodash";
+    import {TimeHelper} from "../../../../../utils/TimeHelper.js";
 
     export let staff;
     export let onComplete, onClose;
@@ -136,6 +136,9 @@
         });
     }, 100);
 
+    // get an array of slider time values from 4am to 8pm
+    let timeMap = [];
+    for (let hour = 4; hour <= 20; hour += 0.5) timeMap.push(TimeHelper.sliderValTo24(hour));
 </script>
 
 <div class="header">
@@ -199,37 +202,29 @@
 
                             {#if staff?.schedule && staff?.schedule[dayOfWeek]?.enabled}
 
-                                <Select name={`schedule.${dayOfWeek}.day.start`}
+                                <Select name={`schedule.${dayOfWeek}.day.start`} value={staff?.schedule[dayOfWeek]?.day?.start}
                                         bind:form_errors={form_errors} placeholder="Day start" small>
-                                    <option value="12:00">12:00 AM</option>
-                                    <option value="12:15">12:15 AM</option>
-                                    <option value="12:30">12:30 AM</option>
-                                    <option value="12:45">12:45 AM</option>
-                                    <option value="01:00">01:00 AM</option>
+                                    {#each timeMap as timestamp (timestamp)}
+                                        <option value={timestamp}>{TimeHelper.convertTime24to12(timestamp)}</option>
+                                    {/each}
                                 </Select>
-                                <Select name={`schedule.${dayOfWeek}.day.end`}
+                                <Select name={`schedule.${dayOfWeek}.day.end`} value={staff?.schedule[dayOfWeek]?.day?.end}
                                         bind:form_errors={form_errors} placeholder="Day end" small>
-                                    <option value="12:00">12:00 AM</option>
-                                    <option value="12:15">12:15 AM</option>
-                                    <option value="12:30">12:30 AM</option>
-                                    <option value="12:45">12:45 AM</option>
-                                    <option value="01:00">01:00 AM</option>
+                                    {#each timeMap as timestamp (timestamp)}
+                                        <option value={timestamp}>{TimeHelper.convertTime24to12(timestamp)}</option>
+                                    {/each}
                                 </Select>
-                                <Select name={`schedule.${dayOfWeek}.lunch.start`}
+                                <Select name={`schedule.${dayOfWeek}.lunch.start`} value={staff?.schedule[dayOfWeek]?.lunch?.start}
                                         bind:form_errors={form_errors} placeholder="Lunch start" small>
-                                    <option value="12:00">12:00 AM</option>
-                                    <option value="12:15">12:15 AM</option>
-                                    <option value="12:30">12:30 AM</option>
-                                    <option value="12:45">12:45 AM</option>
-                                    <option value="01:00">01:00 AM</option>
+                                    {#each timeMap as timestamp (timestamp)}
+                                        <option value={timestamp}>{TimeHelper.convertTime24to12(timestamp)}</option>
+                                    {/each}
                                 </Select>
-                                <Select name={`schedule.${dayOfWeek}.lunch.end`}
+                                <Select name={`schedule.${dayOfWeek}.lunch.end`} value={staff?.schedule[dayOfWeek]?.lunch?.end}
                                         bind:form_errors={form_errors} placeholder="Lunch end" small>
-                                    <option value="12:00">12:00 AM</option>
-                                    <option value="12:15">12:15 AM</option>
-                                    <option value="12:30">12:30 AM</option>
-                                    <option value="12:45">12:45 AM</option>
-                                    <option value="01:00">01:00 AM</option>
+                                    {#each timeMap as timestamp (timestamp)}
+                                        <option value={timestamp}>{TimeHelper.convertTime24to12(timestamp)}</option>
+                                    {/each}
                                 </Select>
                             {:else}
                                 Closed
