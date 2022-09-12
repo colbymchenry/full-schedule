@@ -12,7 +12,7 @@
     import {ApiProgressBar} from "../../../../utils/ApiProgressBar.js";
     import {SwalHelper} from "../../../../utils/SwalHelper.js";
 
-    export let openIndex, index, rowData, fetchProducts;
+    export let openIndex = undefined, index = undefined, rowData = undefined, fetchProducts = undefined;
     let form_errors = {};
 
     async function submitProduct(formData) {

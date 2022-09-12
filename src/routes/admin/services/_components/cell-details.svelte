@@ -14,7 +14,7 @@
     import {ApiProgressBar} from "../../../../utils/ApiProgressBar.js";
     import {SwalHelper} from "../../../../utils/SwalHelper.js";
 
-    export let openIndex, index, rowData, fetchServices;
+    export let openIndex = undefined, index = undefined, rowData = undefined, fetchServices = undefined;
     let form_errors = {};
 
     async function submitService(formData) {
@@ -49,7 +49,6 @@
                 ApiProgressBar.start()
 
                 try {
-                    console.log(product.doc_id)
                     await FirebaseClient.delete("services", product.doc_id);
                     openIndex = -1;
                     await fetchServices();

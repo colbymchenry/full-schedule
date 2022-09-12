@@ -46,13 +46,13 @@
 
             // if there is no docs pulled yet, pull them
             if (!allDocs.length) {
-                allDocs = (await FirebaseClient.getSnapshot(query(ref, orderBy("name", "asc"))));
+                allDocs = await (await FirebaseClient.getSnapshot(query(ref, orderBy("name", "asc"))));
             }
 
             // get last document to paginate
-            const docSnap = await getDoc(doc(ref, allDocs[page * itemsPerPage].doc_id));
+            const docSnap = allDocs[page * itemsPerPage] ? await getDoc(doc(ref, allDocs[page * itemsPerPage].doc_id)) : undefined;
 
-            if (data.length) {
+            if (data.length && docSnap) {
                 data = await FirebaseClient.queryAdv(query(ref, orderBy("name", "asc"), startAfter(docSnap), limit(itemsPerPage)));
             } else {
                 data = await FirebaseClient.queryAdv(query(ref, orderBy("name", "asc"), limit(itemsPerPage)));
