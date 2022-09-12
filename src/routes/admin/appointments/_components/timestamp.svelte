@@ -48,7 +48,7 @@
 
       &:before {
         background: #d6d6d9;
-        font-size: 3rem;
+        font-size: 3rem; 
         top: 0;
         left: 0;
         position: absolute;
