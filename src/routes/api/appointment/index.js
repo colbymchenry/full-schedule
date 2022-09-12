@@ -2,6 +2,7 @@ import {FirebaseAdmin} from "../../../utils/firebase/FirebaseAdmin.js";
 import {JsonHelper} from "../../../utils/JsonHelper";
 import {GoogleCalendarAPI} from "../../../utils/GoogleCalendarAPI.js";
 import {StringUtils} from "../../../utils/StringUtils.js";
+import {TimeHelper} from "../../../utils/TimeHelper.js";
 
 // Endpoint to create an appointment
 export async function post({request}) {
@@ -10,6 +11,21 @@ export async function post({request}) {
     const settings = new JsonHelper(await (await FirebaseAdmin.firestore().collection("settings").doc("main").get()).data());
 
     const payload = await request.json();
+
+    // Basic payload validation for now
+    if (!payload?.date || !payload?.services || !payload?.staff || !payload?.timestamp) {
+        return {
+            status: 400,
+            body: {}
+        }
+    }
+
+    const weekday = payload?.date ? new Date(payload.date).toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    }).split(",")[0].toLowerCase() : null;
 
     // Grab all relevant Firebase documents from the IDs passed in the payload
     const staff = await (await FirebaseAdmin.firestore().collection("staff").doc(payload.staff).get()).data();
@@ -52,16 +68,40 @@ Services: ${services.map((service) => StringUtils.capitalize(service.name)).join
             orderBy: 'startTime'
         })
 
+        // Check to see if the staff is available at that time
+        const notWorking = !staff?.schedule?.[weekday]?.enabled;
+        const onLunch = () => {
+            if (!staff?.schedule?.[weekday]?.lunch?.start || !staff?.schedule?.[weekday]?.lunch?.end) return false;
+            let lunchStart = TimeHelper.getSliderValFrom24(staff.schedule[weekday].lunch.start);
+            let lunchEnd = TimeHelper.getSliderValFrom24(staff.schedule[weekday].lunch.end);
+            let currentVal = TimeHelper.getSliderValFrom24(payload.timestamp);
+            return lunchStart <= currentVal && lunchEnd >= currentVal;
+        }
+
+        if (notWorking || onLunch()) {
+
+            console.log(staff)
+
+            return {
+                status: 400,
+                body: {
+                    message: "Staff not available.",
+                    code: 2
+                }
+            }
+        }
+
         // Check to see if staff is already scheduled at that time
         if (events.filter((gEvent) => gEvent?.extendedProperties?.private?.staff === payload.staff).length) {
             return {
                 status: 400,
                 body: {
-                    message: "Staff not available.",
+                    message: "Staff already scheduled.",
                     code: 1
                 }
             }
         }
+
 
         // Post new event to Google Calendar
         const postedEvent = await calendarApi.postEvent(location, summary, description, startDate, endDate, [

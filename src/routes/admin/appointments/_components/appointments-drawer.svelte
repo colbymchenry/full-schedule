@@ -54,11 +54,13 @@
             payloadDate.setHours(parseInt(hour), parseInt(minute));
             formData["date"] = payloadDate;
             formData["staff"] = staff.doc_id;
+            formData["timestamp"] = timestamp;
             const res = await Api.post('/api/appointment', formData);
 
             if (res?.code === 1) {
                 slotVisible = undefined;
-                showToast(res?.message)
+                showToast(res?.message);
+                ApiProgressBar.stop();
                 return;
             }
 

@@ -4,11 +4,11 @@
 
     export let timestamp, staffAccounts, staff, weekday, slotVisible, date;
 
-    const notWorking = !staff?.schedule[weekday] || !staff?.schedule[weekday]?.enabled;
+    const notWorking = !staff?.schedule?.[weekday]?.enabled;
     const onLunch = () => {
-        if (!staff?.schedule[weekday]?.lunch?.start || !staff?.schedule[weekday]?.lunch?.end) return false;
-        let lunchStart = TimeHelper.getSliderValFrom24(staff?.schedule[weekday]?.lunch?.start);
-        let lunchEnd = TimeHelper.getSliderValFrom24(staff?.schedule[weekday]?.lunch?.end);
+        if (!staff?.schedule?.[weekday]?.lunch?.start || !staff?.schedule?.[weekday]?.lunch?.end) return false;
+        let lunchStart = TimeHelper.getSliderValFrom24(staff.schedule[weekday].lunch.start);
+        let lunchEnd = TimeHelper.getSliderValFrom24(staff.schedule[weekday].lunch.end);
         let currentVal = TimeHelper.getSliderValFrom24(timestamp);
         return lunchStart <= currentVal && lunchEnd >= currentVal;
     }
@@ -22,7 +22,7 @@
                                         <AppointmentsDrawer bind:slotVisible={slotVisible} date={date}
                                                             staff={staff} timestamp={timestamp}/>
                                     {/key}
-                                </span>
+            </span>
 </div>
 
 <style lang="scss">
