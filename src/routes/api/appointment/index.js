@@ -12,8 +12,18 @@ export async function post({request}) {
 
     const payload = await request.json();
 
+    let client, lead;
+
+    if (payload?.client) {
+        client = await (await FirebaseAdmin.firestore().collection("clients").doc(payload.client).get()).data();
+    }
+
+    if (payload?.lead) {
+        lead = await (await FirebaseAdmin.firestore().collection("leads").doc(payload.lead).get()).data();
+    }
+
     // Basic payload validation for now
-    if (!payload?.date || !payload?.services || !payload?.staff || !payload?.timestamp) {
+    if (!payload?.date || !payload?.services || !payload?.staff || !payload?.timestamp || (!payload?.client && !payload?.lead)) {
         return {
             status: 400,
             body: {}
@@ -79,9 +89,6 @@ Services: ${services.map((service) => StringUtils.capitalize(service.name)).join
         }
 
         if (notWorking || onLunch()) {
-
-            console.log(staff)
-
             return {
                 status: 400,
                 body: {
@@ -106,10 +113,13 @@ Services: ${services.map((service) => StringUtils.capitalize(service.name)).join
         // Post new event to Google Calendar
         const postedEvent = await calendarApi.postEvent(location, summary, description, startDate, endDate, [
             {
-                email: staff.email
+                email: staff.email,
+                displayName: staff.displayName
             },
             {
-                email: "me@colbymchenry.com" // TODO: Switch to client later
+                email: client?.email || lead?.email,
+                displayName: client?.displayName || lead?.displayName,
+                phoneNumber: client?.phoneNumber || lead?.phoneNumber
             }
         ], {
             staff: payload.staff,
@@ -128,6 +138,9 @@ Services: ${services.map((service) => StringUtils.capitalize(service.name)).join
             end: postedEvent.end,
             services: payload.services
         });
+
+        // Send Email and SMS confirmation
+
 
         return {
             status: 200,
