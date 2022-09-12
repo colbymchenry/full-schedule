@@ -127,7 +127,7 @@
 <style lang="scss">
 
   .appointment-container {
-    max-width: 300px;
+    //max-width: 300px;
     min-width: 300px;
     position: relative;
     border-left: 1px solid var(--border-color);
