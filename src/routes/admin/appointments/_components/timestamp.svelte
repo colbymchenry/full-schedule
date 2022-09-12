@@ -13,7 +13,7 @@
         let currentVal = TimeHelper.getSliderValFrom24(timestamp);
         return lunchStart <= currentVal && lunchEnd >= currentVal;
     }
-</script>
+</script> 
 
 <div class="container" class:notWorking={notWorking} class:onLunch={onLunch()}>
              <span class="new-app-drawer"
@@ -48,7 +48,7 @@
 
       &:before {
         background: #d6d6d9;
-        font-size: 3rem; 
+        font-size: 3rem;
         top: 0;
         left: 0;
         position: absolute;
