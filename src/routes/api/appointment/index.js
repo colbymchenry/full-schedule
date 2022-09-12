@@ -3,6 +3,7 @@ import {JsonHelper} from "../../../utils/JsonHelper";
 import {GoogleCalendarAPI} from "../../../utils/GoogleCalendarAPI.js";
 import {StringUtils} from "../../../utils/StringUtils.js";
 import {TimeHelper} from "../../../utils/TimeHelper.js";
+import {SMSHelper} from "../../../utils/SMSHelper.js";
 
 // Endpoint to create an appointment
 export async function post({request}) {
@@ -128,7 +129,7 @@ Services: ${services.map((service) => StringUtils.capitalize(service.name)).join
         });
 
         // Add appointment to DB
-        await FirebaseAdmin.firestore().collection("appointments").add({
+        let appObj = {
             staff: payload.staff,
             ...(payload?.client && { client: payload.client }),
             ...(payload?.lead && { lead: payload.lead }),
@@ -137,10 +138,14 @@ Services: ${services.map((service) => StringUtils.capitalize(service.name)).join
             start: postedEvent.start,
             end: postedEvent.end,
             services: payload.services
-        });
+        };
+
+        const { id } = await FirebaseAdmin.firestore().collection("appointments").add(appObj);
+
+        appObj["doc_id"] = id;
 
         // Send Email and SMS confirmation
-
+        await SMSHelper.sendAppointmentConfirmation(appObj, client?.phoneNumber || lead?.phoneNumber, staff);
 
         return {
             status: 200,
