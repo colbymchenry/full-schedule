@@ -5,11 +5,11 @@
     import {FirebaseClient} from "../utils/firebase/FirebaseClient.js";
     import {StringUtils} from "../utils/StringUtils.js";
 
-    export let user;
-    export let src;
-    export let size;
-    export let onChange;
-    export let style;
+    export let user = undefined;
+    export let src = undefined;
+    export let size = undefined;
+    export let onChange = undefined;
+    export let style = undefined;
     export let dontUpload = false
     export let canEdit = false;
     export let square = false;
@@ -18,7 +18,7 @@
 
     let newSrc;
 
-    let clazz;
+    let clazz = undefined;
     export {clazz as class};
 
     let input;

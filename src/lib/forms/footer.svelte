@@ -1,7 +1,7 @@
 <script>
     import Button from './button.svelte';
 
-    export let onCancel;
+    export let onCancel = undefined;
 </script>
 
 <div>

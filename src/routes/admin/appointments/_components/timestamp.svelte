@@ -2,7 +2,8 @@
     import {TimeHelper} from "../../../../utils/TimeHelper";
     import AppointmentsDrawer from './appointments-drawer.svelte';
 
-    export let timestamp, staffAccounts, staff, weekday, slotVisible, date;
+    export let timestamp = undefined, staffAccounts = undefined, staff = undefined, weekday = undefined,
+        slotVisible = undefined, date = undefined;
 
     const notWorking = !staff?.schedule?.[weekday]?.enabled;
     const onLunch = () => {

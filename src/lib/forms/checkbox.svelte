@@ -2,7 +2,7 @@
     export let form_errors = [];
     export let name, value, id = Math.random();
     export let required = false;
-    export let onChange;
+    export let onChange = undefined;
 </script>
 
 <label class="checkbox" class:is--error={form_errors[name]} for={id}>

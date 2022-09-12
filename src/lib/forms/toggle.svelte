@@ -1,5 +1,5 @@
 <script>
-    export let active = false, onClick;
+    export let active = false, onClick = undefined;
 </script>
 
 

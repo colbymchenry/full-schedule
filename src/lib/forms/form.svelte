@@ -5,13 +5,13 @@
     import {onDestroy, onMount} from "svelte";
     import {browser} from "$app/env";
 
-    let clazz;
+    let clazz = undefined;
     export {clazz as class};
-    export let id;
-    export let onSubmit;
-    export let hideFooter;
-    export let style;
-    export let onChange;
+    export let id = undefined;
+    export let onSubmit = undefined;
+    export let hideFooter = undefined;
+    export let style = undefined;
+    export let onChange = undefined;
     let reset = false;
     let footer;
 

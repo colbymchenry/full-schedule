@@ -5,7 +5,7 @@
     import Avatar from '$lib/avatar.svelte';
     import Checkbox from '$lib/forms/checkbox.svelte';
     import Button from '$lib/forms/button.svelte';
-    import { showToast } from "../../../../utils/logger.js";
+    import {showToast} from "../../../../utils/logger.js";
     import {iconBirthday, iconMail, iconNotes, iconPhone, iconPin, iconPlus, iconTrash} from "../../../../lib/icons.js";
     import {FirebaseClient} from "../../../../utils/firebase/FirebaseClient.js";
     import {where} from "firebase/firestore";
@@ -14,7 +14,7 @@
     import {ApiProgressBar} from "../../../../utils/ApiProgressBar.js";
 
 
-    export let date, timestamp, staff, slotVisible;
+    export let date = undefined, timestamp = undefined, staff = undefined, slotVisible = undefined;
 
     let client;
     let form_errors = {};
@@ -57,7 +57,7 @@
             formData["timestamp"] = timestamp;
             const res = await Api.post('/api/appointment', formData);
 
-            if (res?.code === 1) {
+            if (res?.code) {
                 slotVisible = undefined;
                 showToast(res?.message);
                 ApiProgressBar.stop();
@@ -204,7 +204,7 @@
                         day: 'numeric'
                     })} @ {TimeHelper.convertTime24to12(timestamp)} with {staff?.displayName}</span>
                 </div>
-                <Button type="submit" disabledIf={!client} loading={submitted}>Create</Button>
+                <Button type="submit" disabled={!client} loading={submitted}>Create</Button>
             </div>
         </Form>
     </div>

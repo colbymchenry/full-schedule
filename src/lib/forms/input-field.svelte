@@ -5,16 +5,19 @@
     import {DateInput} from "date-picker-svelte";
 
     export let form_errors = {};
-    export let value, label, name, type = "text", placeholder, icon, accept, disablePrefill, readOnly, hint, info, min,
-        max,
-        step, style, onChange, onFocus;
+    // Everything = undefined to suppress Svelte warnings
+    export let value = undefined, label = undefined, name = undefined, type = "text", placeholder = undefined,
+        icon = undefined, accept = undefined, disablePrefill = undefined, readOnly = undefined, hint = undefined,
+        info = undefined, min = undefined,
+        max = undefined,
+        step = undefined, style = undefined, onChange = undefined, onFocus = undefined;
     export let required = false;
 
     // this is used for the Toggle component, it must ALWAYS be checked for FormData to pick it up,
     // but the value can be true or false
     let checked = true;
 
-    let clazz;
+    let clazz = undefined;
     export {clazz as class};
 
     export let focused = false;
@@ -26,7 +29,8 @@
     }
 
     // masked input fields
-    export let alwaysShowMask, maskChar, mask, size, showMask;
+    export let alwaysShowMask = undefined, maskChar = undefined, mask = undefined, size = undefined,
+        showMask = undefined;
 
     $: inputProps = {
         ...(disablePrefill && {autocorrect: "off"}),
@@ -74,7 +78,8 @@
     {#if type === "toggle"}
         <div class={"input-field toggle" + (clazz ? " " + clazz : "")} class:is--readonly={readOnly} {style}
              class:is--error={form_errors[name]}>
-            <input {name} type="checkbox" on:input={clear_error} {checked} bind:value={value} style="margin-top: 0 !important;"/>
+            <input {name} type="checkbox" on:input={clear_error} {checked} bind:value={value}
+                   style="margin-top: 0 !important;"/>
             <Toggle bind:active={value} onClick={() => {
                 value = !value;
                 if (onChange) onChange(value);

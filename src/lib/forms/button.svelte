@@ -2,10 +2,10 @@
     import Spinner from "./spinner.svelte";
     export let color = "primary";
     export let type = "submit";
-    export let isIcon;
-    export let icon;
-    export let callback;
-    export let style;
+    export let isIcon = undefined;
+    export let icon = undefined;
+    export let callback = undefined;
+    export let style = undefined;
     export let loading = false;
     export let disabled = loading;
 </script>

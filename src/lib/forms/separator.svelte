@@ -1,5 +1,5 @@
 <script>
-    export let label;
+    export let label = undefined;
     export let height = "2.5rem";
 </script>
 

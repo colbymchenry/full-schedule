@@ -3,7 +3,7 @@
     import {iconClose} from "../icons.js";
     import {browser} from "$app/env";
 
-    export let label, icon, onClose;
+    export let label = undefined, icon = undefined, onClose = undefined;
     let visible = false;
     let drawer;
     let button;
