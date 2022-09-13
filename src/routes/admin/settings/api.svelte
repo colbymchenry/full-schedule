@@ -9,19 +9,7 @@
     import GoogleOAuthHandler from './google-oauth-handler.svelte';
     import {FirebaseClient} from "../../../utils/firebase/FirebaseClient.js";
     import {showToast} from "../../../utils/logger.js";
-    import {
-        iconApi,
-        iconEvent,
-        iconFingerprint,
-        iconFreeAvailable,
-        iconGoogle,
-        iconKey,
-        iconLan,
-        iconPhone,
-        iconToken,
-        iconTravelExplore,
-        iconUser
-    } from "../../../lib/icons.js";
+    import {iconApi, iconEvent, iconFingerprint, iconFreeAvailable, iconGoogle, iconUser} from "../../../lib/icons.js";
     import {settings} from "../../../lib/stores.js";
     import {Api} from "../../../utils/Api.js";
     import {ApiProgressBar} from "../../../utils/ApiProgressBar.js";
@@ -156,30 +144,8 @@
 
     <Separator/>
 
-    <Section title="Twilio SMS"
-             info={'This service is used for SMS texting. <a href="https://www.twilio.com/try-twilio" target="_blank">Go to sign up page.</a>'}>
-        <Row>
-            <InputField label="SID" name="twilio.sid" icon={iconFingerprint} value={$settings.get("twilio.sid")}
-            />
-            <InputField label="Auth Token" name="twilio.token" icon={iconToken} value={$settings.get("twilio.token")}
-            />
-            <InputField label="MSID" name="twilio.msid" icon={iconFingerprint} value={$settings.get("twilio.msid")}
-            />
-            <InputField label="Phone Number" type="tel" name="twilio.number" icon={iconPhone}
-                        value={$settings.get("twilio.number")}
-                        alwaysShowMask
-                        mask='+1 (000) 000 - 0000'
-                        size={20}
-                        showMask
-                        maskChar="_"
-            />
-        </Row>
-    </Section>
-
-    <Separator/>
-
-    <Section title="TextMagic"
-             info={'This service is used for scheduled text reminders. <a href="https://my.textmagic.com/register/" target="_blank">Go to sign up page.</a>'}>
+    <Section title="TextMagic (SMS)"
+             info={'This service is used for SMS and scheduled text reminders. <a href="https://my.textmagic.com/register/" target="_blank">Go to sign up page.</a>'}>
         <Row>
             <InputField label="Username" name="textmagic.username" icon={iconUser}
                         value={$settings.get("textmagic.username")}
@@ -191,15 +157,9 @@
 
     <Separator/>
 
-    <Section title="Email" info={'This service is used for all emails within Full Schedule.'}>
+    <Section title="SendinBlue (Email & SMS Blast)" info={'This service is used for all emails, email blasts, and SMS blasts within Full Schedule.'}>
         <Row>
-            <InputField label="Host/IP" name="email.host" icon={iconTravelExplore} value={$settings.get("email.host")}
-            />
-            <InputField label="Port" name="email.port" icon={iconLan} value={$settings.get("email.port")}
-            />
-            <InputField label="Username" name="email.username" icon={iconUser} value={$settings.get("email.username")}
-            />
-            <InputField label="Password" name="email.password" icon={iconKey} value={$settings.get("email.password")}
+            <InputField label="API Key" name="sendinblue.api_key" icon={iconApi} value={$settings.get("sendinblue.api_key")}
             />
         </Row>
     </Section>

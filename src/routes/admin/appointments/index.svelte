@@ -28,6 +28,7 @@
     let slotVisible;
 
     let staffAccounts = new Promise(fetchStaff);
+    let appointments = new Promise(fetchAppointments);
 
     async function fetchStaff() {
         try {
@@ -52,6 +53,15 @@
             }).filter((account) => account !== undefined);
         } catch (error) {
             showToast();
+        }
+    }
+
+    async function fetchAppointments() {
+        try {
+            appointments = await FirebaseClient.collection("appointments");
+
+        } catch (error) {
+            showToast("Error fetching appointments...");
         }
     }
 
