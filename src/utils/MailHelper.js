@@ -1,31 +1,26 @@
-import nodemailer from "nodemailer";
+import axios from "axios";
+import {FirebaseAdmin} from "./firebase/FirebaseAdmin.js";
 
-let transporter;
-
-try {
-    transporter = nodemailer.createTransport({
-        host: 'mail.privateemail.com',
-        port: '465',
-        auth: {
-            user: 'noreply@fullschedule.co',
-            pass: '90Percent%'
-        },
-        secure: true,
-        pool: true
-    })
-} catch (error) {
-
-}
+const endpoint = `https://api.sendinblue.com/v3/`;
 
 export class MailHelper {
-    // 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
-    static async send(to, subject, html) {
-        await transporter.sendMail({
-            from: '"Balanced Aesthetics Medspa" <noreply@fullschedule.co>',
-            to,
-            subject,
-            html
-        });
+    static async send(sender, to, html) {
+        const settings = await (await FirebaseAdmin.firestore().collection("settings").doc("main").get()).data();
+        try {
+            const res = await axios.post(endpoint + "smtp/email", {
+                sender, to,
+                "htmlContent": "<html><head></head><body><p>Hello,</p>This is my first transactional email sent from Sendinblue.</p></body></html>"
+            }, {
+                headers: {
+                    "accept": "application/json",
+                    "content-type": "application/json",
+                    "api-key": settings?.sendinblue?.api_key
+                }
+            });
+            console.log(res)
+        } catch (error) {
+            console.error(error);
+        }
     }
 
 }

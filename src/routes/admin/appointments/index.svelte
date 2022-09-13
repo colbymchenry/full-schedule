@@ -27,8 +27,9 @@
 
     let slotVisible;
 
+    let services = new Promise(fetchServices);
     let staffAccounts = new Promise(fetchStaff);
-    let appointments = new Promise(fetchAppointments);
+    let appointments = [];
 
     async function fetchStaff() {
         try {
@@ -51,6 +52,8 @@
                     return account;
                 }
             }).filter((account) => account !== undefined);
+
+            appointments = new Promise(fetchAppointments);
         } catch (error) {
             showToast();
         }
@@ -59,9 +62,16 @@
     async function fetchAppointments() {
         try {
             appointments = await FirebaseClient.collection("appointments");
-
         } catch (error) {
             showToast("Error fetching appointments...");
+        }
+    }
+
+    async function fetchServices() {
+        try {
+            services = await FirebaseClient.collection("services");
+        } catch (error) {
+            showToast("Error fetching services...");
         }
     }
 
@@ -84,7 +94,9 @@
                 {/each}
             </div>
         {:then data}
-            <Timeline/>
+            {#if new Date().getDate() === selectedDate.getDate()}
+                <Timeline/>
+            {/if}
             <table>
                 <thead class="shadow" class:fill={!staffAccounts || !staffAccounts.length}>
                 <tr>
@@ -117,7 +129,9 @@
                                 <td>
                                     <div class="appointment-container">
                                         <Timestamp timestamp={timestamp} staffAccounts={staffAccounts} staff={staff}
-                                                   weekday={weekday} bind:slotVisible={slotVisible} bind:date={selectedDate} />
+                                                   weekday={weekday} bind:slotVisible={slotVisible} services={services}
+                                                   bind:date={selectedDate} bind:appointments={appointments}
+                                                   fetchStaff={fetchStaff} fetchAppointments={fetchAppointments} />
                                     </div>
                                 </td>
                             {/each}

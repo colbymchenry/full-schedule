@@ -4,6 +4,7 @@ import {GoogleCalendarAPI} from "../../../utils/GoogleCalendarAPI.js";
 import {StringUtils} from "../../../utils/StringUtils.js";
 import {TimeHelper} from "../../../utils/TimeHelper.js";
 import {SMSHelper} from "../../../utils/SMSHelper.js";
+import {MailHelper} from "../../../utils/MailHelper.js";
 
 // Endpoint to create an appointment
 export async function post({request}) {
@@ -124,15 +125,15 @@ Services: ${services.map((service) => StringUtils.capitalize(service.name)).join
             }
         ], {
             staff: payload.staff,
-            ...(payload?.client && { client: payload.client }),
-            ...(payload?.lead && { lead: payload.lead })
+            ...(payload?.client && {client: payload.client}),
+            ...(payload?.lead && {lead: payload.lead})
         });
 
         // Add appointment to DB
         let appObj = {
             staff: payload.staff,
-            ...(payload?.client && { client: payload.client }),
-            ...(payload?.lead && { lead: payload.lead }),
+            ...(payload?.client && {client: payload.client}),
+            ...(payload?.lead && {lead: payload.lead}),
             google_event_id: postedEvent.id,
             google_event_link: postedEvent.htmlLink,
             start: postedEvent.start,
@@ -140,19 +141,29 @@ Services: ${services.map((service) => StringUtils.capitalize(service.name)).join
             services: payload.services
         };
 
-        const { id } = await FirebaseAdmin.firestore().collection("appointments").add(appObj);
+        const {id} = await FirebaseAdmin.firestore().collection("appointments").add(appObj);
 
         appObj["doc_id"] = id;
 
         // Send Email and SMS confirmation
         await SMSHelper.sendAppointmentConfirmation(appObj, client?.phoneNumber || lead?.phoneNumber, staff);
 
+        await MailHelper.send(
+            {
+                "name": "Balanced Aesthetics Medspa",
+                "email": "info@balancedaestheticsmedspa.com"
+            },
+            [{
+                "email": "colbymchenry@gmail.com",
+                "name": "Colby McHenry"
+            }]);
+
         return {
             status: 200,
             body: {}
         }
     } catch (error) {
-        if (error?.code ) {
+        if (error?.code) {
             return {
                 status: 400,
                 body: {
