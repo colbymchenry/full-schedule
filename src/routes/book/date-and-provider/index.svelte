@@ -5,14 +5,27 @@
     import InputField from '$lib/forms/input-field.svelte';
     import {iconCalendar} from "../../../lib/icons.js";
     import {bookingStore} from "../../../lib/stores.js";
+    import {Api} from "../../../utils/Api.js";
+    import {browser} from "$app/env";
 
     let disabled = true;
     let selectedDate = new Date();
 
-    $: availability = new Promise(fetchAvailability);
+    let availability = new Promise(fetchAvailability);
 
     async function fetchAvailability() {
-        console.log($bookingStore)
+        if (browser) {
+            try {
+                availability = await Api.post(`/api/fetch-availability`, {
+                    services: $bookingStore.get("services").map(({doc_id}) => doc_id),
+                    date: selectedDate
+                });
+
+                console.log(availability);
+            } catch (error) {
+                console.error(error);
+            }
+        }
     }
 
     async function onSubmit(formData) {
@@ -42,16 +55,16 @@
 </BookingLayout>
 
 <style lang="scss">
-    .container {
-      display: grid;
-      grid-template-columns: 1fr;
-      grid-auto-rows: 1fr;
-      min-height: 300px;
+  .container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-auto-rows: 1fr;
+    min-height: 300px;
 
-      label {
-        font-weight: 500;
-        line-height: 2rem;
-      }
+    label {
+      font-weight: 500;
+      line-height: 2rem;
     }
+  }
 </style>
 

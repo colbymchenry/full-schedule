@@ -17,9 +17,15 @@ export async function post({request}) {
 
         const services = await Promise.all(payload.services.map(async (docId) => {
             return await (await FirebaseAdmin.firestore().collection("services").doc(docId).get()).data();
-        }));
+        }))
+
+        // Get all staff availability
+        const staff = await FirebaseAdmin.getCollectionArray("staff");
+
+        // TODO: Get all staff and render
 
     } catch (error) {
+        console.error(error)
         return {
             status: 400,
             body: { error: true }
