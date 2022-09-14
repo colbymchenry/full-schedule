@@ -24,6 +24,7 @@
     }
 
     async function onSubmit(formData) {
+        loading = true;
         let choices = $bookingStore.get("choices");
         choices["services"] = Object.keys(formData);
         $bookingStore.set("choices", choices);
@@ -31,6 +32,7 @@
     }
 
     let disabled = true;
+    let loading = false;
 
     function checkDisabled() {
         if (browser) {

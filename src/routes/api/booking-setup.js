@@ -7,9 +7,8 @@ export async function get({request, url}) {
 
             delete settings["clover"];
             delete settings["google"];
-            delete settings["twilio"];
+            delete settings["sendinblue"];
             delete settings["textmagic"];
-            delete settings["email"];
             delete settings["created_at"];
             delete settings["updated_at"];
             return {

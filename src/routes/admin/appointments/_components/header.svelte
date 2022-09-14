@@ -23,7 +23,9 @@
                 reRender = !reRender;
             }}/>
         {#key reRender}
-            <InputField type="date" icon={iconCalendar} bind:value={selectedDate}/>
+            <InputField type="date" icon={iconCalendar} bind:value={selectedDate} dateProps={{
+                    closeOnSelection: true
+            }}/>
         {/key}
         <Button type="button" color="icon" icon={iconChevronRight} callback={() => {
                 selectedDate.setDate(selectedDate.getDate() + 1);

@@ -13,6 +13,8 @@
         step = undefined, style = undefined, onChange = undefined, onFocus = undefined;
     export let required = false;
 
+    export let dateProps = {};
+
     // this is used for the Toggle component, it must ALWAYS be checked for FormData to pick it up,
     // but the value can be true or false
     let checked = true;
@@ -94,7 +96,7 @@
                     {@html icon}
                 </div>
             {/if}
-            <DateInput bind:value={value} format="MM/dd/yyyy"/>
+            <DateInput bind:value={value} format="MM/dd/yyyy" {...dateProps} />
         </div>
     {:else}
         <div class={"input-field" + (clazz ? " " + clazz : "")} class:is--search={icon === iconSearch}

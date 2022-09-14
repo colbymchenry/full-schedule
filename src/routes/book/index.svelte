@@ -11,8 +11,10 @@
     import {bookingStore} from "../../lib/stores.js";
 
     let form_errors = {};
+    let loading = false;
 
     async function onSubmit(formData) {
+        loading = true;
         $bookingStore.set("choices", formData);
         await goto('/book/service');
     }
@@ -45,7 +47,7 @@
                     maskChar="_"
                     onChange={checkDisabled}
         />
-        <Button style="min-height: 48px;margin-top: 2rem;justify-self: stretch;" {disabled}>Continue</Button>
+        <Button style="min-height: 48px;margin-top: 2rem;justify-self: stretch;" {disabled} {loading}>Continue</Button>
         <!--                <Separator label="Or continue with" height="1rem" />-->
         <!--                -->
         <!--                <div class="oauth-container">-->

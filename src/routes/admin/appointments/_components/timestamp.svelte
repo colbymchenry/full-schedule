@@ -26,10 +26,11 @@
         let results = appointments.filter((app) => {
             if (app.staff === staff.doc_id) {
                 const appDate = new Date(app.start.dateTime);
-
+                // Finding the appointment at the time stamp
                 if (appDate.getDate() === date.getDate()) {
                     if (appDate.getHours() === dateTimestamp.getHours() &&
-                        appDate.getMinutes() >= dateTimestamp.getMinutes()) {
+                        appDate.getMinutes() === dateTimestamp.getMinutes()) {
+                        // This minutes part will be important in rendering appointments that are in the 15 minutes intervals
                         return true;
                     }
                 }

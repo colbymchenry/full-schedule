@@ -5,6 +5,7 @@ import {StringUtils} from "../../../utils/StringUtils.js";
 import {TimeHelper} from "../../../utils/TimeHelper.js";
 import {SMSHelper} from "../../../utils/SMSHelper.js";
 import {MailHelper} from "../../../utils/MailHelper.js";
+import {AppointmentHelper} from "../../../utils/AppointmentHelper.js";
 
 // Endpoint to create an appointment
 export async function post({request}) {
@@ -32,12 +33,6 @@ export async function post({request}) {
         }
     }
 
-    const weekday = payload?.date ? new Date(payload.date).toLocaleDateString('en-US', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    }).split(",")[0].toLowerCase() : null;
 
     // Grab all relevant Firebase documents from the IDs passed in the payload
     const staff = await (await FirebaseAdmin.firestore().collection("staff").doc(payload.staff).get()).data();
@@ -52,18 +47,6 @@ export async function post({request}) {
     const getVal = (key) => settings.get(key) || "";
 
     try {
-        const startDate = new Date(payload.date);
-
-        // Add up service durations to get accurate endTime
-        const endDate = new Date(payload.date);
-        let totalMinutes = 0;
-        services.forEach(({duration}) => totalMinutes += duration ? parseInt(duration) : 30);
-        const addedHours = Math.floor(totalMinutes / 60);
-        const addedMinutes = totalMinutes % 60;
-        endDate.setHours(endDate.getHours() + addedHours, endDate.getMinutes() + addedMinutes, 0);
-
-        // Get a new Google Calendar API instance
-        const calendarApi = await GoogleCalendarAPI.getInstance();
 
         // Setup Google Calendar's event variables
         const location = `${getVal("address.street1")} ${getVal("address.street2")}, ${getVal("address.city")}, ${getVal("address.state")} ${getVal("address.zip")}`;
@@ -72,48 +55,17 @@ export async function post({request}) {
 Services: ${services.map((service) => StringUtils.capitalize(service.name)).join(", ")}
         `;
 
-        // Get events at time & date
-        const events = await calendarApi.getEvents({
-            timeMin: startDate.toISOString(),
-            timeMax: endDate.toISOString(),
-            singleEvents: true,
-            orderBy: 'startTime'
-        })
+        staff["doc_id"] = payload.staff;
+        const isAvailable = await AppointmentHelper.isAvailable(payload.date, payload.timestamp, services, staff);
 
-        // Check to see if the staff is available at that time
-        const notWorking = !staff?.schedule?.[weekday]?.enabled;
-        const onLunch = () => {
-            if (!staff?.schedule?.[weekday]?.lunch?.start || !staff?.schedule?.[weekday]?.lunch?.end) return false;
-            let lunchStart = TimeHelper.getSliderValFrom24(staff.schedule[weekday].lunch.start);
-            let lunchEnd = TimeHelper.getSliderValFrom24(staff.schedule[weekday].lunch.end);
-            let currentVal = TimeHelper.getSliderValFrom24(payload.timestamp);
-            return lunchStart <= currentVal && lunchEnd >= currentVal;
+        // if there is no start date return
+        if (isAvailable?.status === 400) {
+            return isAvailable;
         }
-
-        if (notWorking || onLunch()) {
-            return {
-                status: 400,
-                body: {
-                    message: "Staff not available.",
-                    code: 2
-                }
-            }
-        }
-
-        // Check to see if staff is already scheduled at that time
-        if (events.filter((gEvent) => gEvent?.extendedProperties?.private?.staff === payload.staff).length) {
-            return {
-                status: 400,
-                body: {
-                    message: "Staff already scheduled.",
-                    code: 1
-                }
-            }
-        }
-
 
         // Post new event to Google Calendar
-        const postedEvent = await calendarApi.postEvent(location, summary, description, startDate, endDate, [
+        const calendarApi = await GoogleCalendarAPI.getInstance();
+        const postedEvent = await calendarApi.postEvent(location, summary, description, isAvailable.startDate, isAvailable.endDate, [
             {
                 email: staff.email,
                 displayName: staff.displayName
@@ -160,7 +112,9 @@ Services: ${services.map((service) => StringUtils.capitalize(service.name)).join
 
         return {
             status: 200,
-            body: {}
+            body: {
+                appointment: appObj
+            }
         }
     } catch (error) {
         if (error?.code) {
