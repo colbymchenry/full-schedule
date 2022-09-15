@@ -1,39 +1,21 @@
-import {GoogleCalendarAPI} from "./GoogleCalendarAPI.js";
 import {TimeHelper} from "./TimeHelper.js";
+import {FirebaseAdmin} from "./firebase/FirebaseAdmin.js";
+import {JsonHelper} from "./JsonHelper.js";
 
 export class AppointmentHelper {
 
-    static async isAvailable(date, timestamp, services, staff) {
+    static async isAvailable(date, timestamp, services, staff, settings, appointments) {
+        if (!settings) {
+            settings = new JsonHelper(await (await FirebaseAdmin.firestore().collection("settings").doc("main").get()).data());
+        }
+
         const weekday = date ? new Date(date).toLocaleDateString('en-US', {
             weekday: 'long',
             year: 'numeric',
             month: 'long',
-            day: 'numeric'
+            day: 'numeric',
+            ...(settings.get("address.timezone") && { timeZone: settings.get("address.timezone") })
         }).split(",")[0].toLowerCase() : null;
-
-        const startDate = new Date(date);
-        const [hour, minute] = timestamp.split(":");
-        startDate.setHours(parseInt(hour), parseInt(minute), 0, 0);
-        // Add up service durations to get accurate endTime
-        const endDate = new Date(date);
-        endDate.setHours(parseInt(hour), parseInt(minute), 0, 0);
-
-        let totalMinutes = 0;
-        services.forEach(({duration}) => totalMinutes += duration ? parseInt(duration) : 30);
-        const addedHours = Math.floor(totalMinutes / 60);
-        const addedMinutes = totalMinutes % 60;
-        endDate.setHours(endDate.getHours() + addedHours, endDate.getMinutes() + addedMinutes, 0);
-
-        // Get a new Google Calendar API instance
-        const calendarApi = await GoogleCalendarAPI.getInstance();
-
-        // Get events at time & date
-        const events = await calendarApi.getEvents({
-            timeMin: startDate.toISOString(),
-            timeMax: endDate.toISOString(),
-            singleEvents: true,
-            orderBy: 'startTime'
-        })
 
         // Check to see if the staff is available at that time
         const notWorking = !staff?.schedule?.[weekday]?.enabled;
@@ -55,8 +37,29 @@ export class AppointmentHelper {
             }
         }
 
+        const startDate = new Date(date);
+        const [hour, minute] = timestamp.split(":");
+        startDate.setHours(parseInt(hour), parseInt(minute), 0, 0);
+        // Add up service durations to get accurate endTime
+        const endDate = new Date(date);
+        endDate.setHours(parseInt(hour), parseInt(minute), 0, 0);
+        let totalMinutes = 0;
+        services.forEach(({duration}) => totalMinutes += duration ? parseInt(duration) : 30);
+        const addedHours = Math.floor(totalMinutes / 60);
+        const addedMinutes = totalMinutes % 60;
+        endDate.setHours(endDate.getHours() + addedHours, endDate.getMinutes() + addedMinutes, 0);
+
+        // Get events at time & date, will need to make this more efficient
+        if (!appointments) {
+            appointments = await FirebaseAdmin.query(FirebaseAdmin.firestore().collection("appointments").where("staff", "==", staff.doc_id));
+        }
+
         // Check to see if staff is already scheduled at that time
-        if (events.filter((gEvent) => gEvent?.extendedProperties?.private?.staff === staff.doc_id).length) {
+        if (appointments.filter((app) => {
+            const appStart = FirebaseAdmin.toDate(app.start);
+            const appEnd = FirebaseAdmin.toDate(app.end);
+            return (appStart < endDate) && (appEnd >= startDate);
+        }).length) {
             return {
                 status: 400,
                 body: {

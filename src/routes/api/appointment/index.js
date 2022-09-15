@@ -56,7 +56,7 @@ Services: ${services.map((service) => StringUtils.capitalize(service.name)).join
         `;
 
         staff["doc_id"] = payload.staff;
-        const isAvailable = await AppointmentHelper.isAvailable(payload.date, payload.timestamp, services, staff);
+        const isAvailable = await AppointmentHelper.isAvailable(payload.date, payload.timestamp, services, staff, settings);
 
         // if there is no start date return
         if (isAvailable?.status === 400) {
@@ -88,32 +88,47 @@ Services: ${services.map((service) => StringUtils.capitalize(service.name)).join
             ...(payload?.lead && {lead: payload.lead}),
             google_event_id: postedEvent.id,
             google_event_link: postedEvent.htmlLink,
-            start: postedEvent.start,
-            end: postedEvent.end,
-            services: payload.services
+            services: payload.services,
+            start: FirebaseAdmin.toTimestamp(new Date(postedEvent.start.dateTime)),
+            end: FirebaseAdmin.toTimestamp(new Date(postedEvent.end.dateTime))
         };
 
         const {id} = await FirebaseAdmin.firestore().collection("appointments").add(appObj);
 
         appObj["doc_id"] = id;
 
-        // Send Email and SMS confirmation
-        await SMSHelper.sendAppointmentConfirmation(appObj, client?.phoneNumber || lead?.phoneNumber, staff);
+        let errors = [];
 
-        await MailHelper.send(
-            {
-                "name": "Balanced Aesthetics Medspa",
-                "email": "info@balancedaestheticsmedspa.com"
-            },
-            [{
-                "email": "colbymchenry@gmail.com",
-                "name": "Colby McHenry"
-            }]);
+        try {
+            // Send Email and SMS confirmation
+            await SMSHelper.sendAppointmentConfirmation(appObj, client?.phoneNumber || lead?.phoneNumber, staff);
+        } catch (error) {
+            errors.push("Failed to send SMS confirmation.");
+        }
+
+        try {
+            await MailHelper.send(
+                {
+                    "name": "Balanced Aesthetics Medspa",
+                    "email": "info@balancedaestheticsmedspa.com"
+                },
+                [{
+                    "email": "colbymchenry@gmail.com",
+                    "name": "Colby McHenry"
+                }], "Your Appointment Confirmation!");
+        } catch (error) {
+            errors.push("Failed to send email confirmation.");
+        }
+
+        if (errors.length) {
+            FirebaseAdmin.firestore().collection("appointments").doc(id).update({ errors });
+        }
 
         return {
             status: 200,
             body: {
-                appointment: appObj
+                appointment: appObj,
+                errors
             }
         }
     } catch (error) {

@@ -13,9 +13,10 @@ export const prettyLog = (label, val, asTable = false, shouldWarn = false) => {
     }
 }
 
-export const showToast = (message, type) => {
+export const showToast = (title, type, text) => {
     Swal.fire({
-        title: message ||  "Server error. Please try again later.",
+        title: title ||  "Server error. Please try again later.",
+        ...(text && { text }),
         timer: 5000,
         timerProgressBar: true,
         toast: true,

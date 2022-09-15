@@ -25,12 +25,12 @@
     $: if (appointments && appointments?.length) {
         let results = appointments.filter((app) => {
             if (app.staff === staff.doc_id) {
-                const appDate = new Date(app.start.dateTime);
+                const appDate = FirebaseClient.toDate(app.start);
                 // Finding the appointment at the time stamp
                 if (appDate.getDate() === date.getDate()) {
                     if (appDate.getHours() === dateTimestamp.getHours() &&
                         appDate.getMinutes() === dateTimestamp.getMinutes()) {
-                        // This minutes part will be important in rendering appointments that are in the 15 minutes intervals
+                        // TODO: This minutes part will be important in rendering appointments that are in the 15 minutes intervals
                         return true;
                     }
                 }
@@ -41,8 +41,8 @@
 
         if (results.length) {
             appointment = results[0];
-            const start = new Date(appointment.start.dateTime);
-            const end = new Date(appointment.end.dateTime);
+            const start = FirebaseClient.toDate(appointment.start);
+            const end = FirebaseClient.toDate(appointment.end);
             let minuteHeight = 100 / 30;
             let minutes = Math.round(
                 Math.abs(end - start) / (60 * 1000)
@@ -73,14 +73,14 @@
             <div class="header">
                 <span class="displayName">{appointment?.userInfo?.displayName}</span>
                 {#if !appointment?.checkIn}
-                    {#if new Date() > new Date(appointment.start.dateTime)}
+                    {#if new Date() > FirebaseClient.toDate(appointment.start)}
                         <span class="status red"><span class="icon">{@html iconHeroWarning}</span> Not checked in</span>
                     {:else}
                         <span class="status yellow"><span class="icon">{@html iconHeroWarning}</span> Awaiting check in</span>
                     {/if}
                 {:else}
                     {#if !appointment?.checkOut}
-                        {#if new Date() > new Date(appointment.end.dateTime)}
+                        {#if new Date() > FirebaseClient.toDate(appointment.end)}
                             <span class="status red"><span
                                     class="icon">{@html iconHeroWarning}</span> Not checked out</span>
                         {:else}
@@ -105,7 +105,8 @@
     <span class="new-app-drawer" class:visible={slotVisible === timestamp + staff.doc_id}
           on:click={() => slotVisible = timestamp + staff.doc_id}>
                 {#key slotVisible}
-                    <AppointmentsDrawer bind:slotVisible={slotVisible} date={date} staff={staff} timestamp={timestamp}/>
+                    <AppointmentsDrawer bind:slotVisible={slotVisible} bind:appointments={appointments} date={date}
+                                        staff={staff} timestamp={timestamp} {fetchAppointments} />
                 {/key}
     </span>
     {/if}

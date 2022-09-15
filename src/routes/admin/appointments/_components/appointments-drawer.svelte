@@ -12,9 +12,10 @@
     import {TimeHelper} from "../../../../utils/TimeHelper.js";
     import {Api} from "../../../../utils/Api.js";
     import {ApiProgressBar} from "../../../../utils/ApiProgressBar.js";
+    import {settings} from "../../../../lib/stores.js";
 
 
-    export let date = undefined, timestamp = undefined, staff = undefined, slotVisible = undefined;
+    export let date = undefined, timestamp = undefined, staff = undefined, slotVisible = undefined, fetchAppointments;
 
     let client;
     let form_errors = {};
@@ -64,7 +65,14 @@
                 return;
             }
 
-            showToast("Appointment created!", "success");
+            if (res?.appointment) {
+                await fetchAppointments();
+                if (res?.errors) {
+                    showToast("Appointment created!", "success", "Errors: " + res.errors.join(". "));
+                } else {
+                    showToast("Appointment created!", "success");
+                }
+            }
             slotVisible = undefined;
         } catch (error) {
             showToast();
@@ -163,7 +171,8 @@
                                         {new Date(client.birthday).toLocaleDateString('en-US', {
                                             year: 'numeric',
                                             month: 'long',
-                                            day: 'numeric'
+                                            day: 'numeric',
+                                            ...($settings.get("address.timezone") && { timeZone: $settings.get("address.timezone") })
                                         })}
                                     </div>
                                 {/if}
@@ -201,7 +210,8 @@
                     <span>{date.toLocaleDateString('en-US', {
                         weekday: 'long',
                         month: 'long',
-                        day: 'numeric'
+                        day: 'numeric',
+                        ...($settings.get("address.timezone") && { timeZone: $settings.get("address.timezone") })
                     })} @ {TimeHelper.convertTime24to12(timestamp)} with {staff?.displayName}</span>
                 </div>
                 <Button type="submit" disabled={!client} loading={submitted}>Create</Button>

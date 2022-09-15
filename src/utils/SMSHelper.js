@@ -44,18 +44,18 @@ export class SMSHelper {
 
     static async sendAppointmentConfirmation(appointment, number, staff) {
         const settings = await (await FirebaseAdmin.firestore().collection("settings").doc("main").get()).data();
-        const dateHuman = new Date(appointment.start.dateTime).toLocaleTimeString([], {
+        const dateHuman = new Date(appointment.start).toLocaleTimeString([], {
             year: 'numeric',
             month: 'long',
             day: 'numeric',
             hour: '2-digit',
             minute: '2-digit',
-            timeZone: appointment.start.timeZone
+            ...(settings?.address?.timezone && { timeZone: settings.address.timezone })
         });
         const textBody = `\n\nYour appointment on\n\n${dateHuman}${staff?.displayName ? ` with ${StringUtils.capitalize(staff.displayName)}` : ""} is scheduled.\n\nAddress:\n${settings?.address?.street1 && settings.address.street1 + "\n"}${settings?.address?.street2 && settings?.address?.street2 + "\n"}${settings?.address?.city && settings?.address?.city + ", "}${settings?.address?.state && settings?.address?.state} ${settings?.address?.zip && settings?.address?.zip}\n\nThanks for choosing ${settings?.store?.name}! We look forward to seeing you!`;
 
         // TODO: Scheduler can't do past 7 days
-        const reminderDate = new Date(appointment.start.dateTime);
+        const reminderDate = new Date(appointment.start);
         reminderDate.setHours(8, 0, 30);
 
 
@@ -72,7 +72,7 @@ export class SMSHelper {
             text: textBody,
             phones: number,
             sendingDateTime: formatDate(reminderDate),
-            sendingTimeZone: appointment.start.timeZone
+            ...(settings?.address?.timezone && { sendingTimeZone: settings.address.timezone })
         });
 
         try {

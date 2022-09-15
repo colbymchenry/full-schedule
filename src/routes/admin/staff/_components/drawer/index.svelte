@@ -15,6 +15,7 @@
     } from '$lib/icons.js';
     import {MathHelper} from "../../../../../utils/MathHelper.js";
     import {StringUtils} from "../../../../../utils/StringUtils.js";
+    import {settings} from "../../../../../lib/stores.js";
 
     export let staff;
     export let onComplete;
@@ -110,7 +111,8 @@
                             {new Date(staff.birthday).toLocaleDateString('en-US', {
                                 year: 'numeric',
                                 month: 'long',
-                                day: 'numeric'
+                                day: 'numeric',
+                                ...($settings.get("address.timezone") && { timeZone: $settings.get("address.timezone") })
                             })}
                         </div>
                     {/if}

@@ -13,6 +13,7 @@
     import {TimeHelper} from "../../../utils/TimeHelper.js";
     import Skeleton from 'svelte-skeleton/Skeleton.svelte'
     import {MathHelper} from "../../../utils/MathHelper.js";
+    import {settings} from "../../../lib/stores.js";
 
 
     let selectedDate = new Date();
@@ -22,7 +23,8 @@
         weekday: 'long',
         year: 'numeric',
         month: 'long',
-        day: 'numeric'
+        day: 'numeric',
+        ...($settings.get("address.timezone") && { timeZone: $settings.get("address.timezone") })
     }).split(",")[0].toLowerCase() : "";
 
     let slotVisible;
@@ -129,9 +131,10 @@
                                 <td>
                                     <div class="appointment-container">
                                         <Timestamp timestamp={timestamp} staffAccounts={staffAccounts} staff={staff}
-                                                   weekday={weekday} bind:slotVisible={slotVisible} services={services}
+                                                   bind:weekday={weekday} bind:slotVisible={slotVisible}
+                                                   services={services}
                                                    bind:date={selectedDate} bind:appointments={appointments}
-                                                   fetchStaff={fetchStaff} fetchAppointments={fetchAppointments} />
+                                                   fetchStaff={fetchStaff} fetchAppointments={fetchAppointments}/>
                                     </div>
                                 </td>
                             {/each}

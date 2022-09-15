@@ -15,6 +15,7 @@
         iconPin
     } from "../../../../../lib/icons.js";
     import {StringUtils} from "../../../../../utils/StringUtils.js";
+    import {settings} from "../../../../../lib/stores.js";
 
     export let client;
     export let onComplete;
@@ -104,7 +105,8 @@
                             {new Date(client.birthday).toLocaleDateString('en-US', {
                                 year: 'numeric',
                                 month: 'long',
-                                day: 'numeric'
+                                day: 'numeric',
+                                ...($settings.get("address.timezone") && { timeZone: $settings.get("address.timezone") })
                             })}
                         </div>
                     {/if}

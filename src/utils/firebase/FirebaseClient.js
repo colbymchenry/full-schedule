@@ -74,6 +74,10 @@ export class FirebaseClient {
         return firebaseApp;
     }
 
+    static toDate(timestamp) {
+        return new Date(timestamp.seconds*1000);
+    }
+
     static async uploadFile(fileData, path) {
         const storageRef = ref(firebaseStorage, path);
         await uploadBytes(storageRef, fileData);

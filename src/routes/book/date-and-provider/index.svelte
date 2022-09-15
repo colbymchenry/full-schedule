@@ -16,17 +16,20 @@
     async function fetchAvailability() {
         if (browser) {
             try {
-                availability = await Api.post(`/api/fetch-availability`, {
+                let res = await Api.post(`/api/fetch-availability`, {
                     services: $bookingStore.get("services").map(({doc_id}) => doc_id),
                     date: selectedDate
                 });
 
-                console.log(availability);
+                availability = Object.values(res.timeSlots);
             } catch (error) {
                 console.error(error);
             }
         }
     }
+
+    // This seems weird, but we run fetchAvailability any time the selected date changes.
+    $: selectedDate, fetchAvailability();
 
     async function onSubmit(formData) {
 
@@ -46,7 +49,19 @@
                 }}/>
             </div>
 
+            <div class="time-slots">
+                {#await availability}
+                    <p>Contacting server...</p>
+                {:then data}
+                    {#each availability as staff}
+                        <div class="staff-block">
 
+                        </div>
+                    {/each}
+                {:catch error}
+
+                {/await}
+            </div>
         </div>
 
         <Button style="min-height: 48px;margin-top: 2rem;justify-self: stretch;" {disabled}>Continue</Button>

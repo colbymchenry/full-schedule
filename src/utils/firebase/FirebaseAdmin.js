@@ -39,6 +39,14 @@ export class FirebaseAdmin {
         return admin.auth();
     }
 
+    static toTimestamp(date) {
+        return admin.firestore.Timestamp.fromDate(new Date(date));
+    }
+
+    static toDate(timestamp) {
+        return new Date(timestamp.seconds*1000);
+    }
+
     static async getCollectionArray(collection) {
         const querySnapshot = await FirebaseAdmin.firestore().collection(collection).get();
         let result = []
@@ -46,6 +54,15 @@ export class FirebaseAdmin {
             result.push({...doc.data(), doc_id: doc.id})
         });
         return result;
+    }
+
+    static async query(q) {
+        let snapshot = await q.get();
+        let results = [];
+        snapshot.forEach((doc) => {
+            results.push({...doc.data(), doc_id: doc.id});
+        })
+        return results;
     }
 
 }
