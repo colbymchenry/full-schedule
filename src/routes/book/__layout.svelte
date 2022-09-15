@@ -109,14 +109,11 @@
 
     > div:first-of-type {
       position: relative;
-      display: grid;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
       min-width: 450px;
-      grid-auto-columns: 1fr;
-      grid-auto-rows: auto;
-      grid-column-gap: 16px;
-      grid-row-gap: 16px;
-      grid-template-columns: 1fr;
-      grid-template-rows: auto;
+      max-width: 450px;
     }
   }
 </style>

@@ -3,10 +3,12 @@
     import Form from "$lib/forms/form.svelte";
     import Button from "$lib/forms/button.svelte";
     import InputField from '$lib/forms/input-field.svelte';
+    import Avatar from '$lib/avatar.svelte';
     import {iconCalendar} from "../../../lib/icons.js";
     import {bookingStore} from "../../../lib/stores.js";
     import {Api} from "../../../utils/Api.js";
     import {browser} from "$app/env";
+    import {TimeHelper} from "../../../utils/TimeHelper.js";
 
     let disabled = true;
     let selectedDate = new Date();
@@ -49,13 +51,24 @@
                 }}/>
             </div>
 
-            <div class="time-slots">
+            <div class="staff__container">
                 {#await availability}
                     <p>Contacting server...</p>
                 {:then data}
                     {#each availability as staff}
-                        <div class="staff-block">
-
+                        <div class="staff__block">
+                            <div class="staff__info">
+                                <Avatar user={staff} size="small"/>
+                                <div>
+                                    <span>{staff.displayName}</span>
+                                    <span>{staff.title}</span>
+                                </div>
+                            </div>
+                            <div class="staff__time-slots">
+                                {#each staff.availability as timestamp}
+                                    <button type="button">{TimeHelper.convertTime24to12(timestamp)}</button>
+                                {/each}
+                            </div>
                         </div>
                     {/each}
                 {:catch error}
@@ -70,11 +83,48 @@
 </BookingLayout>
 
 <style lang="scss">
+  .staff__container {
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
+    overflow: hidden;
+
+    .staff__block {
+      display: flex;
+      flex-direction: column;
+
+      .staff__info {
+        display: flex;
+        align-items: center;
+
+        > div {
+          display: flex;
+          flex-direction: column;
+          margin-left: 1rem;
+        }
+      }
+
+      .staff__time-slots {
+        display: flex;
+        overflow-y: hidden;
+        overflow-x: auto;
+        margin-top: 0.5rem;
+        max-width: 100%;
+
+        button {
+          white-space: nowrap;
+        }
+      }
+    }
+  }
+
   .container {
     display: grid;
     grid-template-columns: 1fr;
     grid-auto-rows: 1fr;
     min-height: 300px;
+    max-width: 100%;
+    overflow: hidden;
 
     label {
       font-weight: 500;

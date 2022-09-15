@@ -122,9 +122,9 @@
                             }}>
                             <!-- When clicked we need to add the product to the service-->
                             <span class="result">
-                            <Avatar user={data} size="xx-small"/>
-                            <span>{data.displayName}</span>
-                        </span>
+                                <Avatar user={data} size="xx-small"/>
+                                <span>{data.displayName}</span>
+                            </span>
                         </SearchWithResults>
                     </div>
                     {#if client}
