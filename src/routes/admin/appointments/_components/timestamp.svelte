@@ -20,17 +20,16 @@
         return lunchStart <= currentVal && lunchEnd >= currentVal;
     }
 
-    let appointment, appHeight;
+    let appointment, appHeight, appMargin;
 
-    $: if (appointments && appointments?.length) {
+    // Only render appointments at each hour
+    $: if (appointments && appointments?.length && parseInt(minute) === 0) {
         let results = appointments.filter((app) => {
             if (app.staff === staff.doc_id) {
                 const appDate = FirebaseClient.toDate(app.start);
                 // Finding the appointment at the time stamp
                 if (appDate.getDate() === date.getDate()) {
-                    if (appDate.getHours() === dateTimestamp.getHours() &&
-                        appDate.getMinutes() === dateTimestamp.getMinutes()) {
-                        // TODO: This minutes part will be important in rendering appointments that are in the 15 minutes intervals
+                    if (appDate.getHours() === dateTimestamp.getHours()) {
                         return true;
                     }
                 }
@@ -47,7 +46,10 @@
             let minutes = Math.round(
                 Math.abs(end - start) / (60 * 1000)
             );
+
+            // Height and margin from top @ the hour
             appHeight = (minuteHeight * minutes) - 2;
+            appMargin = (minuteHeight * start.getMinutes());
 
             try {
                 if (appointment?.lead) {
@@ -69,7 +71,7 @@
 <div class="container" class:notWorking={notWorking} class:onLunch={onLunch()}>
 
     {#if appointment && appointment?.userInfo}
-        <div class="appointment" style={`height: ${appHeight}px;`}>
+        <div class="appointment" style={`height: ${appHeight}px;margin-top: ${appMargin}px;`}>
             <div class="header">
                 <span class="displayName">{appointment?.userInfo?.displayName}</span>
                 {#if !appointment?.checkIn}

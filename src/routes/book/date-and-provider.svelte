@@ -56,8 +56,11 @@
 
         try {
             let res = await Api.post(`/api/appointment`, choices, { token: ($bookingStore.get("token") || 'nil') });
+            if (res.status === 200) {
+                await goto('/book/confirmation');
+            }
         } catch (error) {
-
+            alert("An error occurred.")
         }
 
     }
