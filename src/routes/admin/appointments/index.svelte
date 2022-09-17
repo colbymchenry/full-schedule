@@ -105,17 +105,18 @@
                         <td>
                             <span class:small={TimeHelper.convertTime24to12(timestamp).split(":")[1].includes("30")}>{TimeHelper.convertTime24to12(timestamp)}</span>
                         </td>
-                        {#each staffAccounts as staff}
-                            <td>
-                                <div class="appointment-container">
-                                    <Timestamp timestamp={timestamp} staffAccounts={staffAccounts} staff={staff}
-                                               bind:weekday={weekday} bind:slotVisible={slotVisible}
-                                               services={services} bind:date={selectedDate}
-                                               bind:appointments={appointments}
-                                               fetchStaff={fetchStaff} fetchAppointments={fetchAppointments}/>
-                                </div>
-                            </td>
-                        {/each}
+                        {#key weekday}
+                            {#each staffAccounts as staff}
+                                <td>
+                                    <div class="appointment-container">
+                                        <Timestamp timestamp={timestamp} staffAccounts={staffAccounts} staff={staff}
+                                                   bind:slotVisible={slotVisible} bind:appointments={appointments}
+                                                   services={services} date={selectedDate} weekday={weekday}
+                                                   fetchStaff={fetchStaff} fetchAppointments={fetchAppointments}/>
+                                    </div>
+                                </td>
+                            {/each}
+                        {/key}
                     </tr>
                 {/each}
                 </tbody>

@@ -11,6 +11,8 @@
     const [hour, minute] = timestamp.split(":");
     dateTimestamp.setHours(parseInt(hour), parseInt(minute));
 
+    console.log(date)
+
     $: notWorking = !staff?.schedule?.[weekday]?.enabled;
     $: onLunch = () => {
         if (!staff?.schedule?.[weekday]?.lunch?.start || !staff?.schedule?.[weekday]?.lunch?.end) return false;
@@ -107,8 +109,8 @@
     <span class="new-app-drawer" class:visible={slotVisible === timestamp + staff.doc_id}
           on:click={() => slotVisible = timestamp + staff.doc_id}>
                 {#key slotVisible}
-                    <AppointmentsDrawer bind:slotVisible={slotVisible} bind:appointments={appointments} date={date}
-                                        staff={staff} timestamp={timestamp} {fetchAppointments} />
+                    <AppointmentsDrawer bind:slotVisible={slotVisible} date={date} staff={staff} timestamp={timestamp}
+                                        {fetchAppointments}/>
                 {/key}
     </span>
     {/if}
