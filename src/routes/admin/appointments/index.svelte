@@ -7,14 +7,12 @@
     import Timestamp from './_components/timestamp.svelte';
     import Timeline from './_components/timeline.svelte';
     import {FirebaseClient} from "../../../utils/firebase/FirebaseClient.js";
-    import {Api} from "../../../utils/Api.js";
     import {showToast} from "../../../utils/logger.js";
     import {StringUtils} from "../../../utils/StringUtils.js";
     import {TimeHelper} from "../../../utils/TimeHelper.js";
     import Skeleton from 'svelte-skeleton/Skeleton.svelte'
     import {MathHelper} from "../../../utils/MathHelper.js";
     import {settings} from "../../../lib/stores.js";
-
 
     let selectedDate = new Date();
     selectedDate.setHours(0, 0, 0, 0);
@@ -24,8 +22,9 @@
         year: 'numeric',
         month: 'long',
         day: 'numeric',
-        ...($settings.get("address.timezone") && { timeZone: $settings.get("address.timezone") })
+        ...($settings.get("address.timezone") && {timeZone: $settings.get("address.timezone")})
     }).split(",")[0].toLowerCase() : "";
+
 
     let slotVisible;
 
@@ -35,26 +34,7 @@
 
     async function fetchStaff() {
         try {
-            let accounts = await FirebaseClient.collection("staff");
-
-            if (!accounts.map(({uid}) => uid).join(",").length) {
-                staffAccounts = [];
-                return;
-            }
-
-            const {users} = await Api.get(`/api/user?ids=${accounts.map(({uid}) => uid).join(",")}`);
-
-            staffAccounts = accounts.map((account) => {
-                const user = users.find(({uid}) => uid === account?.uid);
-                if (user) {
-                    account["displayName"] = user.displayName;
-                    account["email"] = user.email;
-                    account["photoURL"] = user.photoURL;
-                    account["phoneNumber"] = user.phoneNumber;
-                    return account;
-                }
-            }).filter((account) => account !== undefined);
-
+            staffAccounts = await FirebaseClient.collection("staff");
             appointments = new Promise(fetchAppointments);
         } catch (error) {
             showToast();
@@ -119,29 +99,25 @@
                 </tr>
                 </thead>
                 <tbody>
-                <!-- Key weekday so it re-renders each time the date changes -->
-                {#key weekday}
-                    {#each timeMap as timestamp (timestamp)}
-                        <tr>
-                            <!-- Insert time stamp in first column of each row-->
+                {#each timeMap as timestamp (timestamp)}
+                    <tr>
+                        <!-- Insert time stamp in first column of each row-->
+                        <td>
+                            <span class:small={TimeHelper.convertTime24to12(timestamp).split(":")[1].includes("30")}>{TimeHelper.convertTime24to12(timestamp)}</span>
+                        </td>
+                        {#each staffAccounts as staff}
                             <td>
-                                <span class:small={TimeHelper.convertTime24to12(timestamp).split(":")[1].includes("30")}>{TimeHelper.convertTime24to12(timestamp)}</span>
+                                <div class="appointment-container">
+                                    <Timestamp timestamp={timestamp} staffAccounts={staffAccounts} staff={staff}
+                                               bind:weekday={weekday} bind:slotVisible={slotVisible}
+                                               services={services} bind:date={selectedDate}
+                                               bind:appointments={appointments}
+                                               fetchStaff={fetchStaff} fetchAppointments={fetchAppointments}/>
+                                </div>
                             </td>
-                            {#each staffAccounts as staff}
-                                <td>
-                                    <div class="appointment-container">
-                                        <Timestamp timestamp={timestamp} staffAccounts={staffAccounts} staff={staff}
-                                                   bind:weekday={weekday} bind:slotVisible={slotVisible}
-                                                   services={services}
-                                                   bind:date={selectedDate} bind:appointments={appointments}
-                                                   fetchStaff={fetchStaff} fetchAppointments={fetchAppointments}/>
-                                    </div>
-                                </td>
-                            {/each}
-                        </tr>
-                    {/each}
-                {/key}
-
+                        {/each}
+                    </tr>
+                {/each}
                 </tbody>
             </table>
         {:catch error}
@@ -249,6 +225,7 @@
           th {
             background-color: white;
             padding: 0.5rem;
+            text-transform: capitalize;
           }
         }
       }

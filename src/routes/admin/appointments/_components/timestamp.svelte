@@ -11,8 +11,8 @@
     const [hour, minute] = timestamp.split(":");
     dateTimestamp.setHours(parseInt(hour), parseInt(minute));
 
-    const notWorking = !staff?.schedule?.[weekday]?.enabled;
-    const onLunch = () => {
+    $: notWorking = !staff?.schedule?.[weekday]?.enabled;
+    $: onLunch = () => {
         if (!staff?.schedule?.[weekday]?.lunch?.start || !staff?.schedule?.[weekday]?.lunch?.end) return false;
         let lunchStart = TimeHelper.getSliderValFrom24(staff.schedule[weekday].lunch.start);
         let lunchEnd = TimeHelper.getSliderValFrom24(staff.schedule[weekday].lunch.end);

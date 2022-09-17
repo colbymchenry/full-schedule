@@ -1,9 +1,17 @@
+import {config} from "dotenv";
 import {FirebaseAdmin} from "../../utils/firebase/FirebaseAdmin.js";
 import {JsonHelper} from "../../utils/JsonHelper.js";
 import {AppointmentHelper} from "../../utils/AppointmentHelper.js";
 import {TimeHelper} from "../../utils/TimeHelper.js";
+import {Recaptcha} from "../../utils/Recaptcha.js";
+config()
+
 
 export async function post({request}) {
+
+    // TODO: This may not be best method, should maybe ban IP abuse rather than checking token for GET requests (yes this is POST but it's fetching info)
+    const verify = await Recaptcha.verifyToken(request);
+    if (verify) return verify;
 
     const payload = await request.json();
 

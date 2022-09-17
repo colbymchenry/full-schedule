@@ -11,3 +11,5 @@ export const progressBarStore = writable(false);
 export const settings = writable(new JsonHelper({}));
 // hold the booking setup data and choices made during the booking process
 export const bookingStore = writable(null);
+
+export const recaptchaKey = writable("6LcKfwgiAAAAAOsX67-tj-zpjEroWamiIQNr9xSF");

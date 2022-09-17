@@ -1,15 +1,17 @@
 <script>
-    import BookingLayout from "../_components/BookingLayout.svelte";
+    import BookingLayout from "./_components/BookingLayout.svelte";
     import Form from "$lib/forms/form.svelte";
     import Button from "$lib/forms/button.svelte";
     import InputField from '$lib/forms/input-field.svelte';
     import Avatar from '$lib/avatar.svelte';
-    import {iconCalendar} from "../../../lib/icons.js";
-    import {bookingStore} from "../../../lib/stores.js";
-    import {Api} from "../../../utils/Api.js";
+    import {iconCalendar} from "../../lib/icons.js";
+    import {bookingStore, recaptchaKey} from "../../lib/stores.js";
+    import {Api} from "../../utils/Api.js";
     import {browser} from "$app/env";
-    import {TimeHelper} from "../../../utils/TimeHelper.js";
+    import {TimeHelper} from "../../utils/TimeHelper.js";
+    import {goto} from "$app/navigation";
 
+    let loading = false;
     let disabled = true;
     let selectedDate = new Date();
     let minDate = new Date();
@@ -20,11 +22,9 @@
 
     function selectTimeslot(staff, timestamp) {
         selectedTimeSlot = {
-            staff: staff.doc_id,
+            staff,
             timestamp
         }
-
-        console.log(selectedTimeSlot)
     }
 
     async function fetchAvailability() {
@@ -33,7 +33,7 @@
                 let res = await Api.post(`/api/fetch-availability`, {
                     services: $bookingStore.get("services").map(({doc_id}) => doc_id),
                     date: selectedDate
-                });
+                }, { token: ($bookingStore.get("token") || 'nil') });
 
                 availability = Object.values(res.timeSlots);
             } catch (error) {
@@ -46,10 +46,21 @@
     $: selectedDate, fetchAvailability();
 
     async function onSubmit(formData) {
+        loading = true;
+        let choices = $bookingStore.get("choices");
+        choices["staff"] = selectedTimeSlot.staff.doc_id;
+        choices["timestamp"] = selectedTimeSlot.timestamp;
+        selectedDate.setHours(0, 0, 0, 0);
+        choices["date"] = selectedDate;
+        $bookingStore.set("choices", choices);
+
+        try {
+            let res = await Api.post(`/api/appointment`, choices, { token: ($bookingStore.get("token") || 'nil') });
+        } catch (error) {
+
+        }
 
     }
-
-    console.log(selectedTimeSlot)
 </script>
 
 
@@ -84,7 +95,7 @@
                                     {#each staff.availability as timestamp}
                                         <button type="button" class="time-slot"
                                                 class:selected={selectedTimeSlot
-                                                    && selectedTimeSlot["staff"] === staff.doc_id
+                                                    && selectedTimeSlot["staff"]?.doc_id === staff.doc_id
                                                     && selectedTimeSlot["timestamp"] === timestamp
                                                 }
                                                 on:click={() => selectTimeslot(staff, timestamp)}>
@@ -108,7 +119,7 @@
             </div>
         </div>
 
-        <Button style="min-height: 48px;margin-top: 2rem;justify-self: stretch;" disabled={!selectedTimeSlot}>Continue</Button>
+        <Button style="min-height: 48px;margin-top: 2rem;justify-self: stretch;" disabled={!selectedTimeSlot} {loading}>Continue</Button>
     </Form>
 
 </BookingLayout>

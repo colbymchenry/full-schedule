@@ -12,9 +12,9 @@
     import Checkbox from "$lib/forms/checkbox.svelte";
     import Form from "$lib/forms/form.svelte";
     import Button from "$lib/forms/button.svelte";
-    import BookingLayout from "../_components/BookingLayout.svelte";
+    import BookingLayout from "./_components/BookingLayout.svelte";
     import {browser} from "$app/env";
-    import {FormHelper} from "../../../utils/FormHelper.js";
+    import {FormHelper} from "../../utils/FormHelper.js";
     import {goto} from "$app/navigation";
 
     export let services;

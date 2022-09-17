@@ -1,5 +1,6 @@
 <svelte:head>
     <title>FS • Book</title>
+    <script src="https://www.google.com/recaptcha/api.js?render=6LcKfwgiAAAAAOsX67-tj-zpjEroWamiIQNr9xSF"></script>
 </svelte:head>
 
 <script context="module">

@@ -2,37 +2,40 @@ import {FirebaseAdmin} from "../../../utils/firebase/FirebaseAdmin.js";
 import {JsonHelper} from "../../../utils/JsonHelper";
 import {GoogleCalendarAPI} from "../../../utils/GoogleCalendarAPI.js";
 import {StringUtils} from "../../../utils/StringUtils.js";
-import {TimeHelper} from "../../../utils/TimeHelper.js";
 import {SMSHelper} from "../../../utils/SMSHelper.js";
 import {MailHelper} from "../../../utils/MailHelper.js";
 import {AppointmentHelper} from "../../../utils/AppointmentHelper.js";
+import {Recaptcha} from "../../../utils/Recaptcha.js";
 
 // Endpoint to create an appointment
 export async function post({request}) {
 
-    await FirebaseAdmin.auth().verifyIdToken(request.headers.get("authorization"));
-    const settings = new JsonHelper(await (await FirebaseAdmin.firestore().collection("settings").doc("main").get()).data());
-
     const payload = await request.json();
-
     let client, lead;
 
-    if (payload?.client) {
-        client = await (await FirebaseAdmin.firestore().collection("clients").doc(payload.client).get()).data();
-    }
-
     if (payload?.lead) {
+        const verify = await Recaptcha.verifyToken(request);
+        if (verify) return verify;
         lead = await (await FirebaseAdmin.firestore().collection("leads").doc(payload.lead).get()).data();
-    }
-
-    // Basic payload validation for now
-    if (!payload?.date || !payload?.services || !payload?.staff || !payload?.timestamp || (!payload?.client && !payload?.lead)) {
+    } else if (payload?.client) {
+        await FirebaseAdmin.auth().verifyIdToken(request.headers.get("authorization"));
+        client = await (await FirebaseAdmin.firestore().collection("clients").doc(payload.client).get()).data();
+    } else {
         return {
             status: 400,
             body: {}
         }
     }
 
+    // Basic payload validation for now
+    if (!payload?.date || !payload?.services || !payload?.staff || !payload?.timestamp) {
+        return {
+            status: 400,
+            body: {}
+        }
+    }
+
+    const settings = new JsonHelper(await (await FirebaseAdmin.firestore().collection("settings").doc("main").get()).data());
 
     // Grab all relevant Firebase documents from the IDs passed in the payload
     const staff = await (await FirebaseAdmin.firestore().collection("staff").doc(payload.staff).get()).data();

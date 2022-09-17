@@ -10,7 +10,7 @@ export class Api {
             cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
             credentials: 'same-origin', // include, *same-origin, omit
             headers: headers || {
-                'authorization': await FirebaseClient.getIdToken(),
+                ...(!headers?.token ? { 'authorization': await FirebaseClient.getIdToken() } : { 'token': headers["token"] }),
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
                 // 'Content-Type': 'application/x-www-form-urlencoded',
@@ -28,7 +28,7 @@ export class Api {
             cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
             credentials: 'same-origin', // include, *same-origin, omit
             headers: headers || {
-                'authorization': await FirebaseClient.getIdToken(),
+                ...(!headers?.token ? { 'authorization': await FirebaseClient.getIdToken() } : { 'token': headers["token"] }),
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
                 // 'Content-Type': 'application/x-www-form-urlencoded',
@@ -50,8 +50,8 @@ export class Api {
             mode: 'cors', // no-cors, *cors, same-origin
             cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
             credentials: 'same-origin', // include, *same-origin, omit
-            headers: headers || {
-                'authorization': await FirebaseClient.getIdToken(),
+            headers: {
+                ...(!headers?.token ? { 'authorization': await FirebaseClient.getIdToken() } : { 'token': headers["token"] }),
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
                 // 'Content-Type': 'application/x-www-form-urlencoded',
@@ -78,7 +78,7 @@ export class Api {
             headers: headers || {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
-                'authorization': await FirebaseClient.getIdToken()
+                ...(!headers?.token ? { 'authorization': await FirebaseClient.getIdToken() } : { 'token': headers["token"] }),
                 // 'Content-Type': 'application/x-www-form-urlencoded',
             },
             redirect: 'follow', // manual, *follow, error
