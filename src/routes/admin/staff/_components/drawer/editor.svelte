@@ -104,12 +104,26 @@
             if (avatarImg) {
                 // Upload image to Cloud Storage
                 const photoURL = await FirebaseClient.uploadFile(avatarImg, 'avatar/' + (staff?.uid || res.user.uid));
+                let uid = staff?.uid || res.user.uid;
                 // update Google User in the backend
                 await Api.patch('/api/user', {
-                    uid: staff?.uid || res.user.uid,
+                    uid,
                     photoURL
                 })
                 data.photoURL = photoURL;
+
+                console.log(await FirebaseClient.doc("staff", uid))
+
+                if (await FirebaseClient.doc("staff", uid)) {
+                    await FirebaseClient.update("staff", uid, {
+                        photoURL
+                    })
+                }
+                if (await FirebaseClient.doc("clients", uid)) {
+                    await FirebaseClient.update("clients", uid, {
+                        photoURL
+                    })
+                }
             } else {
                 data.photoURL = staff.photoURL;
             }

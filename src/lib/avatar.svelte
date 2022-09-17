@@ -86,7 +86,17 @@
                         await Api.patch('/api/user', {
                             uid: user.uid,
                             photoURL: res
-                        })
+                        });
+
+                        if (await FirebaseClient.doc("staff", user.uid)) {
+                            await FirebaseClient.update("staff", user.uid, {
+                                photoURL: res
+                            })
+                        } else if (await FirebaseClient.doc("clients", user.uid)) {
+                            await FirebaseClient.update("clients", user.uid, {
+                                photoURL: res
+                            })
+                        }
                     } catch (error) {
                         await Swal.fire({
                             title: 'Error Reported',

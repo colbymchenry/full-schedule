@@ -78,7 +78,7 @@
       width: 100% !important;
       height: 100% !important;
       background: transparent !important;
-      padding: 10vw !important;
+      padding: 5vw !important;
       box-shadow: none !important;
 
       > div:first-of-type {

@@ -14,8 +14,10 @@
 
     let response;
     let form_errors = {};
+    let submitted = false;
 
     async function onSubmit(data) {
+        submitted = true;
         try {
             response = await FirebaseClient.signIn(data["email"], data["password"]);
             $auth = response.user;
@@ -29,6 +31,7 @@
 
             form_errors = form_errors;
         }
+        submitted = false;
     }
 </script>
 
@@ -45,7 +48,7 @@
                 <Checkbox name="remember">Remember me</Checkbox>
                 <a href="/admin/forgot-password" style="justify-self: flex-end;">Forgot password?</a>
             </div>
-            <Button style="min-height: 48px;">Sign in</Button>
+            <Button style="min-height: 48px;" loading={submitted}>Sign in</Button>
         </Form>
     </div>
 </LoginLayout>

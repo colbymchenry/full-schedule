@@ -18,12 +18,36 @@ export async function post({request}) {
         }))
 
         // Get all staff availability
-        const staff = await FirebaseAdmin.getCollectionArray("staff");
+        let staff = await FirebaseAdmin.getCollectionArray("staff");
+        // Remove staff with no schedule
+        staff = staff.filter((staffObj) => {
+            if (staffObj["schedule"]) {
+                if (staffObj["schedule"]?.sunday?.enabled || staffObj["schedule"]?.monday?.enabled
+                    || staffObj["schedule"]?.tuesday?.enabled || staffObj["schedule"]?.wednesday?.enabled
+                    || staffObj["schedule"]?.thursday?.enabled || staffObj["schedule"]?.friday?.enabled
+                    || staffObj["schedule"]?.saturday?.enabled) {
+                    return true;
+                }
+            }
+
+            return false;
+        })
 
         // Hold an object of time slots available
         const timeSlots = {};
 
-        // TODO: Get all staff and render
+        // Initialize timeslots object with photoURLs
+        staff.forEach((staffObj) => {
+            if (!timeSlots[staffObj.doc_id]) {
+                timeSlots[staffObj.doc_id] = staffObj;
+                timeSlots[staffObj.doc_id]["availability"] = [];
+                if (staffObj["photoURL"])
+                    timeSlots[staffObj.doc_id]["photoURL"] = staffObj["photoURL"];
+                if (staffObj["schedule"])
+                    timeSlots[staffObj.doc_id]["schedule"] = staffObj["schedule"];
+            }
+        })
+
         await Promise.all(staff.map(async (staffObj) => {
             // We pass in the appointments object and settings object to prevent calling too many querys to the Firestore DB
             let appointments = await FirebaseAdmin.query(FirebaseAdmin.firestore().collection("appointments").where("staff", "==", staffObj.doc_id));
@@ -31,11 +55,21 @@ export async function post({request}) {
                 let isAvailable = await AppointmentHelper.isAvailable(payload.date, TimeHelper.sliderValTo24(hour), services, staffObj, settings, appointments);
                 // If there is no status returned then it's a valid time slot
                 if (!isAvailable?.status) {
-                    if (!timeSlots[staffObj.doc_id]) {
-                        timeSlots[staffObj.doc_id] = staffObj;
-                        timeSlots[staffObj.doc_id]["availability"] = [TimeHelper.sliderValTo24(hour)];
-                    } else {
-                        timeSlots[staffObj.doc_id]["availability"] = [...timeSlots[staffObj.doc_id]["availability"], TimeHelper.sliderValTo24(hour)];
+                    timeSlots[staffObj.doc_id]["availability"] = [...timeSlots[staffObj.doc_id]["availability"], TimeHelper.sliderValTo24(hour)];
+                }
+            }
+
+            // If there was no availability for the staff, we need to find the next available date
+            let dayShift = 1;
+            while (!timeSlots[staffObj.doc_id]["availability"].length) {
+                let date = new Date(payload.date);
+                date.setDate(date.getDate() + dayShift);
+                dayShift += 1;
+                for (let hour = 4; hour <= 20; hour += 0.25) {
+                    let isAvailable = await AppointmentHelper.isAvailable(date, TimeHelper.sliderValTo24(hour), services, staffObj, settings, appointments);
+                    // If there is no status returned then it's a valid time slot
+                    if (!isAvailable?.status) {
+                        timeSlots[staffObj.doc_id]["availability"] = [date];
                     }
                 }
             }
@@ -43,14 +77,14 @@ export async function post({request}) {
 
         return {
             status: 200,
-            body: { timeSlots }
+            body: {timeSlots}
         }
 
     } catch (error) {
         console.error(error)
         return {
             status: 400,
-            body: { error: true }
+            body: {error: true}
         }
     }
 }
