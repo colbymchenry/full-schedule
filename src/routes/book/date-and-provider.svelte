@@ -57,6 +57,7 @@
         try {
             let res = await Api.post(`/api/appointment`, choices, { token: ($bookingStore.get("token") || 'nil') });
             if (res?.appointment) {
+                $bookingStore.set("staff", selectedTimeSlot.staff);
                 $bookingStore.set("appointment", res.appointment);
                 await goto('/book/confirmation');
             } else {

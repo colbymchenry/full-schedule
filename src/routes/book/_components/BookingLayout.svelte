@@ -34,7 +34,7 @@
   h1:first-of-type {
     font-weight: 800;
     letter-spacing: 0;
-    font-size: 38px;
+    font-size: 32px;
     line-height: 44px;
     margin-top: 20px;
     margin-bottom: 10px;

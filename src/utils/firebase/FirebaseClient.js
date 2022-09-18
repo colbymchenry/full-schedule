@@ -75,7 +75,8 @@ export class FirebaseClient {
     }
 
     static toDate(timestamp) {
-        return new Date(timestamp.seconds*1000);
+        if (!timestamp) return undefined;
+        return timestamp["_seconds"] ? new Date(timestamp["_seconds"] * 1000) : new Date(timestamp.seconds * 1000);
     }
 
     static async uploadFile(fileData, path) {

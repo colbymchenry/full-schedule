@@ -11,9 +11,9 @@
 </script>
 
 {#if (icon && color === "icon") || isIcon }
-    <button {type} {style} {disabled} class={`icon ${color ? color : ''}`} class:loading={loading} on:click={callback}><span>{@html icon}</span></button>
+    <button {type} {style} disabled={loading || disabled} class={`icon ${color ? color : ''}`} class:loading={loading} on:click={callback}><span>{#if loading}<Spinner color="#94a3b8" size="1.5rem" />{:else}{@html icon}{/if}</span></button>
 {:else}
-    <button {type} {style} {disabled} class={`btn ${icon ? 'has--icon ' : ''}` + color} class:loading={loading} on:click={callback}><span>{#if loading}<Spinner color="#fff" size="1.5rem" />{:else}{#if icon}<div class="icon">{@html icon}</div>{/if}<slot></slot> {/if}</span>
+    <button {type} {style} disabled={loading || disabled} class={`btn ${icon ? 'has--icon ' : ''}` + color} class:loading={loading} on:click={callback}><span>{#if loading}<Spinner color="#94a3b8" size="1.5rem" />{:else}{#if icon}<div class="icon">{@html icon}</div>{/if}<slot></slot> {/if}</span>
     </button>
 {/if}
 
@@ -52,8 +52,12 @@
     transition: all 0.3s ease;
     justify-self: flex-start;
 
+    &.loading {
+      cursor: not-allowed;
+    }
+
     &:disabled {
-      color: var(--fuse-accent-400);
+      color: var(--fuse-accent-400) !important;
       background-color: var(--fuse-accent-200) !important;
     }
 
@@ -210,13 +214,5 @@
         background-color: #f4e4e5;
       }
     }
-  }
-
-  .loading span {
-    color: white;
-  }
-
-  .loading {
-    background-color: #473fc6;
   }
 </style>
