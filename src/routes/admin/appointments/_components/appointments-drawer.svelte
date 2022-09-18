@@ -212,7 +212,7 @@
                         month: 'long',
                         day: 'numeric',
                         ...($settings.get("address.timezone") && { timeZone: $settings.get("address.timezone") })
-                    })} @ {TimeHelper.convertTime24to12(timestamp)} with {staff?.displayName}</span>
+                    })} @ {TimeHelper.convertTime24to12(timestamp)} with <span style="text-transform: capitalize;">{staff?.displayName}</span></span>
                 </div>
                 <Button type="submit" disabled={!client} loading={submitted}>Create</Button>
             </div>

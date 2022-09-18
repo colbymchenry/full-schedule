@@ -56,8 +56,11 @@
 
         try {
             let res = await Api.post(`/api/appointment`, choices, { token: ($bookingStore.get("token") || 'nil') });
-            if (res.status === 200) {
+            if (res?.appointment) {
+                $bookingStore.set("appointment", res.appointment);
                 await goto('/book/confirmation');
+            } else {
+                alert("An error occurred.")
             }
         } catch (error) {
             alert("An error occurred.")
@@ -70,15 +73,15 @@
 <BookingLayout title="Date & Provider" tip="Please select your preferred date and provider.">
 
     <Form id="login-form" class="login-form" onSubmit={onSubmit} hideFooter>
-
-        <div class="container">
-            <div style="justify-self: flex-start;">
-                <label>Date:</label>
-                <InputField type="date" icon={iconCalendar} bind:value={selectedDate} dateProps={{
+        <div style="justify-self: flex-start;">
+            <label>Date:</label>
+            <InputField type="date" icon={iconCalendar} bind:value={selectedDate} dateProps={{
                     closeOnSelection: true,
                     min: minDate
                 }}/>
-            </div>
+        </div>
+        <div class="container">
+
 
             <div class="staff__container">
                 {#await availability}

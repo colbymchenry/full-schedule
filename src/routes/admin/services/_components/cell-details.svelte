@@ -77,7 +77,7 @@
                                     bind:form_errors={form_errors}
                         />
                     </div>
-                    <div style="display: grid;grid-template-columns: 1fr 0.3fr 0.3fr ;grid-template-rows: 1fr;column-gap: 1rem;">
+                    <div style="display: grid;grid-template-columns: 0.7fr 0.5fr 0.5fr;grid-template-rows: 1fr;column-gap: 1rem;">
                         <Select name="category" label="Category *" required value={rowData['category']}
                                 bind:form_errors={form_errors}>
                             <option value="wellness">Wellness</option>

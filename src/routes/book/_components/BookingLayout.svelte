@@ -14,14 +14,14 @@
 </div>
 {#if title}
     <h1>
-        {title}
+        {@html title}
     </h1>
 {:else}
     <br/>
 {/if}
 {#if tip}
     <div class="tip">
-        {tip}
+        {@html tip}
     </div>
 {:else}
     <br/>

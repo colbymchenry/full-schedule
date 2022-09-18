@@ -18,6 +18,8 @@
     import {goto} from "$app/navigation";
 
     export let services;
+    let loading = false;
+    let disabled = true;
 
     if (services && $bookingStore) {
         $bookingStore.set("services", services);
@@ -31,8 +33,6 @@
         await goto('/book/date-and-provider');
     }
 
-    let disabled = true;
-    let loading = false;
 
     function checkDisabled() {
         if (browser) {
@@ -54,7 +54,7 @@
             {/each}
         </div>
 
-        <Button style="min-height: 48px;margin-top: 2rem;justify-self: stretch;" {disabled}>Continue</Button>
+        <Button style="min-height: 48px;margin-top: 2rem;justify-self: stretch;" {disabled} {loading}>Continue</Button>
     </Form>
 
 </BookingLayout>
