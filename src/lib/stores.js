@@ -13,3 +13,5 @@ export const settings = writable(new JsonHelper({}));
 export const bookingStore = writable(null);
 
 export const recaptchaKey = writable("6LcKfwgiAAAAAOsX67-tj-zpjEroWamiIQNr9xSF");
+
+export const toasts = writable([]);

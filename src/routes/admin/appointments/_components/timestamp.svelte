@@ -2,7 +2,9 @@
     import {TimeHelper} from "../../../../utils/TimeHelper";
     import {FirebaseClient} from "../../../../utils/firebase/FirebaseClient.js";
     import AppointmentsDrawer from './appointments-drawer.svelte';
+    import ControlsPopup from './controls-popup.svelte';
     import {iconCheck, iconHeroRecycle, iconHeroWarning} from "../../../../lib/icons.js";
+    import {Toaster} from "../../../../lib/toaster.js";
 
     export let timestamp, staffAccounts, staff, weekday, services,
         slotVisible = undefined, date, appointments, fetchStaff, fetchAppointments;
@@ -75,7 +77,7 @@
     {#if appointment && appointment?.userInfo}
         <div class="appointment" style={`height: ${appHeight}px;margin-top: ${appMargin}px;`}>
             <div class="header">
-                <span class="displayName">{appointment?.userInfo?.displayName}</span>
+                <span class="displayName">{appointment?.userInfo?.displayName?.toLowerCase()}</span>
                 {#if !appointment?.checkIn}
                     {#if new Date() > FirebaseClient.toDate(appointment.start)}
                         <span class="status red"><span class="icon">{@html iconHeroWarning}</span> Not checked in</span>

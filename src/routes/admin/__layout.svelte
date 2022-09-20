@@ -10,6 +10,7 @@
     import ApiProgressBar from '$lib/__layout/api-progress-bar.svelte';
     import {browser} from "$app/env";
     import {JsonHelper} from "../../utils/JsonHelper.js";
+    import {toasts} from "../../lib/stores.js";
 
     $: if (browser) {
         FirebaseClient.auth().onAuthStateChanged((user) => {
@@ -51,6 +52,14 @@
         </TopBar>
         <RightBar/>
     </div>
+<!--  If there are any toast objects, render them one by one in a que, delete -> NEXT  -->
+    {#if $toasts.length}
+        <div class="modal-overlay">
+            <div class="container">
+                <svelte:component this={$toasts[0].component}/>
+            </div>
+        </div>
+    {/if}
 {:else}
     <slot/>
 {/if}
@@ -63,5 +72,30 @@
     min-height: 100%;
     display: flex;
     flex: 1 1 auto;
+  }
+
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:before {
+      content: '';
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      z-index: 10;
+    }
+
+    .container {
+      z-index: 11;
+    }
   }
 </style>

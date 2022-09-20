@@ -70,8 +70,7 @@
 
     <Section title="Name & Phone Number" info="Following information is publicly displayed, be careful!">
         <Row>
-            <InputField label="Name" name="store.name" icon={iconStore} value={$settings.get("store.name")}
-            />
+            <InputField label="Name" name="store.name" icon={iconStore} value={$settings.get("store.name")} />
             <InputField label="Phone" type="tel" name="store.phone" icon={iconPhone}
                         value={$settings.get("store.phone")}
                         alwaysShowMask

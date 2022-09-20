@@ -143,7 +143,7 @@ Services: ${services.map((service) => StringUtils.capitalize(service.name)).join
         }
 
         try {
-            let customerName = StringUtils.capitalize(client?.displayName || lead?.displayName);
+            let customerName = StringUtils.capitalize((client?.displayName || lead?.displayName).toLowerCase());
             // Send email to provider
             await MailHelper.send(
                 {
