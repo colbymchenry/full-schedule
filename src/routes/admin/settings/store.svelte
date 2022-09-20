@@ -39,12 +39,15 @@
 
         let jsonHelper = new JsonHelper(formData);
         try {
+            console.log("B4", jsonHelper.object)
             // If there is a new store logo we need to upload it to Cloud.
             if (storeLogo) {
                 // Upload image to Cloud Storage
                 jsonHelper.set("store.logo", await FirebaseClient.uploadFile(storeLogo, 'logo'))
+            } else {
+                jsonHelper.set("store.logo", $settings?.object?.store?.logo);
             }
-
+            console.log("A4", jsonHelper.object)
             await FirebaseClient.update("settings", "main", jsonHelper.object);
 
             if (jsonHelper?.object?.address?.timezone) {

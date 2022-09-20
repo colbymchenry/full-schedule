@@ -114,12 +114,12 @@ Services: ${services.map((service) => StringUtils.capitalize(service.name)).join
         try {
             await MailHelper.send(
                 {
-                    "name": "Balanced Aesthetics Medspa",
-                    "email": "info@balancedaestheticsmedspa.com"
+                    "name": settings.get("store.name"),
+                    "email": "scheduling@fullschedule.co"
                 },
                 [{
-                    "email": "colbymchenry@gmail.com",
-                    "name": "Colby McHenry"
+                    "email": client?.email || lead?.email,
+                    "name": client?.displayName || lead?.displayName
                 }], "Your Appointment Confirmation!", HTMLBookingConfirmation
                     .replace("{{LOGOURL}}", settings.get("store.logo"))
                     .replace("{{ADDRESS}}", `${settings.object?.address?.street1 && settings.object.address.street1 + "\n"}${settings.object?.address?.street2 && settings.object?.address?.street2 + "\n"}${settings.object?.address?.city && settings.object?.address?.city + ", "}${settings.object?.address?.state && settings.object?.address?.state} ${settings.object?.address?.zip && settings.object?.address?.zip}`)
