@@ -6,6 +6,7 @@ import {SMSHelper} from "../../../utils/SMSHelper.js";
 import {MailHelper} from "../../../utils/MailHelper.js";
 import {AppointmentHelper} from "../../../utils/AppointmentHelper.js";
 import {Recaptcha} from "../../../utils/Recaptcha.js";
+import {HTMLBookingConfirmation} from "../../../assets/email-templates/booking-confirmation.js";
 
 // Endpoint to create an appointment
 export async function post({request}) {
@@ -107,6 +108,7 @@ Services: ${services.map((service) => StringUtils.capitalize(service.name)).join
             await SMSHelper.sendAppointmentConfirmation(appObj, client?.phoneNumber || lead?.phoneNumber, staff);
         } catch (error) {
             errors.push("Failed to send SMS confirmation.");
+            console.error(error);
         }
 
         try {
@@ -118,13 +120,28 @@ Services: ${services.map((service) => StringUtils.capitalize(service.name)).join
                 [{
                     "email": "colbymchenry@gmail.com",
                     "name": "Colby McHenry"
-                }], "Your Appointment Confirmation!");
+                }], "Your Appointment Confirmation!", HTMLBookingConfirmation
+                    .replace("{{LOGOURL}}", settings.get("store.logo"))
+                    .replace("{{ADDRESS}}", `${settings.object?.address?.street1 && settings.object.address.street1 + "\n"}${settings.object?.address?.street2 && settings.object?.address?.street2 + "\n"}${settings.object?.address?.city && settings.object?.address?.city + ", "}${settings.object?.address?.state && settings.object?.address?.state} ${settings.object?.address?.zip && settings.object?.address?.zip}`)
+                    .replace("{{SERVICES}}", services.map(({name}) => name).join(", "))
+                    .replace("{{PROVIDER.PHOTOURL}}", staff.photoURL)
+                    .replace("{{PROVIDER.NAME}}", StringUtils.capitalize(staff.displayName))
+                    .replace("{{PROVIDER.TITLE}}", staff.title)
+                    .replace("{{DATE}}", new Date(postedEvent.start.dateTime).toLocaleTimeString([], {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        ...(settings.get("address.timezone") && {timeZone: settings.get("address.timezone")})
+                    }).replace(/^(.+?,.+?),\s*/g,'$1 @ ')));
         } catch (error) {
             errors.push("Failed to send email confirmation.");
+            console.error(error);
         }
 
         if (errors.length) {
-            FirebaseAdmin.firestore().collection("appointments").doc(id).update({ errors });
+            FirebaseAdmin.firestore().collection("appointments").doc(id).update({errors});
         }
 
         return {

@@ -44,18 +44,18 @@ export class SMSHelper {
 
     static async sendAppointmentConfirmation(appointment, number, staff) {
         const settings = await (await FirebaseAdmin.firestore().collection("settings").doc("main").get()).data();
-        const dateHuman = new Date(appointment.start).toLocaleTimeString([], {
+        const dateHuman = FirebaseAdmin.toDate(appointment.start).toLocaleTimeString([], {
             year: 'numeric',
             month: 'long',
             day: 'numeric',
             hour: '2-digit',
             minute: '2-digit',
             ...(settings?.address?.timezone && { timeZone: settings.address.timezone })
-        });
+        }).replace(/^(.+?,.+?),\s*/g,'$1 @ ');
         const textBody = `\n\nYour appointment on\n\n${dateHuman}${staff?.displayName ? ` with ${StringUtils.capitalize(staff.displayName)}` : ""} is scheduled.\n\nAddress:\n${settings?.address?.street1 && settings.address.street1 + "\n"}${settings?.address?.street2 && settings?.address?.street2 + "\n"}${settings?.address?.city && settings?.address?.city + ", "}${settings?.address?.state && settings?.address?.state} ${settings?.address?.zip && settings?.address?.zip}\n\nThanks for choosing ${settings?.store?.name}! We look forward to seeing you!`;
 
-        // TODO: Scheduler can't do past 7 days
-        const reminderDate = new Date(appointment.start);
+        const reminderDate = FirebaseAdmin.toDate(appointment.start);
+        // Send reminder text at 8:30 AM
         reminderDate.setHours(8, 0, 30);
 
 
@@ -78,7 +78,6 @@ export class SMSHelper {
         try {
             // Update appointment to include the Scheduled Text ID, so we can cancel the scheduled text later
             // if appointment is cancelled
-            console.log(appointment)
             if (appointment?.doc_id) {
                 await FirebaseAdmin.firestore().collection("appointments").doc(appointment.doc_id).update({
                     "TextMagicReminderId": resp.scheduleId

@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+export const HTMLBookingConfirmation = `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
 
@@ -58,7 +58,6 @@
                                                         <tbody>
                                                         <tr>
                                                             <td align="center" class="esd-block-text es-infoblock">
-                                                                <p><a target="_blank">View online version</a></p>
                                                             </td>
                                                         </tr>
                                                         </tbody>
@@ -94,9 +93,9 @@
                                                         <tr>
                                                             <td align="center" class="esd-block-image es-p20b"
                                                                 style="font-size: 0px;"><a target="_blank"><img
-                                                                    src="https://vdcwnl.stripocdn.email/content/guids/CABINET_887f48b6a2f22ad4fb67bc2a58c0956b/images/93351617889024778.png"
-                                                                    alt="Logo" style="display: block; font-size: 12px;"
-                                                                    width="200" title="Logo"></a></td>
+                                                                    src="{{LOGOURL}}"
+                                                                    alt="Logo" style="display: block; font-size: 12px;margin-bottom:40px;"
+                                                                    height="100" title="Logo"></a></td>
                                                         </tr>
                                                         </tbody>
                                                     </table>
@@ -154,7 +153,7 @@
                                         <table width="560" cellpadding="0" cellspacing="0" class="esdev-mso-table">
                                             <tbody>
                                             <tr>
-                                                <td class="esdev-mso-td" valign="top">
+                                                <td class="esdev-mso-td" valign="middle">
                                                     <table cellpadding="0" cellspacing="0" class="es-left" align="left">
                                                         <tbody>
                                                         <tr>
@@ -189,8 +188,7 @@
                                                                     <tr>
                                                                         <td align="left"
                                                                             class="esd-block-text es-p5b es-m-txt-l">
-                                                                            <h3>Tuesday, January&nbsp;28 | 6:30 - 9:30
-                                                                                PM&nbsp;</h3>
+                                                                            <h3>{{DATE}}</h3>
                                                                         </td>
                                                                     </tr>
                                                                     </tbody>
@@ -211,7 +209,7 @@
                                         <table width="560" cellpadding="0" cellspacing="0" class="esdev-mso-table">
                                             <tbody>
                                             <tr>
-                                                <td class="esdev-mso-td" valign="top">
+                                                <td class="esdev-mso-td" valign="middle">
                                                     <table cellpadding="0" cellspacing="0" class="es-left" align="left">
                                                         <tbody>
                                                         <tr>
@@ -246,8 +244,7 @@
                                                                     <tr>
                                                                         <td align="left"
                                                                             class="esd-block-text es-p5b es-m-txt-l">
-                                                                            <h3>4562 Chair Crossing, Kentucky, US,
-                                                                                607898</h3>
+                                                                            <h3>{{ADDRESS}}</h3>
                                                                         </td>
                                                                     </tr>
                                                                     </tbody>
@@ -268,7 +265,7 @@
                                         <table width="560" cellpadding="0" cellspacing="0" class="esdev-mso-table">
                                             <tbody>
                                             <tr>
-                                                <td class="esdev-mso-td" valign="top">
+                                                <td class="esdev-mso-td" valign="middle">
                                                     <table cellpadding="0" cellspacing="0" class="es-left" align="left">
                                                         <tbody>
                                                         <tr>
@@ -303,7 +300,7 @@
                                                                     <tr>
                                                                         <td align="left"
                                                                             class="esd-block-text es-p5b es-m-txt-l">
-                                                                            <h3>Free for everyone</h3>
+                                                                            <h3>{{SERVICES}}</h3>
                                                                         </td>
                                                                     </tr>
                                                                     </tbody>
@@ -364,18 +361,18 @@
                                                         <tr>
                                                             <td align="center" class="esd-block-image"
                                                                 style="font-size: 0px;"><a target="_blank"><img
-                                                                    src="https://vdcwnl.stripocdn.email/content/guids/CABINET_3d0df4c18b0cea2cd3d10f772261e0b3/images/67101617956752886.png"
+                                                                    src="{{PROVIDER.PHOTOURL}}"
                                                                     alt style="display: block;" width="130"></a></td>
                                                         </tr>
                                                         <tr>
                                                             <td align="center"
                                                                 class="esd-block-text es-p5t es-p5b es-m-txt-c">
-                                                                <h3>Jasmine&nbsp;Young</h3>
+                                                                <h3>{{PROVIDER.NAME}}</h3>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td align="center" class="esd-block-text">
-                                                                <p>Stylist in Style Casual</p>
+                                                                <p>{{PROVIDER.TITLE}}</p>
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -386,23 +383,7 @@
                                                                     <tbody>
                                                                     <tr>
                                                                         <td align="center" valign="top" class="es-p10r">
-                                                                            <a target="_blank" href><img
-                                                                                    title="Facebook"
-                                                                                    src="https://vdcwnl.stripocdn.email/content/assets/img/social-icons/logo-colored/facebook-logo-colored.png"
-                                                                                    alt="Fb" width="24" height="24"></a>
-                                                                        </td>
-                                                                        <td align="center" valign="top" class="es-p10r">
-                                                                            <a target="_blank" href><img title="Twitter"
-                                                                                                         src="https://vdcwnl.stripocdn.email/content/assets/img/social-icons/logo-colored/twitter-logo-colored.png"
-                                                                                                         alt="Tw"
-                                                                                                         width="24"
-                                                                                                         height="24"></a>
-                                                                        </td>
-                                                                        <td align="center" valign="top"><a
-                                                                                target="_blank" href><img
-                                                                                title="Instagram"
-                                                                                src="https://vdcwnl.stripocdn.email/content/assets/img/social-icons/logo-colored/instagram-logo-colored.png"
-                                                                                alt="Inst" width="24" height="24"></a>
+                                                                            
                                                                         </td>
                                                                     </tr>
                                                                     </tbody>
@@ -436,82 +417,6 @@
                                             <tbody>
                                             <tr>
                                                 <td width="600" class="esd-container-frame" align="left">
-                                                    <table cellpadding="0" cellspacing="0" width="100%">
-                                                        <tbody>
-                                                        <tr>
-                                                            <td align="center" class="esd-block-social es-p15t es-p15b"
-                                                                style="font-size:0">
-                                                                <table cellpadding="0" cellspacing="0"
-                                                                       class="es-table-not-adapt es-social">
-                                                                    <tbody>
-                                                                    <tr>
-                                                                        <td align="center" valign="top" class="es-p40r">
-                                                                            <a target="_blank" href><img
-                                                                                    title="Facebook"
-                                                                                    src="https://vdcwnl.stripocdn.email/content/assets/img/social-icons/logo-black/facebook-logo-black.png"
-                                                                                    alt="Fb" width="32"></a></td>
-                                                                        <td align="center" valign="top" class="es-p40r">
-                                                                            <a target="_blank" href><img title="Twitter"
-                                                                                                         src="https://vdcwnl.stripocdn.email/content/assets/img/social-icons/logo-black/twitter-logo-black.png"
-                                                                                                         alt="Tw"
-                                                                                                         width="32"></a>
-                                                                        </td>
-                                                                        <td align="center" valign="top" class="es-p40r">
-                                                                            <a target="_blank" href><img
-                                                                                    title="Instagram"
-                                                                                    src="https://vdcwnl.stripocdn.email/content/assets/img/social-icons/logo-black/instagram-logo-black.png"
-                                                                                    alt="Inst" width="32"></a></td>
-                                                                        <td align="center" valign="top"><a
-                                                                                target="_blank" href><img
-                                                                                title="Youtube"
-                                                                                src="https://vdcwnl.stripocdn.email/content/assets/img/social-icons/logo-black/youtube-logo-black.png"
-                                                                                alt="Yt" width="32"></a></td>
-                                                                    </tr>
-                                                                    </tbody>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td align="center" class="esd-block-text es-p35b">
-                                                                <p>Style Casual&nbsp;© 2021 Style Casual, Inc. All
-                                                                    Rights Reserved.</p>
-                                                                <p>4562 Hazy Panda Limits, Chair Crossing, Kentucky, US,
-                                                                    607898</p>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="esd-block-menu" esd-tmp-menu-padding="5|5"
-                                                                esd-tmp-divider="1|solid|#cccccc"
-                                                                esd-tmp-menu-color="#999999">
-                                                                <table cellpadding="0" cellspacing="0" width="100%"
-                                                                       class="es-menu">
-                                                                    <tbody>
-                                                                    <tr class="links">
-                                                                        <td align="center" valign="top" width="33.33%"
-                                                                            class="es-p10t es-p10b es-p5r es-p5l"
-                                                                            style="padding-top: 5px; padding-bottom: 5px;">
-                                                                            <a target="_blank" href="https://"
-                                                                               style="color: #999999;">Visit Us </a>
-                                                                        </td>
-                                                                        <td align="center" valign="top" width="33.33%"
-                                                                            class="es-p10t es-p10b es-p5r es-p5l"
-                                                                            style="padding-top: 5px; padding-bottom: 5px; border-left: 1px solid #cccccc;">
-                                                                            <a target="_blank" href="https://"
-                                                                               style="color: #999999;">Privacy
-                                                                                Policy</a></td>
-                                                                        <td align="center" valign="top" width="33.33%"
-                                                                            class="es-p10t es-p10b es-p5r es-p5l"
-                                                                            style="padding-top: 5px; padding-bottom: 5px; border-left: 1px solid #cccccc;">
-                                                                            <a target="_blank" href="https://"
-                                                                               style="color: #999999;">Terms of Use</a>
-                                                                        </td>
-                                                                    </tr>
-                                                                    </tbody>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        </tbody>
-                                                    </table>
                                                 </td>
                                             </tr>
                                             </tbody>
@@ -567,4 +472,4 @@
 </div>
 </body>
 
-</html>
+</html>`;

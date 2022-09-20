@@ -98,7 +98,7 @@
                                 </div>
                             </div>
                             <div class="staff__time-slots">
-                                {#if staff.availability.length > 1 && typeof staff.availability[0] !== 'date'}
+                                {#if staff.availability.length > 0 && !staff.availability[0].includes("T")}
                                     {#each staff.availability as timestamp}
                                         <button type="button" class="time-slot"
                                                 class:selected={selectedTimeSlot
@@ -109,9 +109,9 @@
                                             {TimeHelper.convertTime24to12(timestamp)}
                                         </button>
                                     {/each}
-                                {:else}
+                                {:else if staff.availability[0].includes("T")}
                                     <small>Next availability:
-                                        <button type="button"
+                                        <button type="button" data-info={staff.availability[0]}
                                                 on:click={() => selectedDate = new Date(staff.availability[0])}>
                                             {new Date(staff.availability[0]).toDateString()}
                                         </button>

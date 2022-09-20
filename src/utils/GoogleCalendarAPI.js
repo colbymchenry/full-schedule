@@ -88,7 +88,6 @@ export class GoogleCalendarAPI {
 // ));
     async postEvent(location, summary, description, startTime, endTime, attendees, extendedProperties) {
         const timeZone = this.settings?.address?.timezone;
-        console.log(timeZone)
         const res = await this.calendar.events.insert({
             calendarId: this.calendarId,
             resource: {
@@ -106,7 +105,7 @@ export class GoogleCalendarAPI {
                     useDefault: false,
                     overrides: [
                         {method: 'email', minutes: 24 * 60},
-                        {method: 'popup', minutes: 10},
+                        {method: 'popup', minutes: 12 * 60},
                     ],
                 },
                 extendedProperties: {

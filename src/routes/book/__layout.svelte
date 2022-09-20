@@ -44,7 +44,10 @@
     <div class="container">
         <div>
             {#if !booking_setup || booking_setup?.error}
-                <h1>Setup is not complete...</h1><p>Check for empty/blank fields in settings.<br /><br /><a href="/admin" style="display: flex;align-items: center;">{@html smallArrow} Admin Login</a></p>
+                <h1>Setup is not complete...</h1>
+                <p>Check for empty/blank fields in settings.<br/><br/><a href="/admin"
+                                                                         style="display: flex;align-items: center;">{@html smallArrow}
+                    Admin Login</a></p>
             {:else}
                 <slot></slot>
             {/if}
