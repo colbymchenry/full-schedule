@@ -339,7 +339,7 @@ export const HTMLBookingConfirmation = `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML
                                                         <tr>
                                                             <td align="center"
                                                                 class="esd-block-text es-p15t es-p5b es-p20r es-p20l es-m-txt-c">
-                                                                <h2>Meet your provider</h2>
+                                                                <h2>Meet your {{FOR}}</h2>
                                                             </td>
                                                         </tr>
                                                         </tbody>

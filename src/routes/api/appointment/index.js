@@ -112,6 +112,7 @@ Services: ${services.map((service) => StringUtils.capitalize(service.name)).join
         }
 
         try {
+            // Send email to client/customer
             await MailHelper.send(
                 {
                     "name": settings.get("store.name"),
@@ -127,6 +128,7 @@ Services: ${services.map((service) => StringUtils.capitalize(service.name)).join
                     .replace("{{PROVIDER.PHOTOURL}}", staff.photoURL)
                     .replace("{{PROVIDER.NAME}}", StringUtils.capitalize(staff.displayName))
                     .replace("{{PROVIDER.TITLE}}", staff.title)
+                    .replace("{{FOR}}", "provider")
                     .replace("{{DATE}}", new Date(postedEvent.start.dateTime).toLocaleTimeString([], {
                         year: 'numeric',
                         month: 'long',
@@ -136,7 +138,39 @@ Services: ${services.map((service) => StringUtils.capitalize(service.name)).join
                         ...(settings.get("address.timezone") && {timeZone: settings.get("address.timezone")})
                     }).replace(/^(.+?,.+?),\s*/g,'$1 @ ')));
         } catch (error) {
-            errors.push("Failed to send email confirmation.");
+            errors.push("Failed to send email confirmation to customer.");
+            console.error(error);
+        }
+
+        try {
+            let customerName = StringUtils.capitalize(client?.displayName || lead?.displayName);
+            // Send email to provider
+            await MailHelper.send(
+                {
+                    "name": settings.get("store.name"),
+                    "email": "scheduling@fullschedule.co"
+                },
+                [{
+                    "email": staff.email,
+                    "name": staff.displayName
+                }], `New Booking for ${customerName}!`, HTMLBookingConfirmation
+                    .replace("{{LOGOURL}}", settings.get("store.logo"))
+                    .replace("{{ADDRESS}}", StringUtils.formatPhoneNumber(client?.phoneNumber || lead?.phoneNumber))
+                    .replace("{{SERVICES}}", services.map(({name}) => name).join(", "))
+                    .replace("{{PROVIDER.PHOTOURL}}", client?.photoURL || lead?.photoURL)
+                    .replace("{{PROVIDER.NAME}}", customerName)
+                    .replace("{{FOR}}", "patient")
+                    .replace("{{PROVIDER.TITLE}}", (client?.email || lead?.email).toLowerCase())
+                    .replace("{{DATE}}", new Date(postedEvent.start.dateTime).toLocaleTimeString([], {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        ...(settings.get("address.timezone") && {timeZone: settings.get("address.timezone")})
+                    }).replace(/^(.+?,.+?),\s*/g,'$1 @ ')));
+        } catch (error) {
+            errors.push("Failed to send email confirmation to customer.");
             console.error(error);
         }
 

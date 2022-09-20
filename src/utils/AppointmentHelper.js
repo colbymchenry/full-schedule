@@ -63,7 +63,7 @@ export class AppointmentHelper {
             return {
                 status: 400,
                 body: {
-                    message: "Staff already scheduled.",
+                    message: "Conflicts with provider's schedule.",
                     code: 1
                 }
             }
