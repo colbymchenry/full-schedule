@@ -3,10 +3,11 @@
     export let name, value, id = Math.random();
     export let required = false;
     export let onChange = undefined;
+    export let checked = false;
 </script>
 
-<label class="checkbox" class:is--error={form_errors[name]} for={id}>
-    <input type="checkbox" {id} {name} {value} {required} on:change={onChange} />
+<label class="checkbox" class:is--error={form_errors[name]} htmlFor={id}>
+    <input type="checkbox" {id} {name} {value} {required} on:change={onChange} {checked} />
     <span><slot></slot></span>
 </label>
 

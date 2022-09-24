@@ -2,18 +2,17 @@
     import {TimeHelper} from "../../../../utils/TimeHelper";
     import {FirebaseClient} from "../../../../utils/firebase/FirebaseClient.js";
     import AppointmentsDrawer from './appointments-drawer.svelte';
-    import ControlsPopup from './controls-popup.svelte';
     import {iconCheck, iconHeroRecycle, iconHeroWarning} from "../../../../lib/icons.js";
-    import {Toaster} from "../../../../lib/toaster.js";
+    import ControlsPopup from "./controls-popup.svelte";
 
     export let timestamp, staffAccounts, staff, weekday, services,
         slotVisible = undefined, date, appointments, fetchStaff, fetchAppointments;
 
+    let showPopup = false;
+
     const dateTimestamp = new Date(date);
     const [hour, minute] = timestamp.split(":");
     dateTimestamp.setHours(parseInt(hour), parseInt(minute));
-
-    console.log(date)
 
     $: notWorking = !staff?.schedule?.[weekday]?.enabled;
     $: onLunch = () => {
@@ -75,7 +74,7 @@
 <div class="container" class:notWorking={notWorking} class:onLunch={onLunch()}>
 
     {#if appointment && appointment?.userInfo}
-        <div class="appointment" style={`height: ${appHeight}px;margin-top: ${appMargin}px;`}>
+        <div class="appointment" style={`height: ${appHeight}px;margin-top: ${appMargin}px;`} on:click={() => showPopup = true}>
             <div class="header">
                 <span class="displayName">{appointment?.userInfo?.displayName?.toLowerCase()}</span>
                 {#if !appointment?.checkIn}
@@ -117,6 +116,10 @@
     </span>
     {/if}
 </div>
+
+{#if appointment && showPopup}
+    <ControlsPopup {appointment} {fetchAppointments} {staffAccounts} {services} bind:visible={showPopup} />
+{/if}
 
 <style lang="scss">
   .appointment {
