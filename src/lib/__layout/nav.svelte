@@ -32,16 +32,16 @@
             icon: iconShieldUser,
             name: 'Staff'
         },
-        {
-            url: '/reports',
-            icon: iconCharts,
-            name: 'Reports'
-        },
-        {
-            url: '/analytics',
-            icon: iconAnalytics,
-            name: 'Analytics'
-        },
+        // {
+        //     url: '/reports',
+        //     icon: iconCharts,
+        //     name: 'Reports'
+        // },
+        // {
+        //     url: '/analytics',
+        //     icon: iconAnalytics,
+        //     name: 'Analytics'
+        // },
         {
             url: '/services',
             icon: iconMedicalServices,
@@ -52,16 +52,16 @@
             icon: iconInventory,
             name: 'Inventory'
         },
-        {
-            url: '/members',
-            icon: iconMemberships,
-            name: 'Members'
-        },
-        {
-            url: '/promotions',
-            icon: iconGiftCard,
-            name: 'Promotions'
-        },
+        // {
+        //     url: '/members',
+        //     icon: iconMemberships,
+        //     name: 'Members'
+        // },
+        // {
+        //     url: '/promotions',
+        //     icon: iconGiftCard,
+        //     name: 'Promotions'
+        // },
         {
             url: '/settings',
             icon: iconTools,
