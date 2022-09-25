@@ -13,6 +13,7 @@
     import Skeleton from 'svelte-skeleton/Skeleton.svelte'
     import {MathHelper} from "../../../utils/MathHelper.js";
     import {settings} from "../../../lib/stores.js";
+    import {where} from "firebase/firestore";
 
     let selectedDate = new Date();
     selectedDate.setHours(0, 0, 0, 0);
@@ -43,7 +44,7 @@
 
     async function fetchAppointments() {
         try {
-            appointments = await FirebaseClient.collection("appointments");
+            appointments = await FirebaseClient.query("appointments", where("cancelled", "!=", true))
         } catch (error) {
             showToast("Error fetching appointments...");
         }

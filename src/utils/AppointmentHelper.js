@@ -51,7 +51,7 @@ export class AppointmentHelper {
 
         // Get events at time & date, will need to make this more efficient
         if (!appointments) {
-            appointments = await FirebaseAdmin.query(FirebaseAdmin.firestore().collection("appointments").where("staff", "==", staff.doc_id));
+            appointments = await FirebaseAdmin.query(FirebaseAdmin.firestore().collection("appointments").where("staff", "==", staff.doc_id).where("cancelled", "!=", true));
         }
 
         // Check to see if staff is already scheduled at that time

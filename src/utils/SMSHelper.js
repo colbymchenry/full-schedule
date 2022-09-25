@@ -42,6 +42,27 @@ export class SMSHelper {
         })
     }
 
+    static async setAppointmentCancellation(appointment, number, staff) {
+        const settings = await (await FirebaseAdmin.firestore().collection("settings").doc("main").get()).data();
+        const dateHuman = FirebaseAdmin.toDate(appointment.start).toLocaleTimeString([], {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            ...(settings?.address?.timezone && { timeZone: settings.address.timezone })
+        }).replace(/^(.+?,.+?),\s*/g,'$1 @ ');
+        const textBody = `\n\nYour appointment on\n\n${dateHuman}${staff?.displayName ? ` with ${StringUtils.capitalize(staff.displayName)}` : ""} was cancelled.`;
+
+        const textMagic = await SMSHelper.getMagicInstance();
+
+        // Send text message NOW
+        await textMagic.sendMessage({
+            text: textBody,
+            phones: number,
+        });
+    }
+
     static async sendAppointmentConfirmation(appointment, number, staff, update) {
         const settings = await (await FirebaseAdmin.firestore().collection("settings").doc("main").get()).data();
         const dateHuman = FirebaseAdmin.toDate(appointment.start).toLocaleTimeString([], {

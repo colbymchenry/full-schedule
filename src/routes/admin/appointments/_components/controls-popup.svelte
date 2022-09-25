@@ -17,6 +17,7 @@
     import {browser} from "$app/env";
     import {Api} from "../../../../utils/Api.js";
     import {TimeHelper} from "../../../../utils/TimeHelper.js";
+    import {ApiProgressBar} from "../../../../utils/ApiProgressBar.js";
 
     export let appointment, fetchAppointments, staffAccounts, services, visible;
 
@@ -53,7 +54,23 @@
     }
 
     async function deleteAppointment() {
+        ApiProgressBar.start();
+        try {
+            await Api.post(`/api/appointment/delete`, {
+                services: selectedServices,
+                date: selectedDate,
+                timestamp: selectedTime,
+                notify: notifyCustomer,
+                appointment
+            });
 
+            await fetchAppointments();
+            alert("Appointment deleted!")
+            close();
+        } catch (error) {
+            console.error(error);
+        }
+        ApiProgressBar.stop();
     }
 
     function close() {
@@ -234,7 +251,7 @@
                 </Checkbox>
             </div>
             <div>
-                <Button color="delete">Delete</Button>
+                <Button color="delete" type="button" callback={deleteAppointment}>Delete</Button>
                 <Button type="button" loading={submitted} callback={updateAppointment}>Save</Button>
             </div>
         </div>

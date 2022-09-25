@@ -68,7 +68,11 @@
             if (res?.appointment) {
                 await fetchAppointments();
                 if (res?.errors) {
-                    showToast("Appointment created!", "success", "Errors: " + res.errors.join(". "));
+                    if (res.errors.length) {
+                        showToast("Appointment created!", "success", "Errors: " + res.errors.join(". "));
+                    } else {
+                        showToast("Appointment created!", "success");
+                    }
                 } else {
                     showToast("Appointment created!", "success");
                 }

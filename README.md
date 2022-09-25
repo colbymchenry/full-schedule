@@ -37,6 +37,13 @@ service cloud.firestore {
 }
 ```
 
+<b>Setup index</b>
+```bash
+CollectionID: appointments
+Fields indexed: staff -> Ascending | cancelled -> Ascending
+Query Scope: Collection
+```
+
 ## Setup Environment Variables
 ```bash
 GOOGLE_CLIENT_SECRET=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

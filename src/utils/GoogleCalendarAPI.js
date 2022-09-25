@@ -117,12 +117,12 @@ export class GoogleCalendarAPI {
         return res.data;
     }
 
-    async deleteEvent(id) {
+    async deleteEvent(id, sendUpdates) {
         return await this.calendar.events.delete({
             calendarId: this.calendarId,
             eventId: id
         }, {
-            sendUpdates: true
+            sendUpdates
         });
     }
 

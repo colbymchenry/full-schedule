@@ -93,7 +93,8 @@ Services: ${services.map((service) => StringUtils.capitalize(service.name)).join
             google_event_link: postedEvent.htmlLink,
             services: payload.services,
             start: FirebaseAdmin.toTimestamp(new Date(postedEvent.start.dateTime)),
-            end: FirebaseAdmin.toTimestamp(new Date(postedEvent.end.dateTime))
+            end: FirebaseAdmin.toTimestamp(new Date(postedEvent.end.dateTime)),
+            cancelled: false
         };
 
         const {id} = await FirebaseAdmin.firestore().collection("appointments").add(appObj);
@@ -122,6 +123,7 @@ Services: ${services.map((service) => StringUtils.capitalize(service.name)).join
                     "name": client?.displayName || lead?.displayName
                 }], "Your Appointment Confirmation!", HTMLBookingConfirmation
                     .replace("{{LOGOURL}}", settings.get("store.logo"))
+                    .replace("{{TITLE}}", "YOU'RE BOOKED!")
                     .replace("{{ADDRESS}}", `${settings.object?.address?.street1 && settings.object.address.street1 + "\n"}${settings.object?.address?.street2 && settings.object?.address?.street2 + "\n"}${settings.object?.address?.city && settings.object?.address?.city + ", "}${settings.object?.address?.state && settings.object?.address?.state} ${settings.object?.address?.zip && settings.object?.address?.zip}`)
                     .replace("{{SERVICES}}", services.map(({name}) => name).join(", "))
                     .replace("{{PROVIDER.PHOTOURL}}", staff.photoURL)
@@ -153,7 +155,7 @@ Services: ${services.map((service) => StringUtils.capitalize(service.name)).join
                     "email": staff.email,
                     "name": staff.displayName
                 }], `New Booking for ${customerName}!`, HTMLBookingConfirmation
-                    .replace("{{TITLE}}", "YOU'RE BOOKED")
+                    .replace("{{TITLE}}", "NEW APPOINTMENT!")
                     .replace("{{LOGOURL}}", settings.get("store.logo"))
                     .replace("{{ADDRESS}}", StringUtils.formatPhoneNumber(client?.phoneNumber || lead?.phoneNumber))
                     .replace("{{SERVICES}}", services.map(({name}) => name).join(", "))
@@ -186,6 +188,7 @@ Services: ${services.map((service) => StringUtils.capitalize(service.name)).join
             }
         }
     } catch (error) {
+        console.error(error);
         if (error?.code) {
             return {
                 status: 400,
@@ -214,7 +217,7 @@ export async function patch({request, url}) {
     }));
     const client = appointment.userInfo;
     // Grab all relevant Firebase documents from the IDs passed in the payload
-    const staff = await (await FirebaseAdmin.firestore().collection("staff").doc(payload.appointment.staff).get()).data();
+    const staff = await (await FirebaseAdmin.firestore().collection("staff").doc(appointment.staff).get()).data();
     const settings = new JsonHelper(await (await FirebaseAdmin.firestore().collection("settings").doc("main").get()).data());
     let errors = appointment?.errors || [];
 
