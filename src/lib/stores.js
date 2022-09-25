@@ -15,3 +15,5 @@ export const bookingStore = writable(null);
 export const recaptchaKey = writable("6LcKfwgiAAAAAOsX67-tj-zpjEroWamiIQNr9xSF");
 
 export const toasts = writable([]);
+
+export const tokenStore = writable(null);

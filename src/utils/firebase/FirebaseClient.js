@@ -27,6 +27,8 @@ import {
 import {getStorage, ref, uploadBytes, deleteObject, listAll, getDownloadURL} from "firebase/storage";
 import {getAnalytics} from "firebase/analytics";
 import {browser} from "$app/env";
+import {tokenStore} from "../../lib/stores.js";
+import {get} from "svelte/store";
 
 let firebaseApp;
 let firebaseAnalytics;
@@ -100,8 +102,25 @@ export class FirebaseClient {
         return res.items;
     }
 
-    static async getIdToken() {
-        return await firebaseAuth.currentUser.getIdToken();
+    static getIdToken() {
+        const token = get(tokenStore);
+
+        // Grab new token and store it
+        (async () => {
+            const newToken = await firebaseAuth.currentUser.getIdToken();
+            tokenStore.set(newToken);
+            localStorage.setItem("token", newToken)
+        })();
+
+        // If no token is stored
+        if (!token) {
+            // Fetch a new token and write it to the store
+            if (localStorage.getItem("token")) {
+                return localStorage.getItem("token");
+            }
+        }
+
+        return token;
     }
 
     static async createUser(email, password) {
