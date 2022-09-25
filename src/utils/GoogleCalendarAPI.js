@@ -20,8 +20,8 @@ export class GoogleCalendarAPI {
         const settings = await (await FirebaseAdmin.firestore().collection("settings").doc("main").get()).data();
         const tokens = await settings?.google?.token;
         calendarApi.oauth2Client = new google.auth.OAuth2(
-            settings.get("google.client_id"),
-            settings.get("google.client_secret"),
+            settings?.google?.client_id,
+            settings?.google?.client_secret,
             'postmessage'
         );
         await calendarApi.oauth2Client.setCredentials(tokens);
