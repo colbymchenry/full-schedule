@@ -17,7 +17,7 @@ export async function post({request}) {
     const services = await Promise.all(payload.services.map(async (docId) => {
         return await (await FirebaseAdmin.firestore().collection("services").doc(docId).get()).data();
     }));
-    
+
     if (notifyCustomer) {
         try {
             if (appointment?.TextMagicReminderId) {

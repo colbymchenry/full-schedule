@@ -103,7 +103,7 @@
                         disablePrefill/>
             <Select label="Timezone" name="address.timezone" icon={iconClock}
                     value={$settings.get("address.timezone")}>
-                {#each timezones as timezone}
+                {#each timezones.sort((a, b) => a.label.localeCompare(b.label)) as timezone}
                     <option value={timezone.value}>{timezone.label}</option>
                 {/each}
             </Select>
