@@ -18,7 +18,7 @@ export class AppointmentHelper {
         }).split(",")[0].toLowerCase() : null;
 
         // Check to see if the staff is available at that time
-        const notWorking = !staff?.schedule?.[weekday]?.enabled;
+        const notWorking = staff?.schedule?.[weekday]?.enabled === false || staff?.schedule?.[weekday]?.enabled === "";
         const onLunch = () => {
             if (!staff?.schedule?.[weekday]?.lunch?.start || !staff?.schedule?.[weekday]?.lunch?.end) return false;
             let lunchStart = TimeHelper.getSliderValFrom24(staff.schedule[weekday].lunch.start);

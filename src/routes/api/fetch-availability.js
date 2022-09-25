@@ -80,8 +80,13 @@ export async function post({request}) {
                         timeSlots[staffObj.doc_id]["availability"] = [date];
                     }
                 }
+
+                if (dayShift > 90) {
+                    timeSlots[staffObj.doc_id]["availability"] = ["none"]
+                }
             }
         }));
+
 
         return {
             status: 200,

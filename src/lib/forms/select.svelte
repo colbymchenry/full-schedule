@@ -45,7 +45,7 @@
 
 <div class="input-field__container" class:is--small={small} >
     {#if label}
-        <label for={name}>
+        <label htmlFor={name}>
             {label}
             {#if hint}
                 <div on:mouseenter={() => showHint = true} on:mouseleave={() => showHint = false}>

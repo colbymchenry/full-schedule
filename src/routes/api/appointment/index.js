@@ -51,7 +51,6 @@ export async function post({request}) {
     const getVal = (key) => settings.get(key) || "";
 
     try {
-
         // Setup Google Calendar's event variables
         const location = `${getVal("address.street1")} ${getVal("address.street2")}, ${getVal("address.city")}, ${getVal("address.state")} ${getVal("address.zip")}`;
         const summary = `${settings.get("store.name")} Appointment`;
@@ -136,7 +135,7 @@ Services: ${services.map((service) => StringUtils.capitalize(service.name)).join
                         hour: '2-digit',
                         minute: '2-digit',
                         ...(settings.get("address.timezone") && {timeZone: settings.get("address.timezone")})
-                    }).replace(/^(.+?,.+?),\s*/g,'$1 @ ')));
+                    }).replace(/^(.+?,.+?),\s*/g, '$1 @ ')));
         } catch (error) {
             errors.push("Failed to send email confirmation to customer.");
             console.error(error);
@@ -154,6 +153,7 @@ Services: ${services.map((service) => StringUtils.capitalize(service.name)).join
                     "email": staff.email,
                     "name": staff.displayName
                 }], `New Booking for ${customerName}!`, HTMLBookingConfirmation
+                    .replace("{{TITLE}}", "YOU'RE BOOKED")
                     .replace("{{LOGOURL}}", settings.get("store.logo"))
                     .replace("{{ADDRESS}}", StringUtils.formatPhoneNumber(client?.phoneNumber || lead?.phoneNumber))
                     .replace("{{SERVICES}}", services.map(({name}) => name).join(", "))
@@ -168,7 +168,7 @@ Services: ${services.map((service) => StringUtils.capitalize(service.name)).join
                         hour: '2-digit',
                         minute: '2-digit',
                         ...(settings.get("address.timezone") && {timeZone: settings.get("address.timezone")})
-                    }).replace(/^(.+?,.+?),\s*/g,'$1 @ ')));
+                    }).replace(/^(.+?,.+?),\s*/g, '$1 @ ')));
         } catch (error) {
             errors.push("Failed to send email confirmation to customer.");
             console.error(error);
@@ -205,10 +205,95 @@ Services: ${services.map((service) => StringUtils.capitalize(service.name)).join
 
 export async function patch({request, url}) {
     await FirebaseAdmin.auth().verifyIdToken(request.headers.get("authorization"));
-    const data = await request.json();
+    const payload = await request.json();
+
+    const notifyCustomer = payload.notify;
+    const appointment = payload.appointment;
+    const services = await Promise.all(payload.services.map(async (docId) => {
+        return await (await FirebaseAdmin.firestore().collection("services").doc(docId).get()).data();
+    }));
+    const client = appointment.userInfo;
+    // Grab all relevant Firebase documents from the IDs passed in the payload
+    const staff = await (await FirebaseAdmin.firestore().collection("staff").doc(payload.appointment.staff).get()).data();
+    const settings = new JsonHelper(await (await FirebaseAdmin.firestore().collection("settings").doc("main").get()).data());
+    let errors = appointment?.errors || [];
+
+    staff["doc_id"] = staff["uid"];
+    const isAvailable = await AppointmentHelper.isAvailable(payload.date, payload.timestamp, services, staff, settings);
+    // if there is no start date return
+    if (isAvailable?.status === 400) {
+        return isAvailable;
+    }
+    const summary = `${settings.get("store.name")} Appointment`;
+    const description = `Provider: ${StringUtils.capitalize(staff?.displayName)}
+Services: ${services.map((service) => StringUtils.capitalize(service.name)).join(", ")}
+        `;
+    // Post new event to Google Calendar
+    const calendarApi = await GoogleCalendarAPI.getInstance();
+    const postedEvent = await calendarApi.updateEvent(appointment.google_event_id, summary, description, isAvailable.startDate, isAvailable.endDate, notifyCustomer);
+
+    if (payload.notify) {
+        try {
+            let appObj = {
+                staff: payload.staff,
+                ...(payload?.client && {client: payload.client}),
+                ...(payload?.lead && {lead: payload.lead}),
+                google_event_id: postedEvent.id,
+                google_event_link: postedEvent.htmlLink,
+                services: payload.services,
+                start: FirebaseAdmin.toTimestamp(new Date(postedEvent.data.start.dateTime)),
+                end: FirebaseAdmin.toTimestamp(new Date(postedEvent.data.end.dateTime))
+            };
+            await SMSHelper.sendAppointmentConfirmation(appObj, client?.phoneNumber, staff, true);
+        } catch (error) {
+            errors.push("Failed to send SMS update.");
+            console.error(error);
+        }
+
+        try {
+            await MailHelper.send(
+                {
+                    "name": settings.get("store.name"),
+                    "email": "scheduling@fullschedule.co"
+                },
+                [{
+                    "email": client?.email,
+                    "name": client?.displayName
+                }], `Appointment Updated!`, HTMLBookingConfirmation
+                    .replace("{{TITLE}}", "APPOINTMENT UPDATED!")
+                    .replace("{{LOGOURL}}", settings.get("store.logo"))
+                    .replace("{{ADDRESS}}", `${settings.object?.address?.street1 && settings.object.address.street1 + "\n"}${settings.object?.address?.street2 && settings.object?.address?.street2 + "\n"}${settings.object?.address?.city && settings.object?.address?.city + ", "}${settings.object?.address?.state && settings.object?.address?.state} ${settings.object?.address?.zip && settings.object?.address?.zip}`)
+                    .replace("{{SERVICES}}", services.map(({name}) => name).join(", "))
+                    .replace("{{PROVIDER.PHOTOURL}}", staff.photoURL)
+                    .replace("{{PROVIDER.NAME}}", StringUtils.capitalize(staff.displayName))
+                    .replace("{{PROVIDER.TITLE}}", staff.title)
+                    .replace("{{FOR}}", "provider")
+                    .replace("{{DATE}}", new Date(postedEvent.data.start.dateTime).toLocaleTimeString([], {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        ...(settings.get("address.timezone") && {timeZone: settings.get("address.timezone")})
+                    }).replace(/^(.+?,.+?),\s*/g, '$1 @ ')));
+
+
+        } catch (error) {
+            errors.push("Failed to send email update to customer.");
+            console.error(error);
+        }
+
+        if (errors.length) {
+            FirebaseAdmin.firestore().collection("appointments").doc(appointment.doc_id).update({errors});
+        }
+    }
 
     try {
-
+        await FirebaseAdmin.firestore().collection("appointments").doc(appointment.doc_id).update({
+            services: payload.services,
+            start: FirebaseAdmin.toTimestamp(new Date(postedEvent.data.start.dateTime)),
+            end: FirebaseAdmin.toTimestamp(new Date(postedEvent.data.end.dateTime))
+        });
 
         return {status: 200}
     } catch (error) {

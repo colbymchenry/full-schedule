@@ -42,7 +42,7 @@ export class SMSHelper {
         })
     }
 
-    static async sendAppointmentConfirmation(appointment, number, staff) {
+    static async sendAppointmentConfirmation(appointment, number, staff, update) {
         const settings = await (await FirebaseAdmin.firestore().collection("settings").doc("main").get()).data();
         const dateHuman = FirebaseAdmin.toDate(appointment.start).toLocaleTimeString([], {
             year: 'numeric',
@@ -52,7 +52,7 @@ export class SMSHelper {
             minute: '2-digit',
             ...(settings?.address?.timezone && { timeZone: settings.address.timezone })
         }).replace(/^(.+?,.+?),\s*/g,'$1 @ ');
-        const textBody = `\n\nYour appointment on\n\n${dateHuman}${staff?.displayName ? ` with ${StringUtils.capitalize(staff.displayName)}` : ""} is scheduled.\n\nAddress:\n${settings?.address?.street1 && settings.address.street1 + "\n"}${settings?.address?.street2 && settings?.address?.street2 + "\n"}${settings?.address?.city && settings?.address?.city + ", "}${settings?.address?.state && settings?.address?.state} ${settings?.address?.zip && settings?.address?.zip}\n\nThanks for choosing ${settings?.store?.name}! We look forward to seeing you!`;
+        const textBody = `\n\nYour appointment on\n\n${dateHuman}${staff?.displayName ? ` with ${StringUtils.capitalize(staff.displayName)}` : ""} ${update ? "was updated" : "is scheduled"}.\n\nAddress:\n${settings?.address?.street1 && settings.address.street1 + "\n"}${settings?.address?.street2 && settings?.address?.street2 + "\n"}${settings?.address?.city && settings?.address?.city + ", "}${settings?.address?.state && settings?.address?.state} ${settings?.address?.zip && settings?.address?.zip}\n\nThanks for choosing ${settings?.store?.name}! We look forward to seeing you!`;
 
         const reminderDate = FirebaseAdmin.toDate(appointment.start);
         // Send reminder text at 8:30 AM

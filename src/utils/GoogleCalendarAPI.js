@@ -126,16 +126,25 @@ export class GoogleCalendarAPI {
         });
     }
 
-//     try {
-//     const calendarApi = await GoogleCalendarAPI.getInstance();
-//
-//     let time1 = new Date();
-//     let time2 = new Date();
-//     time2.setHours(time2.getHours() + 2);
-//
-//     await calendarApi.postEvent("test event", "30326", "Testing events", time1, time2, [{email: "colbymchenry@gmail.com", responseStatus: "accepted"}]);
-// } catch (error) {
-//     console.error(error)
-// }
+    async updateEvent(id, summary, description, startTime, endTime, sendUpdates) {
+        const timeZone = this.settings?.address?.timezone;
+        return await this.calendar.events.update({
+            calendarId: this.calendarId,
+            eventId: id,
+            resource: {
+                summary, description,
+                start: {
+                    dateTime: startTime,
+                    timeZone,
+                },
+                end: {
+                    dateTime: endTime,
+                    timeZone,
+                },
+                sendUpdates
+            }
+        });
+    }
+
 }
 

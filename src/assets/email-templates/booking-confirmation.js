@@ -136,7 +136,7 @@ export const HTMLBookingConfirmation = `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML
                                                         <tr>
                                                             <td align="center"
                                                                 class="esd-block-text es-p20t es-p5b es-m-txt-c">
-                                                                <h1>YOU'RE BOOKED!</h1>
+                                                                <h1>{{TITLE}}</h1>
                                                             </td>
                                                         </tr>
                                                         </tbody>

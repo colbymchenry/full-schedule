@@ -5,15 +5,14 @@
         iconMail,
         iconNotes,
         iconPhone,
-        iconPin,
-        iconTrash
+        iconPin
     } from "../../../../lib/icons.js";
     import Button from "$lib/forms/button.svelte";
     import Checkbox from "$lib/forms/checkbox.svelte";
     import InputField from "$lib/forms/input-field.svelte";
     import InputSelect from "$lib/forms/select.svelte";
     import Avatar from "$lib/avatar.svelte";
-    import {bookingStore, settings} from "../../../../lib/stores.js";
+    import {settings} from "../../../../lib/stores.js";
     import {FirebaseClient} from "../../../../utils/firebase/FirebaseClient.js";
     import {browser} from "$app/env";
     import {Api} from "../../../../utils/Api.js";
@@ -23,8 +22,39 @@
 
     let availability = new Promise(fetchAvailability);
     let client = appointment.userInfo;
-    let selectedDate = FirebaseClient.toDate(appointment.start);
     let closing = false;
+    let notifyCustomer = false;
+
+    let submitted = false;
+    let selectedServices = appointment.services;
+    let selectedDate = FirebaseClient.toDate(appointment.start);
+    let selectedTime = FirebaseClient.toDate(appointment.start);
+
+    async function updateAppointment() {
+        submitted = true;
+
+        try {
+            let res = await Api.patch(`/api/appointment`, {
+                services: selectedServices,
+                date: selectedDate,
+                timestamp: selectedTime,
+                notify: notifyCustomer,
+                appointment
+            });
+
+            await fetchAvailability();
+            alert("Appointment updated!")
+            close();
+        } catch (error) {
+            console.error(error);
+        }
+
+        submitted = false;
+    }
+
+    async function deleteAppointment() {
+
+    }
 
     function close() {
         if (closing) return;
@@ -39,11 +69,15 @@
         if (browser) {
             try {
                 let res = await Api.post(`/api/fetch-availability`, {
-                    services: appointment.services,
+                    services: selectedServices,
                     date: selectedDate
                 });
 
                 availability = Object.values(res.timeSlots).find((d) => d.uid === appointment.staff);
+
+                if (!availability.availability[0].includes("T")) {
+                    selectedTime = availability.availability[0];
+                }
             } catch (error) {
                 console.error(error);
             }
@@ -53,9 +87,26 @@
     // This seems weird, but we run fetchAvailability any time the selected date changes.
     $: selectedDate, fetchAvailability();
 
+    function handleNextAvailability(e) {
+        if (e.target.value === "goto") {
+            selectedDate = new Date(availability.availability[0]);
+        } else if (e.target.value.includes(":")) {
+            selectedTime = e.target.value;
+        }
+    }
 
-    console.log("appointment", appointment)
-    console.log("availability", availability)
+    function handleServiceChange(e) {
+        if (e.target.checked) {
+            selectedServices = [...selectedServices, e.target.value];
+        } else {
+            const index = selectedServices.indexOf(e.target.value);
+            if (index > -1) { // only splice array when item is found
+                selectedServices.splice(index, 1); // 2nd parameter means remove one item only
+            }
+        }
+
+        availability = new Promise(fetchAvailability);
+    }
 </script>
 
 <div class="overlay" class:closing={closing}>
@@ -73,7 +124,7 @@
                         <div class="name">
                             <div>
                                 <Avatar user={client} size="small"/>
-                                <h3>{client?.displayName || "No Name"}</h3>
+                                <h3>{client?.displayName?.toLowerCase() || "No Name"}</h3>
                             </div>
                         </div>
 
@@ -137,13 +188,19 @@
                         </div>
                         <div>
                             <label>Time: </label>
-                            <InputSelect hideDefault>
+                            <InputSelect hideDefault onChange={handleNextAvailability}>
                                 {#await availability}
                                     <option disabled>Fetching...</option>
                                 {:then data}
-                                    {#each data.availability as timeSlot}
-                                        <option value={timeSlot}>{TimeHelper.convertTime24to12(timeSlot)}</option>
-                                    {/each}
+                                    {#if data.availability[0].includes("T")}
+                                        <option>No availability</option>
+                                        <option value={"goto"}>Go
+                                            to: {new Date(data.availability[0]).toDateString()}</option>
+                                    {:else}
+                                        {#each data.availability as timeSlot}
+                                            <option value={timeSlot}>{TimeHelper.convertTime24to12(timeSlot)}</option>
+                                        {/each}
+                                    {/if}
                                 {:catch error}
 
                                 {/await}
@@ -158,8 +215,8 @@
                                 <p>Fetching services...</p>
                             {:then data}
                                 {#each data as service}
-                                    <Checkbox name="services" value={service.doc_id}
-                                              checked={appointment.services.includes(service.doc_id)}>{service.name}</Checkbox>
+                                    <Checkbox name="services" value={service.doc_id} onChange={handleServiceChange}
+                                              checked={selectedServices.includes(service.doc_id)}>{service.name}</Checkbox>
                                 {/each}
                             {:catch error}
                                 <p>Error fetching services...</p>
@@ -172,8 +229,14 @@
 
         </div>
         <div class="footer">
-            <Button color="delete">Delete</Button>
-            <Button>Save</Button>
+            <div>
+                <Checkbox name="notify_customer" onChange={(e) => notifyCustomer = e.target.checked} checked={notifyCustomer}>Notify customer?
+                </Checkbox>
+            </div>
+            <div>
+                <Button color="delete">Delete</Button>
+                <Button type="button" loading={submitted} callback={updateAppointment}>Save</Button>
+            </div>
         </div>
     </div>
 </div>
@@ -271,6 +334,12 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+
+      div {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
     }
 
     .content {
