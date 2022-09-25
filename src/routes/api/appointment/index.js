@@ -235,6 +235,7 @@ Services: ${services.map((service) => StringUtils.capitalize(service.name)).join
     if (payload.notify) {
         try {
             let appObj = {
+                doc_id: appointment.doc_id,
                 staff: payload.staff,
                 ...(payload?.client && {client: payload.client}),
                 ...(payload?.lead && {lead: payload.lead}),

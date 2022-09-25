@@ -42,7 +42,7 @@
                 appointment
             });
 
-            await fetchAvailability();
+            await fetchAppointments();
             alert("Appointment updated!")
             close();
         } catch (error) {
