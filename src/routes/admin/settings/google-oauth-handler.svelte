@@ -21,10 +21,12 @@
                         baseUrl
                     })
 
+                    const oldGoogleSettings = (await FirebaseClient.doc("settings", "main"))?.google || {};
+
+                    oldGoogleSettings["token"] = tokens;
+
                     await FirebaseClient.update("settings", "main", {
-                        "google": {
-                            "token": tokens
-                        }
+                        "google": oldGoogleSettings
                     });
                     history.pushState({}, null, "/admin/settings/api");
                 } catch (e) {
