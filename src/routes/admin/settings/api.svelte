@@ -39,7 +39,7 @@
         let getUrl = window.location;
         let baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
         try {
-            const { authorizationUrl } = await Api.post('/api/google-oauth-url', { baseUrl });
+            const {authorizationUrl} = await Api.post('/api/google-oauth-url', {baseUrl});
             window.location.href = authorizationUrl;
         } catch (e) {
             showToast()
@@ -50,7 +50,7 @@
     async function fetchCalendars() {
         if (!calendars.length && browser) {
             try {
-                const { data } = await Api.get("/api/google-calendar");
+                const {data} = await Api.get("/api/google-calendar");
                 calendars = data.filter(({
                                              accessRole,
                                              id,
@@ -87,7 +87,7 @@
             denyButtonText: 'Cancel',
             showDenyButton: true,
             showCloseButton: true,
-            confirmButtonColor:  "var(--fuse-primary)",
+            confirmButtonColor: "var(--fuse-primary)",
             denyButtonColor: "var(--fuse-accent-500)",
             backdrop: true
         });
@@ -115,31 +115,42 @@
 <Form onSubmit={onSubmit}>
     <Section title="Google"
              info={'API keys used for various Google APIs. <a href="https://console.cloud.google.com/welcome" target="_blank">Go to Google console.</a>'}>
-        <Row>
-            {#if !$settings.object?.google?.token}
-                <!-- Needs to OAuth with Google Business Account -->
-                <Button icon={iconGoogle} color="input" type="button" callback={loginWithGoogle}>Login with Google
-                </Button>
-            {:else}
-                <!-- Needs to select their Google Calendar -->
-                <Select label="Appointment Calendar" hint="Calendar used to keep track of appointments."
-                        name="google.calendars.appointments" icon={iconEvent}
-                        value={$settings.object?.google?.calendars?.appointments} onChange={onCalendarChange}>
-                    {#each calendars as calendar}
-                        <option value={calendar.id}>{calendar.summary}</option>
-                    {/each}
-                    <option value={"create"}>Create Calendar</option>
-                </Select>
-                <Select label="Scheduling Calendar" hint="Calendar used to keep track of employee schedules."
-                        name="google.calendars.schedules" icon={iconFreeAvailable}
-                        value={$settings.get("google.calendars.schedules")}>
-                    <!--{#each states as state}-->
-                    <!--    <option value={state.value}-->
-                    <!--            selected={state.value === $settings.get("address.state")}>{state.label}</option>-->
-                    <!--{/each}-->
-                </Select>
-            {/if}
-        </Row>
+        {#if !$settings.object?.google?.client_id || !$settings.object?.google?.client_secret}
+            <Row>
+                <InputField label="Google Client ID" name="google.client_id" icon={iconUser}
+                            value={$settings.get("google.client_id")}
+                />
+                <InputField label="Google Client Secret" name="google.client_secret" icon={iconApi}
+                            value={$settings.get("google.client_secret")}
+                />
+            </Row>
+        {:else}
+            <Row>
+                {#if !$settings.object?.google?.token}
+                    <!-- Needs to OAuth with Google Business Account -->
+                    <Button icon={iconGoogle} color="input" type="button" callback={loginWithGoogle}>Login with Google
+                    </Button>
+                {:else}
+                    <!-- Needs to select their Google Calendar -->
+                    <Select label="Appointment Calendar" hint="Calendar used to keep track of appointments."
+                            name="google.calendars.appointments" icon={iconEvent}
+                            value={$settings.object?.google?.calendars?.appointments} onChange={onCalendarChange}>
+                        {#each calendars as calendar}
+                            <option value={calendar.id}>{calendar.summary}</option>
+                        {/each}
+                        <option value={"create"}>Create Calendar</option>
+                    </Select>
+                    <Select label="Scheduling Calendar" hint="Calendar used to keep track of employee schedules."
+                            name="google.calendars.schedules" icon={iconFreeAvailable}
+                            value={$settings.get("google.calendars.schedules")}>
+                        <!--{#each states as state}-->
+                        <!--    <option value={state.value}-->
+                        <!--            selected={state.value === $settings.get("address.state")}>{state.label}</option>-->
+                        <!--{/each}-->
+                    </Select>
+                {/if}
+            </Row>
+        {/if}
     </Section>
 
     <Separator/>
@@ -150,16 +161,19 @@
             <InputField label="Username" name="textmagic.username" icon={iconUser}
                         value={$settings.get("textmagic.username")}
             />
-            <InputField label="API Key" name="textmagic.apikey" icon={iconApi} value={$settings.get("textmagic.apikey")}
+            <InputField label="API Key" name="textmagic.apikey" icon={iconApi}
+                        value={$settings.get("textmagic.apikey")}
             />
         </Row>
     </Section>
 
     <Separator/>
 
-    <Section title="SendinBlue (Email & SMS Blast)" info={'This service is used for all emails, email blasts, and SMS blasts within Full Schedule.'}>
+    <Section title="SendinBlue (Email & SMS Blast)"
+             info={'This service is used for all emails, email blasts, and SMS blasts within Full Schedule.'}>
         <Row>
-            <InputField label="API Key" name="sendinblue.api_key" icon={iconApi} value={$settings.get("sendinblue.api_key")}
+            <InputField label="API Key" name="sendinblue.api_key" icon={iconApi}
+                        value={$settings.get("sendinblue.api_key")}
             />
         </Row>
     </Section>

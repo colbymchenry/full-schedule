@@ -9,11 +9,7 @@ config();
 export class GoogleCalendarAPI {
 
     constructor() {
-        this.oauth2Client = new google.auth.OAuth2(
-            process.env.GOOGLE_CLIENT_ID,
-            process.env.GOOGLE_CLIENT_SECRET,
-            'postmessage'
-        );
+        this.oauth2Client = null;
         this.settings = null;
         this.calendar = null;
         this.calendarId = null;
@@ -23,6 +19,11 @@ export class GoogleCalendarAPI {
         const calendarApi = new GoogleCalendarAPI();
         const settings = await (await FirebaseAdmin.firestore().collection("settings").doc("main").get()).data();
         const tokens = await settings?.google?.token;
+        calendarApi.oauth2Client = new google.auth.OAuth2(
+            settings.get("google.client_id"),
+            settings.get("google.client_secret"),
+            'postmessage'
+        );
         await calendarApi.oauth2Client.setCredentials(tokens);
         calendarApi.calendar = google.calendar({version: 'v3', auth: calendarApi.oauth2Client});
         calendarApi.calendarId = settings?.google?.calendars?.appointments;

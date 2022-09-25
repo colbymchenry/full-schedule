@@ -1,6 +1,7 @@
 import {google} from "googleapis";
 import {FirebaseAdmin} from "../../utils/firebase/FirebaseAdmin.js";
 import {config} from 'dotenv';
+import {JsonHelper} from "../../utils/JsonHelper.js";
 
 config();
 
@@ -10,9 +11,11 @@ export async function post({request}) {
 
     const res = await request.json();
 
+    const settings = new JsonHelper(await (await FirebaseAdmin.firestore().collection("settings").doc("main").get()).data());
+
     const oauth2Client = new google.auth.OAuth2(
-        process.env.GOOGLE_CLIENT_ID,
-        process.env.GOOGLE_CLIENT_SECRET,
+        settings.get("google.client_id"),
+        settings.get("google.client_secret"),
         res.baseUrl + '/settings/api'
     );
 
