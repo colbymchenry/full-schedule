@@ -102,7 +102,7 @@ export class FirebaseClient {
         return res.items;
     }
 
-    static getIdToken() {
+    static async getIdToken() {
         const token = get(tokenStore);
 
         // Grab a new token and store it.
@@ -116,13 +116,18 @@ export class FirebaseClient {
 
         // If no token is stored
         if (!token) {
+            // if signed in return that user token
+            if (firebaseAuth?.currentUser) {
+                return await firebaseAuth.currentUser.getIdToken();
+            }
+
             // Fetch a new token and write it to the store
             if (localStorage.getItem("token")) {
                 return localStorage.getItem("token");
             }
         }
 
-        return token;
+        return firebaseAuth?.currentUser ? await firebaseAuth.currentUser.getIdToken() : token;
     }
 
     static async createUser(email, password) {

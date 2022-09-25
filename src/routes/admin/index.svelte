@@ -20,6 +20,8 @@
         submitted = true;
         try {
             response = await FirebaseClient.signIn(data["email"], data["password"]);
+            // Initiate token store.
+            FirebaseClient.getIdToken();
             $auth = response.user;
             await goto("/admin/appointments");
         } catch (error) {
