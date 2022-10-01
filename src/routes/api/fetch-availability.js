@@ -10,8 +10,8 @@ config()
 export async function post({request}) {
 
     // TODO: This may not be best method, should maybe ban IP abuse rather than checking token for GET requests (yes this is POST but it's fetching info)
-    const verify = await Recaptcha.verifyToken(request);
-    if (verify) return verify;
+    // const verify = await Recaptcha.verifyToken(request);
+    // if (verify) return verify;
 
     const payload = await request.json();
 
