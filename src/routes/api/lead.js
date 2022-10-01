@@ -4,8 +4,8 @@ import {Recaptcha} from "../../utils/Recaptcha.js";
 config()
 
 export async function post({request, url}) {
-    const verify = await Recaptcha.verifyToken(request);
-    if (verify) return verify;
+    // const verify = await Recaptcha.verifyToken(request);
+    // if (verify) return verify;
 
 
     try {
