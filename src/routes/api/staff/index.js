@@ -20,6 +20,15 @@ export async function patch({request, url}) {
         delete res['phoneNumber']
         delete res['disabled']
 
+        if (res['schedule']) {
+            Object.keys(res['schedule']).forEach((workDay) => {
+                if (res['schedule'][workDay].enabled === '') {
+                    res['schedule'][workDay].enabled = false;
+                    console.log("CALED")
+                }
+            })
+        }
+
         await FirebaseAdmin.firestore().collection("staff").doc(url.searchParams.get("uid")).update(res);
 
         return {status: 200}

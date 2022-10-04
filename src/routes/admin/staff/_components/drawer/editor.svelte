@@ -112,8 +112,6 @@
                 })
                 data.photoURL = photoURL;
 
-                console.log(await FirebaseClient.doc("staff", uid))
-
                 if (await FirebaseClient.doc("staff", uid)) {
                     await FirebaseClient.update("staff", uid, {
                         photoURL
@@ -204,7 +202,7 @@
             <div class="schedule">
                 {#each ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"] as dayOfWeek}
                     <h5>{dayOfWeek}</h5>
-                    <InputField name={`schedule.${dayOfWeek}.enabled`} type="toggle" style="padding-top: 0rem !important;"
+                    <InputField name={`schedule.${dayOfWeek}.enabled`} type="toggle" style="padding-top: 0 !important;"
                                 value={staff?.schedule ? staff?.schedule[dayOfWeek]?.enabled : null}
                                 bind:form_errors={form_errors} onChange={(val) => {
                                     if (!staff?.schedule)  staff["schedule"] = {};
@@ -241,7 +239,7 @@
                                     {/each}
                                 </Select>
                             {:else}
-                                Closed
+                                OOO
                             {/if}
                         </div>
                     </div>

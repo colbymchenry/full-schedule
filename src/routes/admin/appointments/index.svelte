@@ -36,6 +36,9 @@
     async function fetchStaff() {
         try {
             staffAccounts = await FirebaseClient.collection("staff");
+            // Filter out staff with no schedules
+            staffAccounts = staffAccounts.filter((staff) => staff?.schedule &&
+                Object.values(staff.schedule).filter((day) => day.enabled === true && day?.day?.start && day?.day?.end).length);
             appointments = new Promise(fetchAppointments);
         } catch (error) {
             showToast();
