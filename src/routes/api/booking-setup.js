@@ -5,6 +5,19 @@ export async function get({request, url}) {
         if (url.searchParams.get("store")) {
             const settings = await (await FirebaseAdmin.firestore().collection("settings").doc("main").get()).data();
 
+            let staffAccounts = await FirebaseAdmin.getCollectionArray("staff");
+            // Filter out staff with no schedules
+            staffAccounts = staffAccounts.filter((staff) => staff?.schedule &&
+                Object.values(staff.schedule).filter((day) => day.enabled === true && day?.day?.start && day?.day?.end).length);
+
+
+            if (!staffAccounts.length) {
+                return {
+                    status: 400,
+                    body: { error: true }
+                }
+            }
+
             delete settings["clover"];
             delete settings["google"];
             delete settings["sendinblue"];
