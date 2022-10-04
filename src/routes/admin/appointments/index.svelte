@@ -4,6 +4,7 @@
 
 <script>
     import Header from './_components/header.svelte';
+    import BlockTimePopup from './_components/block-time-popup.svelte';
     import Timestamp from './_components/timestamp.svelte';
     import Timeline from './_components/timeline.svelte';
     import {FirebaseClient} from "../../../utils/firebase/FirebaseClient.js";
@@ -14,6 +15,8 @@
     import {MathHelper} from "../../../utils/MathHelper.js";
     import {settings} from "../../../lib/stores.js";
     import {where} from "firebase/firestore";
+    import {iconCancel, iconClock} from "../../../lib/icons.js";
+    import Button from "$lib/forms/button.svelte";
 
     let selectedDate = new Date();
     selectedDate.setHours(0, 0, 0, 0);
@@ -28,6 +31,9 @@
 
 
     let slotVisible;
+
+    let showBlockTimePopup = false;
+    let selectedStaff = null;
 
     let services = new Promise(fetchServices);
     let staffAccounts = new Promise(fetchStaff);
@@ -90,14 +96,24 @@
                     <th></th>
                     {#each staffAccounts as staff}
                         <th>
-                            {#if staff?.photoURL}
-                                <img class="avatar" src={staff.photoURL} loading="lazy" alt=""/>
-                            {:else}
-                                <div class="avatar">
-                                    {StringUtils.getInitials(staff.displayName)}
+                            <div style="display: flex;justify-content: space-between;align-items: center;">
+                                <div style="display: flex;align-items: center;">
+                                    {#if staff?.photoURL}
+                                        <img class="avatar" src={staff.photoURL} loading="lazy" alt=""/>
+                                    {:else}
+                                        <div class="avatar">
+                                            {StringUtils.getInitials(staff.displayName)}
+                                        </div>
+                                    {/if}
+                                    <span class="truncate">{staff.displayName}</span>
                                 </div>
-                            {/if}
-                            <span class="truncate">{staff.displayName}</span>
+
+                                <Button color="icon" icon={iconCancel} type="button" callback={() => {
+                                    selectedStaff = staff;
+                                    showBlockTimePopup = true;
+                                }}></Button>
+                            </div>
+
                         </th>
                     {/each}
                 </tr>
@@ -131,6 +147,13 @@
     </div>
 
 </section>
+
+
+{#if showBlockTimePopup && selectedStaff}
+    <BlockTimePopup {fetchAppointments} {staffAccounts} bind:visible={showBlockTimePopup} onClose={() => {
+        selectedStaff = null;
+    }}/>
+{/if}
 
 <style lang="scss">
 
