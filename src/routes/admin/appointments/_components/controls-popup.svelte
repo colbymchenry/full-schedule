@@ -225,7 +225,7 @@
                         <p>Fetching services...</p>
                     {:then data}
                         {#each data as service}
-                            <Checkbox name="services" value={service.doc_id} onChange={handleServiceChange}
+                            <Checkbox name="services" value={service.doc_id} on:change={handleServiceChange}
                                       checked={selectedServices.includes(service.doc_id)}>{service.name}</Checkbox>
                         {/each}
                     {:catch error}
@@ -238,7 +238,7 @@
 
     <svelte:fragment slot="footer">
         <div>
-            <Checkbox name="notify_customer" onChange={(e) => notifyCustomer = e.target.checked}
+            <Checkbox name="notify_customer" on:change={(e) => notifyCustomer = e.target.checked}
                       checked={notifyCustomer}>Notify customer?
             </Checkbox>
         </div>

@@ -12,6 +12,7 @@
     export let hideFooter = undefined;
     export let style = undefined;
     export let onChange = undefined;
+    export let formValues = {};
     let reset = false;
     let footer;
 

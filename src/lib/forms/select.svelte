@@ -2,7 +2,7 @@
     import {iconHelp} from "../icons.js";
 
     export let form_errors = {};
-    export let value, label, name, type = "text", icon, disablePrefill, readOnly, hint, info, infoTop;
+    export let value, label, name, type = "text", icon, disablePrefill, readOnly, hint, info, infoTop, disabled;
     export let required = false;
     export let hideDefault = false;
     export let style;
@@ -23,6 +23,7 @@
         ...(disablePrefill && {autocomplete: "off"}),
         maxlength: "256",
         id: name,
+        disabled,
         name,
         type,
         required,
@@ -45,7 +46,7 @@
 
 <div class="input-field__container" class:is--small={small} >
     {#if label}
-        <label htmlFor={name}>
+        <label for={name}>
             {label}
             {#if hint}
                 <div on:mouseenter={() => showHint = true} on:mouseleave={() => showHint = false}>

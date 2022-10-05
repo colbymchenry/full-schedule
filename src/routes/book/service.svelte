@@ -49,7 +49,7 @@
         <div class="container">
             {#each $bookingStore.get("services") as service}
                 <div>
-                    <Checkbox name={service.doc_id} onChange={checkDisabled}>{service.name}</Checkbox>
+                    <Checkbox name={service.doc_id} on:change={checkDisabled}>{service.name}</Checkbox>
                 </div>
             {/each}
         </div>

@@ -1,25 +1,23 @@
 <script>
-    import {
-        iconBirthday, iconCalendar,
-        iconMail,
-        iconNotes,
-        iconPhone,
-        iconPin
-    } from "../../../../lib/icons.js";
     import Popup from "$lib/popup.svelte";
     import Button from "$lib/forms/button.svelte";
-    import Checkbox from "$lib/forms/checkbox.svelte";
+    import Form from "$lib/forms/form.svelte";
+    import Select from "$lib/forms/select.svelte";
     import InputField from "$lib/forms/input-field.svelte";
-    import InputSelect from "$lib/forms/select.svelte";
-    import Avatar from "$lib/avatar.svelte";
-    import {settings} from "../../../../lib/stores.js";
     import {TimeHelper} from "../../../../utils/TimeHelper.js";
 
     export let staff, date, fetchStaff, staffAccounts, visible, onClose;
 
+    // get an array of slider time values from 4am to 8pm
+    let timeMap = [];
+    for (let hour = 4; hour <= 20; hour += 0.5) timeMap.push(TimeHelper.sliderValTo24(hour));
+
+    let submitBtn;
     let closing = false;
     let submitted = false;
+    let form_errors = {};
 
+    let blockEntireDay = true;
 
     function close() {
         if (closing) return;
@@ -30,14 +28,41 @@
         }, 400);
     }
 
-    async function blockTime() {
-
+    async function onSubmit(formData) {
+    console.log(formData)
     }
 </script>
 
 <Popup {onClose} bind:visible={visible} bind:closing={closing} title="Block Time">
     <div slot="content" class="app">
-        <h1>BLOCK TIME</h1>
+        <Form onSubmit={onSubmit} hideFooter style="width: 100%;margin-top: 1rem;" onChange={(e) => {
+            delete form_errors[e.target.name];
+            form_errors = form_errors;
+        }}>
+            <div class="form-container">
+                <div class="allDay">
+                 <InputField name="allDay" id="allDay" type="toggle" label="Block off entire day" bind:value={blockEntireDay} />
+                </div>
+
+                <div class="time-slots">
+                    <Select disabled={blockEntireDay} name={`start`} bind:form_errors={form_errors} placeholder="Day start" small infoTop="Start time">
+                        {#each timeMap as timestamp (timestamp)}
+                            <option value={timestamp}>{TimeHelper.convertTime24to12(timestamp)}</option>
+                        {/each}
+                    </Select>
+                    <span>-</span>
+                    <Select disabled={blockEntireDay} name={`end`} bind:form_errors={form_errors} placeholder="Day start" small infoTop="End time">
+                        {#each timeMap as timestamp (timestamp)}
+                            <option value={timestamp}>{TimeHelper.convertTime24to12(timestamp)}</option>
+                        {/each}
+                    </Select>
+                </div>
+
+            </div>
+
+            <button bind:this={submitBtn} type="submit" style="display: none;"></button>
+        </Form>
+
     </div>
 
     <svelte:fragment slot="footer">
@@ -45,7 +70,9 @@
 
         </div>
         <div>
-            <Button type="button" loading={submitted} callback={blockTime}>Submit</Button>
+            <Button type="button" loading={submitted} callback={() => submitBtn.click()} disabled={() => {
+                <!--if (blockEntireDay)-->
+            }}>Submit</Button>
         </div>
     </svelte:fragment>
 </Popup>
@@ -58,5 +85,27 @@
     > div {
       flex: 1;
     }
+  }
+
+
+  .form-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: flex-start;
+  }
+
+  .time-slots {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+
+    > span {
+      margin-top: 0.75rem;
+    }
+  }
+
+  .time-slots,.allDay {
+    flex: 1;
   }
 </style>
