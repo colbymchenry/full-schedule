@@ -108,7 +108,7 @@
                 </div>
             {/if}
             {#if alwaysShowMask || maskChar || mask}
-                <MaskInput {...inputProps} {alwaysShowMask} {maskChar} {mask} {size} {showMask} {readonly}
+                <MaskInput {...inputProps} {alwaysShowMask} {maskChar} {mask} {size} {showMask}
                            on:focus={() => focused = true} on:blur={() => focused = false}
                            on:change={clear_error} on:input={clear_error}
                            value={value || ""}
