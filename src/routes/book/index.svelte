@@ -64,11 +64,10 @@
     <Form id="login-form" class="login-form" onSubmit={onSubmit} hideFooter>
 
         <InputField form_errors={form_errors} name="displayName" type="text" label="Full Name *" icon={iconPerson}
-                    required disablePrefill onChange={checkDisabled}/>
+                    required onChange={checkDisabled}/>
         <InputField form_errors={form_errors} name="email" type="email" label="Email *" icon={iconMail}
-                    required disablePrefill onChange={checkDisabled}/>
+                    required onChange={checkDisabled}/>
         <InputField label="Phone *" type="tel" name="phoneNumber" icon={iconPhone} required alwaysShowMask
-                    disablePrefill
                     mask='+1 (000) 000 - 0000'
                     size={20}
                     showMask
