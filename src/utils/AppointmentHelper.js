@@ -1,8 +1,6 @@
 import {TimeHelper} from "./TimeHelper.js";
 import {FirebaseAdmin} from "./firebase/FirebaseAdmin.js";
 import {JsonHelper} from "./JsonHelper.js";
-import {FirebaseClient} from "./firebase/FirebaseClient.js";
-import {date, staff} from "../routes/admin/appointments/_components/timestamp.svelte";
 
 export class AppointmentHelper {
 
