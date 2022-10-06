@@ -19,6 +19,24 @@ export class GoogleCalendarAPI {
         const calendarApi = new GoogleCalendarAPI();
         const settings = await (await FirebaseAdmin.firestore().collection("settings").doc("main").get()).data();
         const tokens = await settings?.google?.token;
+
+        // TODO: Implement check if expired
+        const request = await fetch("https://www.googleapis.com/oauth2/v4/token", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                client_id: settings?.google?.client_id,
+                client_secret: settings?.google?.client_secret,
+                refresh_token: settings?.google?.token?.refresh_token,
+                grant_type: "refresh_token",
+            }),
+        });
+
+        const data = await request.json();
+        tokens["access_token"] = data.access_token;
+
         calendarApi.oauth2Client = new google.auth.OAuth2(
             settings?.google?.client_id,
             settings?.google?.client_secret,
