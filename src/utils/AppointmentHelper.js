@@ -10,7 +10,7 @@ export class AppointmentHelper {
         }
 
         if (!blockedTime) {
-            blockedTime = (await (await FirebaseAdmin.firestore().collection("blocked_time").where("staff", "==", staff.doc_id).get()).data());
+            blockedTime = await FirebaseAdmin.getCollectionArray("blocked_time");
         }
 
         const weekday = date ? new Date(date).toLocaleDateString('en-US', {

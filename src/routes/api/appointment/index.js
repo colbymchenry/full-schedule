@@ -5,7 +5,6 @@ import {StringUtils} from "../../../utils/StringUtils.js";
 import {SMSHelper} from "../../../utils/SMSHelper.js";
 import {MailHelper} from "../../../utils/MailHelper.js";
 import {AppointmentHelper} from "../../../utils/AppointmentHelper.js";
-import {Recaptcha} from "../../../utils/Recaptcha.js";
 import {HTMLBookingConfirmation} from "../../../assets/email-templates/booking-confirmation.js";
 
 // Endpoint to create an appointment
@@ -14,9 +13,10 @@ export async function post({request}) {
     const payload = await request.json();
     let client, lead;
 
+    // TODO: Add back recaptcha
     if (payload?.lead) {
-        const verify = await Recaptcha.verifyToken(request);
-        if (verify) return verify;
+        // const verify = await Recaptcha.verifyToken(request);
+        // if (verify) return verify;
         lead = await (await FirebaseAdmin.firestore().collection("leads").doc(payload.lead).get()).data();
     } else if (payload?.client) {
         await FirebaseAdmin.auth().verifyIdToken(request.headers.get("authorization"));
