@@ -2,7 +2,6 @@
     import Button from '$lib/forms/button.svelte';
     import InputField from '$lib/forms/input-field.svelte';
     import {iconCalendar, iconChevronLeft, iconChevronRight} from "../../../../lib/icons.js";
-    import {settings} from "../../../../lib/stores.js";
 
     export let selectedDate = new Date();
     let reRender = false;
@@ -11,8 +10,7 @@
         weekday: 'long',
         year: 'numeric',
         month: 'long',
-        day: 'numeric',
-        ...($settings.get("address.timezone") && { timeZone: $settings.get("address.timezone") })
+        day: 'numeric'
     }) : "";
 
 </script>
