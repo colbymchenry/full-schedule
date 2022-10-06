@@ -17,22 +17,22 @@
         loading = true;
 
         // If not in dev environment we need to use recaptcha
-        if (import.meta.env.VITE_ENV !== "DEV") {
-            window.grecaptcha.ready(function () {
-                window.grecaptcha.execute($recaptchaKey, {action: 'submit'}).then(async (token) => {
-                    try {
-                        await Api.post('/api/lead', formData, {token})
-                        $bookingStore.set("choices", formData);
-                        $bookingStore.set("token", token)
-                        await goto('/book/service');
-                    } catch (error) {
-                        console.error(error);
-                    }
-                }).catch((error) => {
-                    alert("Recaptcha failed.")
-                });
-            });
-        } else {
+        // if (import.meta.env.VITE_ENV !== "DEV") {
+        //     window.grecaptcha.ready(function () {
+        //         window.grecaptcha.execute($recaptchaKey, {action: 'submit'}).then(async (token) => {
+        //             try {
+        //                 await Api.post('/api/lead', formData, {token})
+        //                 $bookingStore.set("choices", formData);
+        //                 $bookingStore.set("token", token)
+        //                 await goto('/book/service');
+        //             } catch (error) {
+        //                 console.error(error);
+        //             }
+        //         }).catch((error) => {
+        //             alert("Recaptcha failed.")
+        //         });
+        //     });
+        // } else {
             try {
                 if (localStorage.getItem("lead")) formData["original_lead"] = localStorage.getItem("lead");
                 const res = await Api.post('/api/lead', formData, { token: "nil" });
@@ -43,19 +43,22 @@
             } catch (error) {
                 console.error(error);
             }
-        }
-
+        // }
+        loading = false;
     }
 
     let disabled = true;
 
     function checkDisabled() {
         if (browser) {
-            const form = document.getElementById("login-form");
-            const formData = FormHelper.getFormData(form);
-            const phone = formData.phoneNumber.replaceAll("_", "").replace("+1", "").replace("(", "").replace(")", "").replace("-", "").replace(/\s+/g, '');
+            setTimeout(() => {
+                const form = document.getElementById("login-form");
+                const formData = FormHelper.getFormData(form);
+                const phone = formData.phoneNumber.replaceAll("_", "").replace("+1", "").replace("(", "").replace(")", "").replace("-", "").replace(/\s+/g, '');
+                console.log(phone, phone.length)
+                disabled = !formData?.displayName?.length || !formData?.email?.length || phone.length !== 10
+            }, 200);
 
-            disabled = !formData?.displayName?.length || !formData?.email?.length || phone.length !== 9
         }
     }
 </script>
