@@ -45,6 +45,13 @@
             // Filter out staff with no schedules
             staffAccounts = staffAccounts.filter((staff) => staff?.schedule &&
                 Object.values(staff.schedule).filter((day) => day.enabled === true && day?.day?.start && day?.day?.end).length);
+
+            let blockedTime = await FirebaseClient.collection("blocked_time");
+            staffAccounts = staffAccounts.map((staffAcct) => {
+                staffAcct["blocked_time"] = blockedTime.filter((block) => block.staff === staffAcct.doc_id) || [];
+                return staffAcct;
+            })
+
             appointments = new Promise(fetchAppointments);
         } catch (error) {
             showToast();
@@ -150,7 +157,7 @@
 
 
 {#if showBlockTimePopup && selectedStaff}
-    <BlockTimePopup {fetchAppointments} {staffAccounts} bind:visible={showBlockTimePopup} onClose={() => {
+    <BlockTimePopup {fetchAppointments} {staffAccounts} date={selectedDate} staff={selectedStaff} bind:visible={showBlockTimePopup} onClose={() => {
         selectedStaff = null;
     }}/>
 {/if}

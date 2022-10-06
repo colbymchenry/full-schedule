@@ -17,6 +17,7 @@ export async function post({request}) {
 
     try {
         const settings = new JsonHelper(await (await FirebaseAdmin.firestore().collection("settings").doc("main").get()).data());
+        const blockedTime = await FirebaseAdmin.getCollectionArray("blocked_time");
 
         // Make sure if only one service is selected it is passed as an array
         if (typeof payload.services === 'string') payload["services"] = [payload["services"]];
@@ -60,7 +61,7 @@ export async function post({request}) {
             // We pass in the appointments object and settings object to prevent calling too many querys to the Firestore DB
             let appointments = await FirebaseAdmin.query(FirebaseAdmin.firestore().collection("appointments").where("staff", "==", staffObj.doc_id));
             for (let hour = 4; hour <= 20; hour += 0.25) {
-                let isAvailable = await AppointmentHelper.isAvailable(payload.date, TimeHelper.sliderValTo24(hour), services, staffObj, settings, appointments);
+                let isAvailable = await AppointmentHelper.isAvailable(payload.date, TimeHelper.sliderValTo24(hour), services, staffObj, settings, appointments, blockedTime);
                 // If there is no status returned then it's a valid time slot
                 if (!isAvailable?.status) {
                     timeSlots[staffObj.doc_id]["availability"] = [...timeSlots[staffObj.doc_id]["availability"], TimeHelper.sliderValTo24(hour)];
@@ -74,7 +75,7 @@ export async function post({request}) {
                 date.setDate(date.getDate() + dayShift);
                 dayShift += 1;
                 for (let hour = 4; hour <= 20; hour += 0.25) {
-                    let isAvailable = await AppointmentHelper.isAvailable(date, TimeHelper.sliderValTo24(hour), services, staffObj, settings, appointments);
+                    let isAvailable = await AppointmentHelper.isAvailable(date, TimeHelper.sliderValTo24(hour), services, staffObj, settings, appointments, blockedTime);
                     // If there is no status returned then it's a valid time slot
                     if (!isAvailable?.status) {
                         timeSlots[staffObj.doc_id]["availability"] = [date];

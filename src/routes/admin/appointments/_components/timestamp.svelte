@@ -14,13 +14,17 @@
     const [hour, minute] = timestamp.split(":");
     dateTimestamp.setHours(parseInt(hour), parseInt(minute));
 
-    $: notWorking = !staff?.schedule?.[weekday]?.enabled;
-    $: onLunch = () => {
+    let notWorking = !staff?.schedule?.[weekday]?.enabled;
+    const onLunch = () => {
         if (!staff?.schedule?.[weekday]?.lunch?.start || !staff?.schedule?.[weekday]?.lunch?.end) return false;
         let lunchStart = TimeHelper.getSliderValFrom24(staff.schedule[weekday].lunch.start);
         let lunchEnd = TimeHelper.getSliderValFrom24(staff.schedule[weekday].lunch.end);
         let currentVal = TimeHelper.getSliderValFrom24(timestamp);
         return lunchStart <= currentVal && lunchEnd >= currentVal;
+    }
+
+    const isBlockedTime = () => {
+        return staff.blocked_time ? staff.blocked_time.filter((block) => date.getDate() === FirebaseClient.toDate(block.date).getDate()).length : false;
     }
 
     let appointment, appHeight, appMargin;
@@ -71,7 +75,7 @@
     }
 </script>
 
-<div class="container" class:notWorking={notWorking} class:onLunch={onLunch()}>
+<div class="container" class:notWorking={notWorking} class:onLunch={onLunch()} class:blocked={isBlockedTime()}>
 
     {#if appointment && appointment?.userInfo}
         <div class="appointment" style={`height: ${appHeight}px;margin-top: ${appMargin}px;`} on:click={() => showPopup = true}>
@@ -196,7 +200,7 @@
       }
     }
 
-    &.notWorking, &.onLunch {
+    &.notWorking, &.onLunch, &.blocked {
       .new-app-drawer {
         display: none !important;
       }
@@ -225,6 +229,12 @@
     &.onLunch {
       &:before {
         content: 'LUNCH';
+      }
+    }
+
+    &.blocked {
+      &:before {
+        content: 'BLOCKED';
       }
     }
   }

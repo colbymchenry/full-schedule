@@ -1,12 +1,18 @@
 import {TimeHelper} from "./TimeHelper.js";
 import {FirebaseAdmin} from "./firebase/FirebaseAdmin.js";
 import {JsonHelper} from "./JsonHelper.js";
+import {FirebaseClient} from "./firebase/FirebaseClient.js";
+import {date, staff} from "../routes/admin/appointments/_components/timestamp.svelte";
 
 export class AppointmentHelper {
 
-    static async isAvailable(date, timestamp, services, staff, settings, appointments) {
+    static async isAvailable(date, timestamp, services, staff, settings, appointments, blockedTime) {
         if (!settings) {
             settings = new JsonHelper(await (await FirebaseAdmin.firestore().collection("settings").doc("main").get()).data());
+        }
+
+        if (!blockedTime) {
+            blockedTime = (await (await FirebaseAdmin.firestore().collection("blocked_time").where("staff", "==", staff.doc_id).get()).data());
         }
 
         const weekday = date ? new Date(date).toLocaleDateString('en-US', {
@@ -27,7 +33,11 @@ export class AppointmentHelper {
             return lunchStart <= currentVal && lunchEnd >= currentVal;
         }
 
-        if (notWorking || onLunch()) {
+        const isBlockedTime = () => {
+            return blockedTime ?  blockedTime.filter((block) => new Date(date).getDate() === FirebaseAdmin.toDate(block.date).getDate() && block.staff === staff.doc_id).length : false;
+        }
+
+        if (notWorking || onLunch() || isBlockedTime()) {
             return {
                 status: 400,
                 body: {

@@ -22,26 +22,23 @@
     let changeListeners = [];
     let interval;
 
+    function inputChangeEvent(e) {
+        onChange(e);
+        formValues = FormHelper.getFormData(form);
+    }
+
     onMount(() => {
         if (browser) {
-            if (onChange && form) {
-                interval = setInterval(() => {
-                    Array.from(form.getElementsByTagName("INPUT"))
+            if (onChange && form !== undefined) {
+                    [...Array.from(form.getElementsByTagName("INPUT")), ...Array.from(form.getElementsByTagName("SELECT")),
+                        ...Array.from(form.getElementsByTagName("TEXTAREA"))]
                         .filter((elem) => !changeListeners.includes(elem.name)) // filter out any we already have
                         .forEach((elem) => {
-                            elem.addEventListener("change", onChange); // add the event listener
+                            elem.addEventListener("change", inputChangeEvent); // add the event listener
                             changeListeners = [...changeListeners, elem.name];
                         });
-                }, 1000);
 
             }
-        }
-    })
-
-    onDestroy(() => {
-        // destroy interval
-        if (browser && interval) {
-            clearInterval(interval);
         }
     })
 </script>

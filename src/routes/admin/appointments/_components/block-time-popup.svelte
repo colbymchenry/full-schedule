@@ -5,6 +5,10 @@
     import Select from "$lib/forms/select.svelte";
     import InputField from "$lib/forms/input-field.svelte";
     import {TimeHelper} from "../../../../utils/TimeHelper.js";
+    import {ApiProgressBar} from "../../../../utils/ApiProgressBar.js";
+    import {FirebaseClient} from "../../../../utils/firebase/FirebaseClient.js";
+    import {settings} from "../../../../lib/stores.js";
+    import {showToast} from "../../../../utils/logger.js";
 
     export let staff, date, fetchStaff, staffAccounts, visible, onClose;
 
@@ -16,8 +20,11 @@
     let closing = false;
     let submitted = false;
     let form_errors = {};
+    let formValues = {};
 
     let blockEntireDay = true;
+
+    $: disabled = !blockEntireDay && (!formValues["start"] || !formValues["end"]);
 
     function close() {
         if (closing) return;
@@ -29,35 +36,56 @@
     }
 
     async function onSubmit(formData) {
-    console.log(formData)
+        ApiProgressBar.start();
+        try {
+            await FirebaseClient.add("blocked_time", {
+               staff: staff.doc_id,
+               date,
+               ...(formData["reason"] && { reason: formData["reason"] }),
+               ...(formData["start"] && { start: formData["start"] }),
+               ...(formData["end"] && { end: formData["end"] })
+            });
+            close();
+        } catch (error) {
+            showToast();
+            console.error(error);
+        }
+        ApiProgressBar.stop();
     }
 </script>
 
 <Popup {onClose} bind:visible={visible} bind:closing={closing} title="Block Time">
     <div slot="content" class="app">
-        <Form onSubmit={onSubmit} hideFooter style="width: 100%;margin-top: 1rem;" onChange={(e) => {
+        <Form bind:formValues={formValues} onSubmit={onSubmit} hideFooter style="width: 100%;margin-top: 1rem;"
+              onChange={(e) => {
             delete form_errors[e.target.name];
             form_errors = form_errors;
         }}>
             <div class="form-container">
                 <div class="allDay">
-                 <InputField name="allDay" id="allDay" type="toggle" label="Block off entire day" bind:value={blockEntireDay} />
+                    <InputField name="allDay" id="allDay" type="toggle" label="Block off entire day"
+                                bind:value={blockEntireDay}/>
                 </div>
 
                 <div class="time-slots">
-                    <Select disabled={blockEntireDay} name={`start`} bind:form_errors={form_errors} placeholder="Day start" small infoTop="Start time">
+                    <Select disabled={blockEntireDay} name={`start`} bind:form_errors={form_errors}
+                            placeholder="Day start" small infoTop="Start time">
                         {#each timeMap as timestamp (timestamp)}
                             <option value={timestamp}>{TimeHelper.convertTime24to12(timestamp)}</option>
                         {/each}
                     </Select>
                     <span>-</span>
-                    <Select disabled={blockEntireDay} name={`end`} bind:form_errors={form_errors} placeholder="Day start" small infoTop="End time">
+                    <Select disabled={blockEntireDay} name={`end`} bind:form_errors={form_errors}
+                            placeholder="Day start" small infoTop="End time">
                         {#each timeMap as timestamp (timestamp)}
                             <option value={timestamp}>{TimeHelper.convertTime24to12(timestamp)}</option>
                         {/each}
                     </Select>
                 </div>
+            </div>
 
+            <div style="display: flex;margin-top: 2rem;">
+                <InputField type="text" name="reason" placeholder="Reason..." />
             </div>
 
             <button bind:this={submitBtn} type="submit" style="display: none;"></button>
@@ -66,13 +94,17 @@
     </div>
 
     <svelte:fragment slot="footer">
-        <div>
-
+        <div style="color: var(--secondary-color);font-weight: 500;">
+         <span>{date.toLocaleDateString('en-US', {
+             weekday: 'long',
+             month: 'long',
+             day: 'numeric',
+             ...($settings.get("address.timezone") && { timeZone: $settings.get("address.timezone") })
+         })} </span>
         </div>
         <div>
-            <Button type="button" loading={submitted} callback={() => submitBtn.click()} disabled={() => {
-                <!--if (blockEntireDay)-->
-            }}>Submit</Button>
+            <Button type="button" loading={submitted} callback={() => submitBtn.click()} bind:disabled={disabled}>Submit
+            </Button>
         </div>
     </svelte:fragment>
 </Popup>
@@ -105,7 +137,7 @@
     }
   }
 
-  .time-slots,.allDay {
+  .time-slots, .allDay {
     flex: 1;
   }
 </style>
