@@ -12,7 +12,7 @@
         year: 'numeric',
         month: 'long',
         day: 'numeric',
-        // ...($settings.get("address.timezone") && { timeZone: $settings.get("address.timezone") })
+        ...($settings.get("address.timezone") && { timeZone: $settings.get("address.timezone") })
     }) : "";
 
 </script>

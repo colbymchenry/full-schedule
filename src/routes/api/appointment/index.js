@@ -67,9 +67,7 @@ Services: ${services.map((service) => StringUtils.capitalize(service.name)).join
         }
 
         // Post new event to Google Calendar
-        console.log("HERE")
         const calendarApi = await GoogleCalendarAPI.getInstance();
-        console.log("HERE1")
         const postedEvent = await calendarApi.postEvent(location, summary, description, isAvailable.startDate, isAvailable.endDate, [
             {
                 email: staff.email,
@@ -85,7 +83,6 @@ Services: ${services.map((service) => StringUtils.capitalize(service.name)).join
             ...(payload?.client && {client: payload.client}),
             ...(payload?.lead && {lead: payload.lead})
         });
-        console.log("HERE2")
 
         // Add appointment to DB
         let appObj = {
