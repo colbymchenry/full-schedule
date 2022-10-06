@@ -55,7 +55,6 @@
                 const form = document.getElementById("login-form");
                 const formData = FormHelper.getFormData(form);
                 const phone = formData.phoneNumber.replaceAll("_", "").replace("+1", "").replace("(", "").replace(")", "").replace("-", "").replace(/\s+/g, '');
-                console.log(phone, phone.length)
                 disabled = !formData?.displayName?.length || !formData?.email?.length || phone.length !== 10
             }, 200);
 
@@ -70,12 +69,7 @@
                     required onChange={checkDisabled}/>
         <InputField form_errors={form_errors} name="email" type="email" label="Email *" icon={iconMail}
                     required onChange={checkDisabled}/>
-        <InputField label="Phone *" type="tel" name="phoneNumber" icon={iconPhone} required alwaysShowMask
-                    mask='+1 (000) 000 - 0000'
-                    size={20}
-                    showMask
-                    maskChar="_"
-                    onChange={checkDisabled}
+        <InputField label="Phone *" type="tel" name="phoneNumber" icon={iconPhone} required onChange={checkDisabled}
         />
         <Button style="min-height: 48px;margin-top: 2rem;justify-self: stretch;" {disabled} {loading}>Continue</Button>
         <!--                <Separator label="Or continue with" height="1rem" />-->
