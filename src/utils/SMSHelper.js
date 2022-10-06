@@ -1,4 +1,4 @@
-import {instance} from "textmagic-client/src/ApiClient";
+import {instance} from "textmagic-client/src/ApiClient.js";
 import TextMagicApi from "textmagic-client/src/api/TextMagicApi";
 import {FirebaseAdmin} from "./firebase/FirebaseAdmin.js";
 import {StringUtils} from "./StringUtils.js";
