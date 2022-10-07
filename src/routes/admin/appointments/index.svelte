@@ -21,13 +21,27 @@
     let selectedDate = new Date();
     selectedDate.setHours(0, 0, 0, 0);
 
-    $: weekday = selectedDate ? selectedDate.toLocaleDateString('en-US', {
+
+    let dateString = selectedDate.toLocaleDateString('en-US', {
         weekday: 'long',
         year: 'numeric',
         month: 'long',
         day: 'numeric',
         ...($settings.get("address.timezone") && {timeZone: $settings.get("address.timezone")})
-    }).split(",")[0].toLowerCase() : "";
+    })
+
+    let weekday = dateString.split(",")[0].toLowerCase();
+
+    $: if (dateString) {
+        let date = new Date(dateString);
+        let newDateObj = new Date(selectedDate.getTime() + date.getTimezoneOffset()*60000);
+        weekday = newDateObj.toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        }).split(",")[0].toLowerCase();
+    }
 
 
     let slotVisible;

@@ -7,13 +7,26 @@
     export let selectedDate = new Date();
     let reRender = false;
 
-    $: dateString = selectedDate ? selectedDate.toLocaleDateString('en-US', {
+    let dateString = selectedDate.toLocaleDateString('en-US', {
         weekday: 'long',
         year: 'numeric',
         month: 'long',
         day: 'numeric',
         ...($settings.get("address.timezone") && { timeZone: $settings.get("address.timezone") })
-    }) : "";
+    });
+
+    let displayString = dateString;
+
+    $: if (dateString) {
+        let date = new Date(dateString);
+        let newDateObj = new Date(selectedDate.getTime() + date.getTimezoneOffset()*60000);
+        displayString = newDateObj.toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    }
 
 </script>
 
@@ -36,7 +49,7 @@
             }}/>
     </div>
     <div>
-        <h1>{dateString}</h1>
+        <h1>{displayString}</h1>
     </div>
     <div>
 

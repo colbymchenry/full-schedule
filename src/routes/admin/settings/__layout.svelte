@@ -124,6 +124,8 @@
     .navigation {
       background: #fff;
       border-right: 1px solid var(--border-color);
+      max-height: calc(100vh - 4rem);
+      overflow-y: auto;
 
       .heading {
         margin: 2.5rem 1.5rem;
