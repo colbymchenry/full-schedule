@@ -68,19 +68,9 @@
                 </div>
 
                 <div class="time-slots">
-                    <Select disabled={blockEntireDay} name={`start`} bind:form_errors={form_errors}
-                            placeholder="Day start" small infoTop="Start time">
-                        {#each timeMap as timestamp (timestamp)}
-                            <option value={timestamp}>{TimeHelper.convertTime24to12(timestamp)}</option>
-                        {/each}
-                    </Select>
+                    <InputField disabled={blockEntireDay} name="start" type="time" label="Start Time" bind:form_errors={form_errors}/>
                     <span>-</span>
-                    <Select disabled={blockEntireDay} name={`end`} bind:form_errors={form_errors}
-                            placeholder="Day start" small infoTop="End time">
-                        {#each timeMap as timestamp (timestamp)}
-                            <option value={timestamp}>{TimeHelper.convertTime24to12(timestamp)}</option>
-                        {/each}
-                    </Select>
+                    <InputField disabled={blockEntireDay} name="end" type="time" label="End Time" bind:form_errors={form_errors}/>
                 </div>
             </div>
 
@@ -133,7 +123,7 @@
     align-items: center;
 
     > span {
-      margin-top: 0.75rem;
+      margin-top: 1rem;
     }
   }
 

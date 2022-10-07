@@ -60,8 +60,16 @@ export class GoogleCalendarAPI {
 
     // TODO: Not sure if we need to update time zone here, seems every event has it's own unique time zone
     async updateCalendar(options) {
-        // console.log(this.calendar.settings)
-        // return await this.calendar.settings.update(options);
+        const calendars = await this.getCalendars();
+        const thisCalendar = calendars.find((c) => c.id === this.calendarId);
+
+        return await this.calendar.calendars.update({
+            calendarId: this.calendarId,
+            requestBody: {
+                summary: thisCalendar?.summary || "Full Schedule - MASTER",
+                timeZone: options.timeZone
+            }
+        });
     }
 
     async getCalendars() {
@@ -78,33 +86,6 @@ export class GoogleCalendarAPI {
         })).data;
     }
 
-//     $event = new Google_Service_Calendar_Event(array(
-//         'summary' => 'Google I/O 2015',
-//     'location' => '800 Howard St., San Francisco, CA 94103',
-//     'description' => 'A chance to hear more about Google\'s developer products.',
-//     'start' => array(
-//     'dateTime' => '2015-05-28T09:00:00-07:00',
-//     'timeZone' => 'America/Los_Angeles',
-// ),
-//     'end' => array(
-//     'dateTime' => '2015-05-28T17:00:00-07:00',
-//     'timeZone' => 'America/Los_Angeles',
-// ),
-//     'recurrence' => array(
-//     'RRULE:FREQ=DAILY;COUNT=2'
-// ),
-//     'attendees' => array(
-//         array('email' => 'lpage@example.com'),
-//     array('email' => 'sbrin@example.com'),
-// ),
-//     'reminders' => array(
-//     'useDefault' => FALSE,
-//     'overrides' => array(
-//         array('method' => 'email', 'minutes' => 24 * 60),
-//     array('method' => 'popup', 'minutes' => 10),
-// ),
-// ),
-// ));
     async postEvent(location, summary, description, startTime, endTime, attendees, extendedProperties) {
         const timeZone = this.settings?.address?.timezone;
         const res = await this.calendar.events.insert({
@@ -113,11 +94,11 @@ export class GoogleCalendarAPI {
                 summary, location, description, attendees: attendees || [],
                 start: {
                     dateTime: startTime,
-                    timeZone,
+                    timeZone
                 },
                 end: {
                     dateTime: endTime,
-                    timeZone,
+                    timeZone
                 },
                 sendUpdates: "all",
                 reminders: {

@@ -10,7 +10,7 @@
         icon = undefined, accept = undefined, disablePrefill = undefined, readOnly = undefined, hint = undefined,
         info = undefined, min = undefined,
         max = undefined,
-        step = undefined, style = undefined, onChange = undefined, onFocus = undefined;
+        step = undefined, style = undefined, onChange = undefined, onFocus = undefined, disabled = false;
     export let required = false;
 
     export let dateProps = {};
@@ -48,6 +48,7 @@
         min,
         max,
         style,
+        disabled,
         accept,
         ...(type === "email" && {pattern: "^(?=[^\s@]{1,64}@)[^\s@]+@[^\s@]+\.(.{2}|.{3})+$"}),
         "class": (icon ? "has--icon" : "")
@@ -145,6 +146,10 @@
     font: 400 .875rem/1.2857142857 Inter var, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", Segoe UI Symbol, "Noto Color Emoji";
     align-self: flex-start;
     width: 100%;
+
+    input:disabled {
+      color: var(--fuse-text-disabled);
+    }
 
     small {
       margin-top: 0.25rem;
