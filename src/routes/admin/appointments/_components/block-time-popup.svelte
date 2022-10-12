@@ -2,7 +2,6 @@
     import Popup from "$lib/popup.svelte";
     import Button from "$lib/forms/button.svelte";
     import Form from "$lib/forms/form.svelte";
-    import Select from "$lib/forms/select.svelte";
     import InputField from "$lib/forms/input-field.svelte";
     import {TimeHelper} from "../../../../utils/TimeHelper.js";
     import {ApiProgressBar} from "../../../../utils/ApiProgressBar.js";

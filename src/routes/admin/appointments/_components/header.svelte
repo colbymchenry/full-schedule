@@ -3,30 +3,17 @@
     import InputField from '$lib/forms/input-field.svelte';
     import {iconCalendar, iconChevronLeft, iconChevronRight} from "../../../../lib/icons.js";
     import {settings} from "../../../../lib/stores.js";
+    import {TimeHelper} from "../../../../utils/TimeHelper.js";
 
     export let selectedDate = new Date();
     let reRender = false;
 
-    let dateString = selectedDate.toLocaleDateString('en-US', {
+    $: dateString = TimeHelper.timezoneOffset(selectedDate).toLocaleDateString('en-US', {
         weekday: 'long',
         year: 'numeric',
         month: 'long',
-        day: 'numeric',
-        ...($settings.get("address.timezone") && { timeZone: $settings.get("address.timezone") })
+        day: 'numeric'
     });
-
-    let displayString = dateString;
-
-    $: if (dateString) {
-        let date = new Date(dateString);
-        let newDateObj = new Date(selectedDate.getTime() + date.getTimezoneOffset()*60000);
-        displayString = newDateObj.toLocaleDateString('en-US', {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
-    }
 
 </script>
 
@@ -49,7 +36,7 @@
             }}/>
     </div>
     <div>
-        <h1>{displayString}</h1>
+        <h1>{dateString}</h1>
     </div>
     <div>
 

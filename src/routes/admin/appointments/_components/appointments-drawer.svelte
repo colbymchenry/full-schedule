@@ -175,8 +175,7 @@
                                         {new Date(client.birthday).toLocaleDateString('en-US', {
                                             year: 'numeric',
                                             month: 'long',
-                                            day: 'numeric',
-                                            ...($settings.get("address.timezone") && { timeZone: $settings.get("address.timezone") })
+                                            day: 'numeric'
                                         })}
                                     </div>
                                 {/if}
@@ -211,11 +210,10 @@
             </div>
             <div class="form-footer">
                 <div>
-                    <span>{date.toLocaleDateString('en-US', {
+                    <span>{TimeHelper.timezoneOffset(date).toLocaleDateString('en-US', {
                         weekday: 'long',
                         month: 'long',
-                        day: 'numeric',
-                        ...($settings.get("address.timezone") && { timeZone: $settings.get("address.timezone") })
+                        day: 'numeric'
                     })} @ {TimeHelper.convertTime24to12(timestamp)} with <span style="text-transform: capitalize;">{staff?.displayName}</span></span>
                 </div>
                 <Button type="submit" disabled={!client} loading={submitted}>Create</Button>

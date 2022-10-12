@@ -57,6 +57,8 @@ export async function post({request}) {
             }
         })
 
+        // TODO: Fix booking fetching availability with timezones
+
         await Promise.all(staff.map(async (staffObj) => {
             // We pass in the appointments object and settings object to prevent calling too many querys to the Firestore DB
             let appointments = await FirebaseAdmin.query(FirebaseAdmin.firestore().collection("appointments").where("staff", "==", staffObj.doc_id));

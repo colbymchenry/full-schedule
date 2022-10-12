@@ -1,5 +1,7 @@
-const weekdays = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+import {settings} from "../lib/stores.js";
+import {get} from 'svelte/store'
 
+const weekdays = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
 
 export class TimeHelper {
 
@@ -61,4 +63,22 @@ export class TimeHelper {
         minutes += minuteEnd - minuteStart;
         return minutes;
     }
+
+    static timezoneOffset(date, settingsStore) {
+        if (!settingsStore) {
+            settingsStore = get(settings);
+        }
+        let dateString = date.toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            ...(settingsStore.get("address.timezone") && {timeZone: settingsStore.get("address.timezone")})
+        })
+
+        let d1 = new Date(dateString);
+        return new Date(date.getTime() + d1.getTimezoneOffset() * 60000);
+    }
+
+
 }
