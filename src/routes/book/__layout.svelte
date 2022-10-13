@@ -22,6 +22,7 @@
     import {bookingStore} from "$lib/stores.js";
     import {JsonHelper} from "../../utils/JsonHelper.js";
     import {goto} from "$app/navigation";
+    import {onMount} from "svelte";
 
     export let booking_setup;
 
@@ -33,6 +34,7 @@
     } else if (booking_setup) {
         $bookingStore = new JsonHelper({"store": booking_setup});
     }
+
 
     let smallArrow = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="24" height="24" style="margin-right: 0.5rem;" stroke-width="1.5" stroke="currentColor">
   <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />

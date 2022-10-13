@@ -9,6 +9,7 @@
     import BookingLayout from "./_components/BookingLayout.svelte";
     import {bookingStore, recaptchaKey} from "../../lib/stores.js";
     import {Api} from "../../utils/Api.js";
+    import {page} from "$app/stores";
 
     let form_errors = {};
     let loading = false;
@@ -35,6 +36,18 @@
         // } else {
             try {
                 if (localStorage.getItem("lead")) formData["original_lead"] = localStorage.getItem("lead");
+                if ($page.url.searchParams.get("utm_campaign")) {
+                    formData["utm_campaign"] = $page.url.searchParams.get("utm_campaign");
+                }
+                if ($page.url.searchParams.get("utm_content")) {
+                    formData["utm_content"] = $page.url.searchParams.get("utm_content");
+                }
+                if ($page.url.searchParams.get("utm_medium")) {
+                    formData["utm_medium"] = $page.url.searchParams.get("utm_medium");
+                }
+                if ($page.url.searchParams.get("utm_source")) {
+                    formData["utm_source"] = $page.url.searchParams.get("utm_source");
+                }
                 const res = await Api.post('/api/lead', formData, { token: "nil" });
                 formData["lead"] = res.lead;
                 localStorage.setItem("lead", res.lead);
