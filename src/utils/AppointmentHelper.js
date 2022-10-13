@@ -1,6 +1,7 @@
 import {TimeHelper} from "./TimeHelper.js";
 import {FirebaseAdmin} from "./firebase/FirebaseAdmin.js";
 import {JsonHelper} from "./JsonHelper.js";
+import {selectedDate} from "../routes/admin/appointments/_components/header.svelte";
 
 export class AppointmentHelper {
 
@@ -32,7 +33,10 @@ export class AppointmentHelper {
         }
 
         const isBlockedTime = () => {
-            return blockedTime ?  blockedTime.filter((block) => new Date(date).getDate() === FirebaseAdmin.toDate(block.date).getDate() && block.staff === staff.doc_id).length : false;
+            return blockedTime ?  blockedTime.filter((block) =>{
+                console.log(new Date(date).getDate(),  FirebaseAdmin.toDate(block.date).getDate())
+              return new Date(date).getDate() === FirebaseAdmin.toDate(block.date).getDate() && block.staff === staff.doc_id
+            }).length  : false;
         }
 
         if (notWorking || onLunch() || isBlockedTime()) {
