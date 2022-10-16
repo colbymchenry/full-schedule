@@ -2,7 +2,6 @@
     import Button from '$lib/forms/button.svelte';
     import InputField from '$lib/forms/input-field.svelte';
     import {iconCalendar, iconChevronLeft, iconChevronRight} from "../../../../lib/icons.js";
-    import {settings} from "../../../../lib/stores.js";
     import {TimeHelper} from "../../../../utils/TimeHelper.js";
 
     export let selectedDate = new Date();

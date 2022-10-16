@@ -31,10 +31,13 @@ export class AppointmentHelper {
             return lunchStart <= currentVal && lunchEnd >= currentVal;
         }
 
+        // TODO: Figire this part out.
         const isBlockedTime = () => {
             return blockedTime ?  blockedTime.filter((block) =>{
-                console.log(new Date(date).getDate(),  FirebaseAdmin.toDate(block.date).getDate())
-              return new Date(date).getDate() === FirebaseAdmin.toDate(block.date).getDate() && block.staff === staff.doc_id
+                let blockDate = FirebaseAdmin.toDate(block.date)
+                let newDate = new Date(new Date().getTime() + blockDate.getTimezoneOffset() * 60000)
+                console.log(newDate.getDate(),  FirebaseAdmin.toDate(block.date).getDate())
+              return newDate.getDate() === FirebaseAdmin.toDate(block.date).getDate() && block.staff === staff.doc_id
             }).length  : false;
         }
 
