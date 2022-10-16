@@ -57,8 +57,6 @@ export async function post({request}) {
             }
         })
 
-        // TODO: Fix booking fetching availability with timezones
-
         await Promise.all(staff.map(async (staffObj) => {
             // We pass in the appointments object and settings object to prevent calling too many querys to the Firestore DB
             let appointments = await FirebaseAdmin.query(FirebaseAdmin.firestore().collection("appointments").where("staff", "==", staffObj.doc_id));
@@ -84,7 +82,8 @@ export async function post({request}) {
                     }
                 }
 
-                if (dayShift > 90) {
+                // TODO: Set this back to 90, only 10 for Tupelo open one day situation.
+                if (dayShift > 10) {
                     timeSlots[staffObj.doc_id]["availability"] = ["none"]
                 }
             }
