@@ -116,6 +116,8 @@
                                             {new Date(staff.availability[0]).toDateString()}
                                         </button>
                                     </small>
+                                {:else}
+                                    <small>No availability</small>
                                 {/if}
                             </div>
                         </div>
