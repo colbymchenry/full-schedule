@@ -13,6 +13,8 @@ export class AppointmentHelper {
             blockedTime = await FirebaseAdmin.getCollectionArray("blocked_time");
         }
 
+        if (typeof date === 'string') date = new Date(date);
+
         const weekday = date ? new Date(date).toLocaleDateString('en-US', {
             weekday: 'long',
             year: 'numeric',
@@ -33,7 +35,6 @@ export class AppointmentHelper {
 
         // TODO: Figire this part out.
         const isBlockedTime = () => {
-
             return blockedTime ?  blockedTime.filter((block) =>{
                 let blockDate = FirebaseAdmin.toDate(block.date)
               return blockDate.getDate() === date.getDate() && block.staff === staff.doc_id
