@@ -33,11 +33,10 @@ export class AppointmentHelper {
 
         // TODO: Figire this part out.
         const isBlockedTime = () => {
+
             return blockedTime ?  blockedTime.filter((block) =>{
                 let blockDate = FirebaseAdmin.toDate(block.date)
-                let newDate = new Date(new Date().getTime() + blockDate.getTimezoneOffset() * 60000)
-                console.log(newDate.getDate(),  FirebaseAdmin.toDate(block.date).getDate())
-              return newDate.getDate() === FirebaseAdmin.toDate(block.date).getDate() && block.staff === staff.doc_id
+              return blockDate.getDate() === date.getDate() && block.staff === staff.doc_id
             }).length  : false;
         }
 
