@@ -33,7 +33,7 @@
                 let res = await Api.post(`/api/fetch-availability`, {
                     services: $bookingStore.get("services").map(({doc_id}) => doc_id),
                     date: selectedDate
-                }, { token: ($bookingStore.get("token") || 'nil') });
+                }, {token: ($bookingStore.get("token") || 'nil')});
 
                 availability = Object.values(res.timeSlots);
             } catch (error) {
@@ -55,7 +55,7 @@
         $bookingStore.set("choices", choices);
 
         try {
-            let res = await Api.post(`/api/appointment`, choices, { token: ($bookingStore.get("token") || 'nil') });
+            let res = await Api.post(`/api/appointment`, choices, {token: ($bookingStore.get("token") || 'nil')});
             if (res?.appointment) {
                 $bookingStore.set("staff", selectedTimeSlot.staff);
                 $bookingStore.set("appointment", res.appointment);
@@ -99,16 +99,20 @@
                             </div>
                             <div class="staff__time-slots">
                                 {#if staff.availability.length > 0 && !staff.availability[0].includes("T")}
-                                    {#each staff.availability as timestamp}
-                                        <button type="button" class="time-slot"
-                                                class:selected={selectedTimeSlot
+                                    {#if staff.availability[0] === 'none'}
+                                        <small>No availability</small>
+                                    {:else}
+                                        {#each staff.availability as timestamp}
+                                            <button type="button" class="time-slot"
+                                                    class:selected={selectedTimeSlot
                                                     && selectedTimeSlot["staff"]?.doc_id === staff.doc_id
                                                     && selectedTimeSlot["timestamp"] === timestamp
                                                 }
-                                                on:click={() => selectTimeslot(staff, timestamp)}>
-                                            {TimeHelper.convertTime24to12(timestamp)}
-                                        </button>
-                                    {/each}
+                                                    on:click={() => selectTimeslot(staff, timestamp)}>
+                                                {TimeHelper.convertTime24to12(timestamp)}
+                                            </button>
+                                        {/each}
+                                    {/if}
                                 {:else if staff.availability[0].includes("T")}
                                     <small>Next availability:
                                         <button type="button" data-info={staff.availability[0]}
@@ -116,8 +120,6 @@
                                             {new Date(staff.availability[0]).toDateString()}
                                         </button>
                                     </small>
-                                {:else}
-                                    <small>No availability</small>
                                 {/if}
                             </div>
                         </div>
@@ -128,7 +130,9 @@
             </div>
         </div>
 
-        <Button style="min-height: 48px;margin-top: 2rem;justify-self: stretch;" disabled={!selectedTimeSlot} {loading}>Continue</Button>
+        <Button style="min-height: 48px;margin-top: 2rem;justify-self: stretch;" disabled={!selectedTimeSlot} {loading}>
+            Continue
+        </Button>
     </Form>
 
 </BookingLayout>
