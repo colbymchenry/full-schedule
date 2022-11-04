@@ -112,12 +112,12 @@
                 <MaskInput {...inputProps} {alwaysShowMask} {maskChar} {mask} {size} {showMask}
                            on:focus={() => focused = true} on:blur={() => focused = false}
                            on:change={clear_error} on:input={clear_error}
-                           value={value || ""}
+                           bind:value={value}
                 />
             {:else}
                 <input {...inputProps} {readonly} on:input={clear_error}
                        on:focusin={() => focused = true} on:focusout={() => focused = false}
-                       value={value || ""}
+                       bind:value={value}
                 />
             {/if}
         </div>

@@ -4,11 +4,14 @@
     import AppointmentsDrawer from './appointments-drawer.svelte';
     import {iconCheck, iconHeroRecycle, iconHeroWarning} from "../../../../lib/icons.js";
     import ControlsPopup from "./controls-popup.svelte";
+    import StatusPopup from "./status-popup.svelte";
 
     export let timestamp, staffAccounts, staff, weekday, services,
         slotVisible = undefined, date, appointments, fetchStaff, fetchAppointments;
 
-    let showPopup = false;
+    let showControlsModal = false;
+    let showStatusModal = false;
+    let checkingIn = false;
 
     const dateTimestamp = new Date(date);
     const [hour, minute] = timestamp.split(":");
@@ -73,28 +76,44 @@
             }
         }
     }
+
+    function showStatusPopup(e, checkingIn1) {
+        e.preventDefault();
+        e.stopPropagation();
+        checkingIn = checkingIn1;
+        showStatusModal = true;
+    }
 </script>
 
 <div class="container" class:notWorking={notWorking} class:onLunch={onLunch()} class:blocked={isBlockedTime()}>
 
     {#if appointment && appointment?.userInfo}
-        <div class="appointment" style={`height: ${appHeight}px;margin-top: ${appMargin}px;`} on:click={() => showPopup = true}>
+        <div class="appointment" style={`height: ${appHeight}px;margin-top: ${appMargin}px;`}
+             on:click={() => showControlsModal = true}>
             <div class="header">
                 <span class="displayName">{appointment?.userInfo?.displayName?.toLowerCase()}</span>
                 {#if !appointment?.checkIn}
                     {#if new Date() > FirebaseClient.toDate(appointment.start)}
-                        <span class="status red"><span class="icon">{@html iconHeroWarning}</span> Not checked in</span>
+                        <span class="status red"><span class="icon">{@html iconHeroWarning}</span> Not checked in (<button
+                                type="button" class="status-btn" on:click={(e) => showStatusPopup(e, true)}>check in</button>)</span>
                     {:else}
-                        <span class="status yellow"><span class="icon">{@html iconHeroWarning}</span> Awaiting check in</span>
+                        <span class="status yellow"><span class="icon">{@html iconHeroWarning}</span> Awaiting check in (<button
+                                type="button"
+                                on:click={(e) => showStatusPopup(e, true)}
+                                class="status-btn">check in</button>)</span>
                     {/if}
                 {:else}
                     {#if !appointment?.checkOut}
                         {#if new Date() > FirebaseClient.toDate(appointment.end)}
                             <span class="status red"><span
-                                    class="icon">{@html iconHeroWarning}</span> Not checked out</span>
+                                    class="icon">{@html iconHeroWarning}</span> Not checked out (<button type="button"
+                                                                                                         on:click={(e) => showStatusPopup(e, false)}
+                                                                                                         class="status-btn">checkout</button>)</span>
                         {:else}
                             <span class="status green"><span
-                                    class="icon">{@html iconHeroRecycle}</span> In progress</span>
+                                    class="icon">{@html iconHeroRecycle}</span> In progress (<button type="button"
+                                                                                                     on:click={(e) => showStatusPopup(e, false)}
+                                                                                                     class="status-btn">checkout</button>)</span>
                         {/if}
                     {:else}
                              <span class="status green"><span
@@ -121,11 +140,33 @@
     {/if}
 </div>
 
-{#if appointment && showPopup}
-    <ControlsPopup {appointment} {fetchAppointments} {staffAccounts} {services} bind:visible={showPopup} />
+{#if appointment && showControlsModal}
+    <ControlsPopup {appointment} {fetchAppointments} {staffAccounts} {services} bind:visible={showControlsModal}/>
 {/if}
 
+{#if appointment && showStatusModal}
+    <StatusPopup {appointment} {fetchAppointments} {checkingIn} bind:visible={showStatusModal} />
+{/if}
+
+
 <style lang="scss">
+  .status-btn {
+    background: none;
+    border: none;
+    outline: none;
+    padding: 0;
+    margin: 0;
+    color: rgb(159, 162, 169);
+    font-size: inherit;
+    font-family: inherit;
+    font-weight: inherit;
+    transition: all 0.4s ease;
+    cursor: pointer;
+    &:hover {
+      color: rgb(255, 255, 255);
+    }
+  }
+
   .appointment {
     position: absolute;
     width: 100%;

@@ -5,7 +5,7 @@
 </script>
 
 <label class="checkbox" class:is--error={form_errors[name]} for={id}>
-    <input type="checkbox" {id} {name} checked={value} {required} on:change />
+    <input type="checkbox" {id} {name} {value} {required} on:change />
     <span><slot></slot></span>
 </label>
 

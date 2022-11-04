@@ -19,6 +19,7 @@ export class StringUtils {
     }
 
     static capitalize(str) {
+        if (!str) return str;
         const words = str.split(" ");
 
         for (let i = 0; i < words.length; i++) {

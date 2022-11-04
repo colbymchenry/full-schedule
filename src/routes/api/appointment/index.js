@@ -55,7 +55,7 @@ export async function post({request}) {
         const location = `${getVal("address.street1")} ${getVal("address.street2")}, ${getVal("address.city")}, ${getVal("address.state")} ${getVal("address.zip")}`;
         const summary = `${settings.get("store.name")} Appointment`;
         const description = `Provider: ${StringUtils.capitalize(staff?.displayName)}
-Services: ${services.map((service) => StringUtils.capitalize(service.name)).join(", ")}
+Services: ${services.map((service) => StringUtils.capitalize(service?.name)).join(", ")}
         `;
 
         staff["doc_id"] = payload.staff;
@@ -229,7 +229,7 @@ export async function patch({request, url}) {
     }
     const summary = `${settings.get("store.name")} Appointment`;
     const description = `Provider: ${StringUtils.capitalize(staff?.displayName)}
-Services: ${services.map((service) => StringUtils.capitalize(service.name)).join(", ")}
+Services: ${services.map((service) => StringUtils.capitalize(service?.name)).join(", ")}
         `;
     // Post new event to Google Calendar
     const calendarApi = await GoogleCalendarAPI.getInstance();
