@@ -1,11 +1,12 @@
 <script>
     export let form_errors = [];
     export let name, value, id = Math.random();
+    export let checked = true;
     export let required = false;
 </script>
 
 <label class="checkbox" class:is--error={form_errors[name]} for={id}>
-    <input type="checkbox" {id} {name} {value} {required} on:change />
+    <input type="checkbox" {id} {name} {value} {required} bind:checked={checked} on:change />
     <span><slot></slot></span>
 </label>
 
