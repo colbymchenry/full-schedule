@@ -136,7 +136,7 @@
                             name="google.calendars.appointments" icon={iconEvent}
                             value={$settings.object?.google?.calendars?.appointments} onChange={onCalendarChange}>
                         {#each calendars as calendar}
-                            <option value={calendar.id}>{calendar.summary}</option>
+                            <option value={calendar.id} selected={$settings.object?.google?.calendars?.appointments === calendar.id}>{calendar.summary}</option>
                         {/each}
                         <option value={"create"}>Create Calendar</option>
                     </Select>

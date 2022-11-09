@@ -71,7 +71,7 @@
                 on:focusin={() => focused = true} on:focusout={() => focused = false} on:change={onChange}>
             {#if !hideDefault}
                 {#if placeholder}
-                    <option value="" disabled selected={true}>{placeholder}</option>
+                    <option value="" disabled selected>{placeholder}</option>
                 {:else}
                     <option value="" disabled {selected}>{placeholder || "Make a selection"}</option>
                 {/if}
