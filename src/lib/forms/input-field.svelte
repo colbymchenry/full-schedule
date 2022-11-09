@@ -6,12 +6,16 @@
 
     export let form_errors = {};
     // Everything = undefined to suppress Svelte warnings
-    export let value = "", label = undefined, name = undefined, type = "text", placeholder = undefined,
+    export let value = undefined, label = undefined, name = undefined, type = "text", placeholder = undefined,
         icon = undefined, accept = undefined, disablePrefill = undefined, readOnly = undefined, hint = undefined,
         info = undefined, min = undefined,
         max = undefined,
         step = undefined, style = undefined, onChange = undefined, onFocus = undefined, disabled = false;
     export let required = false;
+
+    $: if (!value) {
+        value = "";
+    }
 
     export let dateProps = {};
 
