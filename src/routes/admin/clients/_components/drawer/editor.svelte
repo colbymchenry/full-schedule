@@ -145,7 +145,7 @@
             <InputField label="Address" name="address" icon={iconPin} value={client?.address}
                         disablePrefill bind:form_errors={form_errors}/>
 
-            <InputField label="Birthday" name="birthday" type="date" icon={iconBirthday} value={client?.birthday ? new Date(client.birthday) : null}
+            <InputField label="Birthday" name="birthday" type="date" icon={iconBirthday} value={client?.birthday ? new Date(client.birthday) : new Date()}
                         disablePrefill bind:form_errors={form_errors}
             />
 
