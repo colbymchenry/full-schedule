@@ -1,7 +1,6 @@
 <script>
     import Button from '$lib/forms/button.svelte';
     import InputField from '$lib/forms/input-field.svelte';
-    import Select from '$lib/forms/select.svelte';
     import Footer from '$lib/drawers/footer.svelte';
     import Avatar from '$lib/avatar.svelte';
     import {
@@ -194,7 +193,7 @@
             <InputField label="Address" name="address" icon={iconPin} value={staff?.address}
                         disablePrefill bind:form_errors={form_errors}/>
 
-            <InputField label="Birthday" name="birthday" type="date" icon={iconBirthday} value={staff?.birthday || null}
+            <InputField label="Birthday" name="birthday" type="date" icon={iconBirthday} value={staff?.birthday || new Date()}
                         disablePrefill bind:form_errors={form_errors}
             />
 
