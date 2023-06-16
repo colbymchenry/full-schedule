@@ -1,5 +1,6 @@
 <script>
     import Button from '$lib/forms/button.svelte';
+    import { auth } from '$lib/stores';
 
     export let onCancel, onSave, onDelete, hideDelete, hideCancel, isUpdate, style;
 </script>
@@ -8,7 +9,7 @@
     {#if hideDelete}
         <div></div>
     {:else}
-        <Button type="button" color="delete" callback={onDelete}>Delete</Button>
+        <Button type="button" color="delete" callback={onDelete} disabled={$auth?.email !== 'me@colbymchenry.com'}>Delete</Button>
     {/if}
     <div>
         {#if hideCancel}
@@ -16,7 +17,7 @@
         {:else}
             <Button type="button" color="cancel" callback={onCancel}>Cancel</Button>
         {/if}
-        <Button color="primary" callback={onSave}>{isUpdate ? 'Update' : 'Save'}</Button>
+        <Button color="primary" callback={onSave} disabled={$auth?.email !== 'me@colbymchenry.com'}>{isUpdate ? 'Update' : 'Save'}</Button>
     </div>
 
 </div>
