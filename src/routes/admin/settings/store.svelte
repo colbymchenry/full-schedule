@@ -24,7 +24,7 @@
     iconTwitter,
     iconYoutube
   } from '../../../lib/icons.js';
-  import { settings } from '../../../lib/stores.js';
+  import { auth, settings } from '../../../lib/stores.js';
   import { ApiProgressBar } from '../../../utils/ApiProgressBar.js';
   import { JsonHelper } from '../../../utils/JsonHelper.js';
   import { Api } from '../../../utils/Api.js';
