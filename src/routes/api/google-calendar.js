@@ -6,11 +6,13 @@ export async function get({request, url}) {
         await FirebaseAdmin.auth().verifyIdToken(request.headers.get("authorization"));
         const calendarApi = await GoogleCalendarAPI.getInstance();
 
+        console.log("HELLOOO", await calendarApi.getCalendars())
         return {
             status: 200,
             body: {data: await calendarApi.getCalendars()}
         }
     } catch (error) {
+        console.error(error);
         return {
             status: 200,
             body: {data: []}
