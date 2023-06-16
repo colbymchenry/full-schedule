@@ -54,7 +54,6 @@
         style,
         disabled,
         accept,
-        ...(type === "email" && {pattern: "^(?=[^\s@]{1,64}@)[^\s@]+@[^\s@]+\.(.{2}|.{3})+$"}),
         "class": (icon ? "has--icon" : "")
     }
 
