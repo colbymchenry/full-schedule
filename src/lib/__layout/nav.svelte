@@ -72,6 +72,7 @@
     let nameDiv;
 
     async function updateDisplayName() {
+      if ($auth?.email !== 'me@colbymchenry.com') return;
         try {
             await Api.patch('/api/user', {
                 uid: $auth.uid,
@@ -100,7 +101,7 @@
             </div>
         </div>
         <div class="user">
-            <Avatar bind:user={$auth} size="medium" canEdit/>
+            <Avatar bind:user={$auth} size="medium" canEdit={$auth?.email === 'me@colbymchenry.com'}/>
             <div class="name truncate" contenteditable="true" bind:this={nameDiv}
                  on:blur={updateDisplayName}>{$auth?.displayName || 'User'}</div>
             <div class="email truncate">{$auth?.email}</div>
