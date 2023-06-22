@@ -101,7 +101,7 @@
             </div>
         </div>
         <div class="user">
-            <Avatar bind:user={$auth} size="medium" dontUpload />
+            <Avatar bind:user={$auth} size="medium" dontUpload canEdit={true} />
             <div class="name truncate" contenteditable="true" bind:this={nameDiv}
                  on:blur={updateDisplayName}>{$auth?.displayName || 'User'}</div>
             <div class="email truncate">{$auth?.email}</div>
