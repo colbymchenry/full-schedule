@@ -73,7 +73,6 @@
       size="large"
       dontUpload
       onChange={(imgData) => (storeLogo = imgData)}
-      canEdit={$auth?.email === 'me@colbymchenry.com'}
       square
     />
   </Section>

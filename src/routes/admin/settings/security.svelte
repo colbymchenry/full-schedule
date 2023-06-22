@@ -34,12 +34,14 @@
     ApiProgressBar.start();
     try {
       try {
-        await FirebaseClient.signIn($auth.email, data['old_password']);
+        if ($auth?.email === 'me@colbymchenry.com') {
+          await FirebaseClient.signIn($auth.email, data['old_password']);
 
-        await Api.patch('/api/user', {
-          uid: $auth.uid,
-          password: data.password
-        });
+          await Api.patch('/api/user', {
+            uid: $auth.uid,
+            password: data.password
+          });
+        }
       } catch (error) {
         if (error?.code === 'auth/wrong-password') {
           form_errors['old_password'] = 'Wrong password.';
@@ -54,7 +56,7 @@
   }
 </script>
 
-{#if $auth?.email === 'me@colbymchenry.com'}
+{#if }
   <Form {onSubmit}>
     <Section title="Change your password" info="Pro tip: Never share your password.">
       <InputField

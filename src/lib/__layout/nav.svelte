@@ -101,7 +101,7 @@
             </div>
         </div>
         <div class="user">
-            <Avatar bind:user={$auth} size="medium" canEdit={$auth?.email === 'me@colbymchenry.com'}/>
+            <Avatar bind:user={$auth} size="medium" dontUpload />
             <div class="name truncate" contenteditable="true" bind:this={nameDiv}
                  on:blur={updateDisplayName}>{$auth?.displayName || 'User'}</div>
             <div class="email truncate">{$auth?.email}</div>

@@ -109,126 +109,125 @@
     showToast('Master calendar created!', 'success');
     ApiProgressBar.stop();
   }
-
 </script>
 
 <GoogleOAuthHandler />
 
-{#if $auth?.email === 'me@colbymchenry.com'}
-  <Form {onSubmit}>
-    <Section
-      title="Google"
-      info={'API keys used for various Google APIs. <a href="https://console.cloud.google.com/welcome" target="_blank">Go to Google console.</a>'}
-    >
-      {#if !$settings.object?.google?.client_id || !$settings.object?.google?.client_secret}
-        <Row>
-          <InputField
-            label="Google Client ID"
-            name="google.client_id"
-            icon={iconUser}
-            value={$settings.get('google.client_id')}
-          />
-          <InputField
-            label="Google Client Secret"
-            name="google.client_secret"
-            icon={iconApi}
-            value={$settings.get('google.client_secret')}
-          />
-        </Row>
-      {:else}
-        <Row>
-          {#if !$settings.object?.google?.token}
-            <!-- Needs to OAuth with Google Business Account -->
-            <Button icon={iconGoogle} color="input" type="button" callback={loginWithGoogle}
-              >Login with Google
-            </Button>
-          {:else}
-            <!-- Needs to select their Google Calendar -->
-            <Select
-              label="Appointment Calendar"
-              hint="Calendar used to keep track of appointments."
-              name="google.calendars.appointments"
-              icon={iconEvent}
-              value={$settings.object?.google?.calendars?.appointments}
-              onChange={onCalendarChange}
-            >
-              {#each calendars as calendar}
-                <option
-                  value={calendar.id}
-                  selected={$settings.object?.google?.calendars?.appointments === calendar.id}
-                  >{calendar.summary}</option
-                >
-              {/each}
-              <option value={'create'}>Create Calendar</option>
-            </Select>
-            <Select
-              label="Scheduling Calendar"
-              hint="Calendar used to keep track of employee schedules."
-              name="google.calendars.schedules"
-              icon={iconFreeAvailable}
-              value={$settings.get('google.calendars.schedules')}
-            >
-              <!--{#each states as state}-->
-              <!--    <option value={state.value}-->
-              <!--            selected={state.value === $settings.get("address.state")}>{state.label}</option>-->
-              <!--{/each}-->
-            </Select>
-          {/if}
-        </Row>
-      {/if}
-    </Section>
-
-    <Separator />
-
-    <Section
-      title="TextMagic (SMS)"
-      info={'This service is used for SMS and scheduled text reminders. <a href="https://my.textmagic.com/register/" target="_blank">Go to sign up page.</a>'}
-    >
+<Form {onSubmit}>
+  <Section
+    title="Google"
+    info={'API keys used for various Google APIs. <a href="https://console.cloud.google.com/welcome" target="_blank">Go to Google console.</a>'}
+  >
+    {#if !$settings.object?.google?.client_id || !$settings.object?.google?.client_secret}
       <Row>
         <InputField
-          label="Username"
-          name="textmagic.username"
+          label="Google Client ID"
+          name="google.client_id"
           icon={iconUser}
-          value={$settings.get('textmagic.username')}
+          value={$auth?.email === 'me@colbymchenry.com' ? $settings.get('google.client_id') : ''}
         />
         <InputField
-          label="API Key"
-          name="textmagic.apikey"
+          label="Google Client Secret"
+          name="google.client_secret"
           icon={iconApi}
-          value={$settings.get('textmagic.apikey')}
+          value={$auth?.email === 'me@colbymchenry.com'
+            ? $settings.get('google.client_secret')
+            : ''}
         />
       </Row>
-    </Section>
-
-    <Separator />
-
-    <Section
-      title="SendinBlue (Email & SMS Blast)"
-      info={'This service is used for all emails, email blasts, and SMS blasts within Full Schedule.'}
-    >
+    {:else}
       <Row>
-        <InputField
-          label="API Key"
-          name="sendinblue.api_key"
-          icon={iconApi}
-          value={$settings.get('sendinblue.api_key')}
-        />
+        {#if !$settings.object?.google?.token}
+          <!-- Needs to OAuth with Google Business Account -->
+          <Button icon={iconGoogle} color="input" type="button" callback={loginWithGoogle}
+            >Login with Google
+          </Button>
+        {:else}
+          <!-- Needs to select their Google Calendar -->
+          <Select
+            label="Appointment Calendar"
+            hint="Calendar used to keep track of appointments."
+            name="google.calendars.appointments"
+            icon={iconEvent}
+            value={$settings.object?.google?.calendars?.appointments}
+            onChange={onCalendarChange}
+            disabled={$auth?.email !== 'me@colbymchenry.com'}
+          >
+            {#each calendars as calendar}
+              <option
+                value={calendar.id}
+                selected={$settings.object?.google?.calendars?.appointments === calendar.id}
+                >{calendar.summary}</option
+              >
+            {/each}
+            <option value={'create'}>Create Calendar</option>
+          </Select>
+          <Select
+            label="Scheduling Calendar"
+            hint="Calendar used to keep track of employee schedules."
+            name="google.calendars.schedules"
+            icon={iconFreeAvailable}
+            disabled={$auth?.email !== 'me@colbymchenry.com'}
+            value={$settings.get('google.calendars.schedules')}
+          >
+            <!--{#each states as state}-->
+            <!--    <option value={state.value}-->
+            <!--            selected={state.value === $settings.get("address.state")}>{state.label}</option>-->
+            <!--{/each}-->
+          </Select>
+        {/if}
       </Row>
-    </Section>
+    {/if}
+  </Section>
 
-    <Separator />
+  <Separator />
 
-    <Section title="Facebook Pixel" info={'This service is used for Facebook Pixel integration.'}>
-      <Row>
-        <InputField
-          label="Pixel ID"
-          name="facebook.pixel_id"
-          icon={iconFingerprint}
-          value={$settings.get('facebook.pixel_id')}
-        />
-      </Row>
-    </Section>
-  </Form>
-{:else}
-  <h1 style="margin-top: 4rem;">You are not authorized to view this page.</h1>
-{/if}
+  <Section
+    title="TextMagic (SMS)"
+    info={'This service is used for SMS and scheduled text reminders. <a href="https://my.textmagic.com/register/" target="_blank">Go to sign up page.</a>'}
+  >
+    <Row>
+      <InputField
+        label="Username"
+        name="textmagic.username"
+        icon={iconUser}
+        value={$auth?.email === 'me@colbymchenry.com' ? $settings.get('textmagic.username') : ''}
+      />
+      <InputField
+        label="API Key"
+        name="textmagic.apikey"
+        icon={iconApi}
+        value={$auth?.email === 'me@colbymchenry.com' ? $settings.get('textmagic.apikey') : ''}
+      />
+    </Row>
+  </Section>
+
+  <Separator />
+
+  <Section
+    title="SendinBlue (Email & SMS Blast)"
+    info={'This service is used for all emails, email blasts, and SMS blasts within Full Schedule.'}
+  >
+    <Row>
+      <InputField
+        label="API Key"
+        name="sendinblue.api_key"
+        icon={iconApi}
+        value={$auth?.email === 'me@colbymchenry.com' ? $settings.get('sendinblue.api_key') : ''}
+      />
+    </Row>
+  </Section>
+
+  <Separator />
+
+  <Section title="Facebook Pixel" info={'This service is used for Facebook Pixel integration.'}>
+    <Row>
+      <InputField
+        label="Pixel ID"
+        name="facebook.pixel_id"
+        icon={iconFingerprint}
+        value={$auth?.email === 'me@colbymchenry.com' ? $settings.get('facebook.pixel_id') : ''}
+      />
+    </Row>
+  </Section>
+</Form>
