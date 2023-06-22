@@ -124,13 +124,13 @@
           label="Google Client ID"
           name="google.client_id"
           icon={iconUser}
-          value={$auth?.email === 'me@colbymchenry.com' ? $settings.get('google.client_id') : ''}
+          value={$auth?.email === import.meta.env.VITE_EMAIL ? $settings.get('google.client_id') : ''}
         />
         <InputField
           label="Google Client Secret"
           name="google.client_secret"
           icon={iconApi}
-          value={$auth?.email === 'me@colbymchenry.com'
+          value={$auth?.email === import.meta.env.VITE_EMAIL
             ? $settings.get('google.client_secret')
             : ''}
         />
@@ -151,7 +151,7 @@
             icon={iconEvent}
             value={$settings.object?.google?.calendars?.appointments}
             onChange={onCalendarChange}
-            disabled={$auth?.email !== 'me@colbymchenry.com'}
+            disabled={$auth?.email !== import.meta.env.VITE_EMAIL}
           >
             {#each calendars as calendar}
               <option
@@ -167,7 +167,7 @@
             hint="Calendar used to keep track of employee schedules."
             name="google.calendars.schedules"
             icon={iconFreeAvailable}
-            disabled={$auth?.email !== 'me@colbymchenry.com'}
+            disabled={$auth?.email !== import.meta.env.VITE_EMAIL}
             value={$settings.get('google.calendars.schedules')}
           >
             <!--{#each states as state}-->
@@ -191,13 +191,13 @@
         label="Username"
         name="textmagic.username"
         icon={iconUser}
-        value={$auth?.email === 'me@colbymchenry.com' ? $settings.get('textmagic.username') : ''}
+        value={$auth?.email === import.meta.env.VITE_EMAIL ? $settings.get('textmagic.username') : ''}
       />
       <InputField
         label="API Key"
         name="textmagic.apikey"
         icon={iconApi}
-        value={$auth?.email === 'me@colbymchenry.com' ? $settings.get('textmagic.apikey') : ''}
+        value={$auth?.email === import.meta.env.VITE_EMAIL ? $settings.get('textmagic.apikey') : ''}
       />
     </Row>
   </Section>
@@ -213,7 +213,7 @@
         label="API Key"
         name="sendinblue.api_key"
         icon={iconApi}
-        value={$auth?.email === 'me@colbymchenry.com' ? $settings.get('sendinblue.api_key') : ''}
+        value={$auth?.email === import.meta.env.VITE_EMAIL ? $settings.get('sendinblue.api_key') : ''}
       />
     </Row>
   </Section>
@@ -226,7 +226,7 @@
         label="Pixel ID"
         name="facebook.pixel_id"
         icon={iconFingerprint}
-        value={$auth?.email === 'me@colbymchenry.com' ? $settings.get('facebook.pixel_id') : ''}
+        value={$auth?.email === import.meta.env.VITE_EMAIL ? $settings.get('facebook.pixel_id') : ''}
       />
     </Row>
   </Section>

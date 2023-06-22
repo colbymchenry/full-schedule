@@ -34,7 +34,7 @@
     ApiProgressBar.start();
     try {
       try {
-        if ($auth?.email === 'me@colbymchenry.com') {
+        if ($auth?.email === import.meta.env.VITE_EMAIL) {
           await FirebaseClient.signIn($auth.email, data['old_password']);
 
           await Api.patch('/api/user', {

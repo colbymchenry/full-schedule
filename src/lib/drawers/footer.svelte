@@ -9,7 +9,7 @@
     {#if hideDelete}
         <div></div>
     {:else}
-        <Button type="button" color="delete" callback={onDelete} disabled={$auth?.email !== 'me@colbymchenry.com'}>Delete</Button>
+        <Button type="button" color="delete" callback={onDelete} disabled={$auth?.email !== import.meta.env.VITE_EMAIL}>Delete</Button>
     {/if}
     <div>
         {#if hideCancel}
@@ -17,7 +17,7 @@
         {:else}
             <Button type="button" color="cancel" callback={onCancel}>Cancel</Button>
         {/if}
-        <Button color="primary" callback={onSave} disabled={$auth?.email !== 'me@colbymchenry.com'}>{isUpdate ? 'Update' : 'Save'}</Button>
+        <Button color="primary" callback={onSave} disabled={$auth?.email !== import.meta.env.VITE_EMAIL}>{isUpdate ? 'Update' : 'Save'}</Button>
     </div>
 
 </div>

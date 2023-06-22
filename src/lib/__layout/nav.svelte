@@ -72,7 +72,7 @@
     let nameDiv;
 
     async function updateDisplayName() {
-      if ($auth?.email !== 'me@colbymchenry.com') return;
+      if ($auth?.email !== import.meta.env.VITE_EMAIL) return;
         try {
             await Api.patch('/api/user', {
                 uid: $auth.uid,
