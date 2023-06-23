@@ -71,7 +71,8 @@
     <Avatar
       src={$settings?.object?.store?.logo}
       size="large"
-      dontUpload
+      dontUpload={true}
+      canEdit={true}
       onChange={(imgData) => (storeLogo = imgData)}
       square
     />
